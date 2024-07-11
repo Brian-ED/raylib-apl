@@ -5,7 +5,7 @@ Breaking changes to any feature in raylib-apl should be expected for now, as thi
 
 # Getting started
 Current examples expect a .dll to be in the raylib-apl directory, downloadable [here](https://github.com/raysan5/raylib/releases/tag/5.0). Make sure you download version 5.0.
-Then \[`]Link`](https://dyalog.github.io/link/4.0/API/) to the examples directory and run the examples as functions.
+Then [\]Link](https://dyalog.github.io/link/4.0/API/) to the examples directory and run the examples as functions.
 
 # Parsing (optional)
 The autoparsing isn't needed since a fully parsed version is premade, though if you still need to parse, you need to install CBQN to run it till we translate the parser to APL.
