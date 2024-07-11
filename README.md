@@ -18,11 +18,11 @@ The autoparsing isn't needed since a fully parsed version is premade, though if 
 
 ### Dyalog Limited
 raylib-APL has been financially supported by [Dyalog Limited](https://www.dyalog.com/).
-I(Brian ED) was hired as an intern by [Dyalog Limited](https://www.dyalog.com/) at about 7th of july 2024 to develop raylib-APL, alongside [Asher](https://github.com/asherbhs).
+Brian was hired as an intern by [Dyalog Limited](https://www.dyalog.com/) at about 7th of july 2024 to develop raylib-APL, alongside [Asher](https://github.com/asherbhs).
 [The Dyalog team](https://www.dyalog.com/meet-team-dyalog.htm) have helped a lot with the developement of this library.
 
 ### raylib
 raylib-APL relies on the [raylib C library](https://github.com/raysan5/raylib/). Lots of thanks to the raysan5 and the raylib community for this great library.
 
-### Marshall
-The current version of raylib-apl relies on [json.bqn made by marshall](https://github.com/mlochbaum/bqn-libs/blob/master/json.bqn), more specifically json.bqn.
+### Marshall Lochbaum
+The current version of raylib-apl relies on [json.bqn made by Marshall Lochbaum](https://github.com/mlochbaum/bqn-libs/blob/master/json.bqn), more specifically json.bqn.
