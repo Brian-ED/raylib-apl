@@ -1,7 +1,11 @@
+
 # raylib-apl
 raylib-apl is a library made to write cross-platform graphical applications using the Dyalog APL programming language.
 
 Breaking changes to any feature in raylib-apl should be expected for now, as this library is very young and experimental.
+
+# Warning
+Not made as an actual library yet, this repository is considered very experimental currently.
 
 # Getting started
 Current examples expect a .dll to be in the raylib-apl directory, downloadable [here](https://github.com/raysan5/raylib/releases/tag/5.0). Make sure you download version 5.0.
