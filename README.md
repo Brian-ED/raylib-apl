@@ -16,9 +16,9 @@ The autoparsing isn't needed since a fully parsed version is premade, though if 
 
 # Credits
 
-### Dyalog:
-raylib-APL has been financially supported by [Dyalog](https://www.dyalog.com/) and Insight Systems.
-I(Brian ED) was hired as an intern by Insight systems at about 7th of july 2024 to develop raylib-APL, alongside [Asher](https://github.com/asherbhs).
+### Dyalog Limited
+raylib-APL has been financially supported by [Dyalog Limited](https://www.dyalog.com/).
+I(Brian ED) was hired as an intern by [Dyalog Limited](https://www.dyalog.com/) at about 7th of july 2024 to develop raylib-APL, alongside [Asher](https://github.com/asherbhs).
 [The Dyalog team](https://www.dyalog.com/meet-team-dyalog.htm) have helped a lot with the developement of this library.
 
 ### raylib
