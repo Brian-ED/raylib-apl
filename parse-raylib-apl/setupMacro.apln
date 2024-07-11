@@ -1,0 +1,35 @@
+NestedStructToStr ← {
+  1≥|≡⍵:⍵
+  ((~m)/⍵),'{','}',⍨1↓,/' ',¨∇¨⍵/⍨m←×|≡¨⍵
+}
+NestedStructToStrReturn ← {
+  1≥|≡⍵:⍵
+  ((~m)/⍵),'{','}',⍨1↓,/' ',¨∇¨{('*i8:c8'≡⍵)∨'*u8:c8'≡⍵:(,'*')⋄⍵}¨⍵/⍨m←×|≡¨⍵
+}
+
+
+⍝ Makes an importer that improves the ffi function creation syntax
+∇ OutputStr ← {outType} MakeImporter (debug pathToBin funcName inpTypes)
+  ⍝ outType's default is ''
+  :If 0=⎕NC'outType'
+    outType←''
+  :EndIf
+
+  OutputStr ← {⎕←⎕se.Dyalog.Utils.disp ⍵ ⋄ ⍵} (NestedStructToStrReturn outType),' ',pathToBin,'|',funcName,⊃,/' ',¨NestedStructToStr¨inpTypes
+
+  :if debug
+    ⎕←funcName
+  :EndIf
+∇
+
+⍝ predefined C types
+bool ← 'I1'
+c    ← 'I1'
+i    ← 'I4'
+f    ← 'F4'
+u    ← 'U4'
+i8   ← 'I1'
+u8   ← 'U1'
+str  ← '=0C1'
+uStr ← '=C1'
+ptr  ← ,'P'

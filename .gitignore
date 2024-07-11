@@ -1,0 +1,10 @@
+# workspace files are ignored
+*.dws
+*.code-workspace
+
+# link directory is for throw-away-testing
+/link
+
+# the dll file can be gotten at https://github.com/raysan5/raylib/releases/tag/5.0
+# make sure it's 5.0
+raylib.dll

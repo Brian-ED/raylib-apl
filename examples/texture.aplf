@@ -1,0 +1,64 @@
+texture arg
+
+lib ← '../raylib.dll'
+
+⍝ args: width height title
+⍝ Initialize window and OpenGL context
+⎕na lib,'|InitWindow I4 I4 =0C1'
+
+⍝ Close window and unload OpenGL context
+⎕na lib,'|CloseWindow'
+
+⍝ Check if application should close (KEY_ESCAPE pressed or windows close icon clicked)
+⎕na 'I1 ',lib,'|WindowShouldClose'
+
+⍝ Setup canvas (framebuffer) to start drawing
+⎕na lib,'|BeginDrawing'
+
+⍝ End canvas drawing and swap buffers (double buffering)
+⎕na lib,'|EndDrawing'
+
+⍝ args: color
+⍝ Set background color (framebuffer clear color)
+⎕na lib,'|ClearBackground U8'
+
+⎕na lib,'|SetTargetFPS I4'
+⎕NA lib,'|EnableEventWaiting'
+⎕NA lib,'|DrawFPS I4 I4'
+
+⎕NA v2                  R('GetMousePosition'                 (⍬                                             )) ⍝                                                                   ⍝ Get mouse position XY
+DrawTexture
+UpdateTextureRaw
+LoadImage
+WheelMoved
+
+gray ← 256⊥150 150 150 255
+black ← 256⊥0 0 0 255
+red ← 256⊥255 0 0 255
+white ← 256⊥255 255 255 255
+pixelFormat_uncompressed_r8g8b8a8 ← 7
+
+img ← 1000 1000⍴100/1000 2⍴blue red
+ptr ← MemAlloc×/≢img
+tex ← LoadTextureFromImage ,⊂(⊂ptr),(⌽⍴img),1 pixelFormat_uncompressed_r8g8b8a8
+
+_←InitWindow 800 800 'def'
+
+rot ← 0
+frame ← 0
+
+SetTargetFPS 60
+:While ~WindowShouldClose
+    frame +← 1
+    rot (90|+)← GetMouseWheelMove
+
+    _←BeginDrawing
+        _←ClearBackground black
+        _←DrawFPS 40 40
+        _←GetMousePosition∘{DrawTextureEx tex ⍵ ⍺ 0.2 white}¨rot+90×⍳4
+        _←UpdateTextureRaw tex,⍥⊂,frame⌽img
+    _←EndDrawing
+:EndWhile
+
+UnloadTexture tex
+_←CloseWindow
