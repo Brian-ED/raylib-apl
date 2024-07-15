@@ -8,3 +8,6 @@
 # the dll file can be gotten at https://github.com/raysan5/raylib/releases/tag/5.0
 # make sure it's 5.0
 raylib.dll
+
+# some testing Brian's doing with C
+ffi.c
