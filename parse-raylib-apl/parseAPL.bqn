@@ -60,14 +60,14 @@ typeReplacements ← ⍉shortendStructNames∾[
 
   "'F8'"‿"double"
   "'I8'"‿"long"
-  "f"      ‿"float"
-  "i"      ‿"int"
-  "ptr"    ‿"..."
-  "u"      ‿"unsigned int"
-  "u8"     ‿"char"
-  "u8"     ‿"unsigned char"
+  "f"   ‿"float"
+  "i"   ‿"int"
+  "ptr" ‿"..."
+  "u"   ‿"unsigned int"
+  "u8"  ‿"char"
+  "u8"  ‿"unsigned char"
   "'U2'"‿"unsigned short"
-  " "      ‿"void"
+  " "   ‿"void"
 ]
 
 defaultPathDefinition ← "⊑•args"
@@ -95,16 +95,16 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
       consts←constText⊸(⊣≡≠⊸↑)¨𝕩
       s ← ¬consts∨¬⊑¨'*'⊸∊¨𝕩
       cleaned←constText⊸∾⁼¨⌾(consts⊸/)𝕩
-      [kept,removed] ← 2‿∘⥊⍉Remap⌾⌽˘> ∨`∘∊⟜"[*"⊸(¬⊸/∨`⌾⌽∘≠⟜' '⊸/⊸⋈SwitchOrder∘/)¨cleaned
-      replaced ← kept LowerNames∘(MapNames⌾⋈)∘⊣⍟(0⊸≡)¨(c⊐kept)⊏bqn∾0
-      removed {""𝕊𝕩:𝕩;'"'≡⊑𝕩?𝕨⊸∾⌾('"'⊸∾⁼)𝕩;"('"∾𝕨∾"',"∾𝕩∾')'}¨ replaced
+      [kept,removed] ← 2‿∘⥊⍉'='⍟('*'⊸=)¨⌾(1⊸⊏)˘ Remap⌾⌽˘> ∨`∘∊⟜"[*"⊸(¬⊸/∨`⌾⌽∘≠⟜' '⊸/⊸⋈SwitchOrder∘/)¨cleaned
+      replaced ← kept {LowerNames MapNames⌾⋈𝕨}⍟(0⊸≡)¨(c⊐kept)⊏bqn∾0
+      removed {""𝕊𝕩:𝕩;'"'≡⊑𝕩?𝕨⊸∾⌾('"'⊸∾⁼)𝕩;"('"∾𝕨∾"',"∾𝕩∾')'}¨replaced
     }
   }
 
   AddRemoved ← {
     ""𝕊𝕩:𝕩;
     "'"≡○⊑𝕩?𝕨⊸∾⌾((⊑"'")⊸∾⁼)𝕩;
-    '*'≡⊑•SHow 𝕨? "'"∾𝕨∾"',"∾𝕩;
+    '*'≡⊑𝕨? "'"∾𝕨∾"',"∾𝕩;
     𝕩∾",'"∾𝕨∾"'"
   }
   MapStructTypes ← {
@@ -187,17 +187,17 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
     p←⊑¨⊢˝¨aliases
     ∾ ∾∾⟜(⋈⋈)¨⟜aliasLines⌾(¯1⊸↓)assembled⊔˜+`»+˝p≡⌜names
   }
-
   functionsDone ← {
+    [returns⋄names⋄argTypes⋄argNames⋄desc] ← 2‿0‿3‿4‿1⊏{
+      (3↑𝕩)∾⍉{<˘⍉∘‿2⥊⊢˝˘>⊑𝕩}˘⊢˝𝕩
+    }⍉(↕0‿4)∾´∾⟜⟨⟨⟩⟩⍟(3=≠)¨functions
     <˘"⎕NA "‿"R('"‿" ("‿")) ⍝"‿" ⍝ "⟨
       MapFuncReturnType
       ∾⟜"'"¨
       (1↓·∾' '⊸∾¨)¨ · (2⌊≠)◶⟨⋈"⍬"⋄⟨",⊂"⟩∾⊢⋄⊢⟩¨ MapArgTypes¨
       (∾' '⊸∾¨)¨
       ⊢
-    ⟩_MetaParse⍟(⟨⟩⊸≢){
-      2‿0‿3‿4‿1⊏(3↑𝕩)∾⍉{<˘⍉∘‿2⥊⊢˝˘>⊑𝕩}˘⊢˝𝕩
-    }⌾⍉⍟(⟨⟩⊸≢)(↕0‿4)∾´∾⟜⟨⟨⟩⟩⍟(3=≠)¨functions
+    ⟩_MetaParse ⍉[returns⋄names⋄argTypes⋄argNames⋄desc]
   }
 
   top∾∾nl∾¨∨`⌾⌽∘≠⟜' '⊸/¨∾1↓∾⟨""⟩⊸⋈¨definesDone‿enumsDone‿structsDone‿functionsDone
@@ -223,7 +223,7 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
 
 # Get data type and name from a string containing both
 # NOTE: Useful to parse function parameters and struct fields
-GetDataTypeAndName ← (∨`⌾⌽∊⟜"* ">∨`∘=⟜',')⊸(/⋈¬⊸/) #‿type‿name: # const char *typeName, int typeNameLen, char *type, char *name)
+GetDataTypeAndName ← (∨`⌾⌽∊⟜"* ">∨`∘=⟜',')⊸(/⋈¬⊸/) # type‿name: # const char *typeName, int typeNameLen, char *type, char *name)
 
 # Get comment from a line, do nothing if no comment in line
 GetDescription ← ∨`∘≠⟜' '⊸/2↓∨`∘∧⟜«∘=⟜'/'⊸/ # str → description (str)
@@ -344,7 +344,7 @@ ParseHeader ← {𝕨𝕊headerChars:
     desc ← GetDescription (𝕩-1)⊑lines # Parse struct description
     name←' '⊸≠⊸/∧`∘≠⟜'{'⊸/"typedef struct "∾⁼⊑structLines # Get struct name: typedef struct name {
     fields ← ∾´{ # Get struct fields and count them -> fields finish with ;
-      fieldType‿fieldNamesUnparsed ← ∨`∘≠⟜' '⊸/⌾⌽¨ GetDataTypeAndName ⊐⟜';'⊸↑𝕩
+      fieldType‿fieldNamesUnparsed ← ∨`⌾⌽∘≠⟜' '⊸/¨ GetDataTypeAndName ⊐⟜';'⊸↑𝕩
       fieldNames ← ∨`∘≠⟜' '⊸/¨ ','((⊢-˜+`×¬)∘=⊔⊢)fieldNamesUnparsed
       fieldDesc  ← GetDescription 𝕩
 
