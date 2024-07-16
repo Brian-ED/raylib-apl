@@ -1,38 +1,12 @@
 basicStart
 
-lib ← '../raylib.dll'
-
-⍝ args: width height title
-⍝ Initialize window and OpenGL context
-⎕na lib,'|InitWindow I4 I4 =0C1'
-
-⍝ Close window and unload OpenGL context
-⎕na lib,'|CloseWindow'
-
-⍝ Check if application should close (KEY_ESCAPE pressed or windows close icon clicked)
-⎕na 'I1 ',lib,'|WindowShouldClose'
-
-⍝ Setup canvas (framebuffer) to start drawing
-⎕na lib,'|BeginDrawing'
-
-⍝ End canvas drawing and swap buffers (double buffering)
-⎕na lib,'|EndDrawing'
-
-⍝ args: color
-⍝ Set background color (framebuffer clear color)
-⎕na lib,'|ClearBackground U8'
-
-⎕na lib,'|SetTargetFPS I4'
-⎕NA lib,'|EnableEventWaiting'
-⎕NA lib,'|DrawFPS I4 I4'
-
-gray ← 256⊥150 150 150 150
-_←InitWindow 800 800 'abc'
-SetTargetFPS 60
-:While ~WindowShouldClose
-    _←BeginDrawing
-        _←ClearBackground gray
-        _←DrawFPS 40 40
-    _←EndDrawing
+gray ← 150 150 150 150
+_←raylib.InitWindow 800 800 'abc'
+_←raylib.SetTargetFPS 60
+:While ~raylib.WindowShouldClose
+    _←raylib.BeginDrawing
+        _←raylib.ClearBackground ,⊂gray
+        _←raylib.DrawFPS 40 40
+    _←raylib.EndDrawing
 :EndWhile
-_←CloseWindow
+_←raylib.CloseWindow
