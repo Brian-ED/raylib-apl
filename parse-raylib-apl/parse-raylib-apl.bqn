@@ -1,3 +1,6 @@
 ⟨HeaderToFFI,SetPath⟩ ← •Import "parseAPL.bqn"
-"output-raylib.apln" •FChars "../raylib.dll" SetPath "RLAPI" HeaderToFFI •FChars "raylib.h"
+file ← •FChars "raylib.h"
+file HeaderToFFI˜↩ "RLAPI"
+file SetPath˜↩ "../libraylib.so.5.0.0"⍟("linux"≡•platform.os)"../raylib.dll"
+"output-raylib.apln" •FChars file
 •Out "output-raylib.apln successfully generated"

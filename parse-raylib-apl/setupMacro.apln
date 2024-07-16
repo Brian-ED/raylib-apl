@@ -1,25 +1,21 @@
-NestedStructToStr ← {
-  1≥|≡⍵:⍵
-  ((~m)/⍵),'{','}',⍨1↓,/' ',¨∇¨⍵/⍨m←×|≡¨⍵
-}
-NestedStructToStrReturn ← {
-  1≥|≡⍵:⍵
-  ((~m)/⍵),'{','}',⍨1↓,/' ',¨∇¨{('*i8:c8'≡⍵)∨'*u8:c8'≡⍵:(,'*')⋄⍵}¨⍵/⍨m←×|≡¨⍵
-}
-
-
 ⍝ Makes an importer that improves the ffi function creation syntax
-∇ OutputStr ← {outType} MakeImporter (debug pathToBin funcName inpTypes)
+∇ OutputStr ← {outType} MakeImporter (pathToBin funcName inpTypes)
+    ;NestedStructToStr ;NestedStructToStrReturn
   ⍝ outType's default is ''
   :If 0=⎕NC'outType'
     outType←''
   :EndIf
 
-  OutputStr ← {⎕←⎕se.Dyalog.Utils.disp ⍵ ⋄ ⍵} (NestedStructToStrReturn outType),' ',pathToBin,'|',funcName,⊃,/' ',¨NestedStructToStr¨inpTypes
+  NestedStructToStr ← {
+    1≥|≡⍵:⍵
+    ((~m)/⍵),'{','}',⍨1↓,/' ',¨∇¨⍵/⍨m←×|≡¨⍵
+  }
+  NestedStructToStrReturn ← {
+    1≥|≡⍵:⍵
+    ((~m)/⍵),'{','}',⍨1↓,/' ',¨∇¨{('*i8:c8'≡⍵)∨'*u8:c8'≡⍵:(,'*')⋄⍵}¨⍵/⍨m←×|≡¨⍵
+  }
 
-  :if debug
-    ⎕←funcName
-  :EndIf
+  OutputStr ← {⎕←⎕se.Dyalog.Utils.disp ⍵ ⋄ ⍵} (NestedStructToStrReturn outType),' ',pathToBin,'|',funcName,⊃,/' ',¨NestedStructToStr¨inpTypes
 ∇
 
 ⍝ predefined C types
