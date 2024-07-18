@@ -70,7 +70,7 @@ typeReplacements ← ⍉shortendStructNames∾[
   " "  ‿"void"
 ]
 
-defaultPathDefinition ← "{⍵:'../libraylib.so.5.0.0'⋄'raylib.dll'}'Linux'≡'-64'~⍨⊃#⎕WG'APLVersion'"
+defaultPathDefinition ← "{⍵:'../libraylib.so.5.0.0'⋄'..\raylib.dll'}'Linux'≡'-64'~⍨⊃#⎕WG'APLVersion'"
 
 SetPath ← {path𝕊ffi:
   def ← defaultPathDefinition

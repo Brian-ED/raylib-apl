@@ -58,7 +58,6 @@ maxAllignment ← 8
     :EndIf
   :EndFor
   alignedStructSizes ↓⍨← 1
-  fieldSizes
   r ← maxAllignment-alignedStructSizes
 ∇
 

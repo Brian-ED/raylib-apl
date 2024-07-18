@@ -13,7 +13,7 @@
   NestedStructToStr ← {
     2=+/∧\'<=>'∊⍨⍵ : '=P'
     1≥|≡⍵:⍵
-    structTypes ← ⎕←PadStruct ⎕←⎕←⍵/⍨m←×|≡¨⍵
+    structTypes ← PadStruct ⍵/⍨m←×|≡¨⍵
     (left right) ← {n←⍵∊'[]',⎕D⋄((~n)/⍵)(n/⍵)}(~m)/⍵
     structTypes ← ∇¨structTypes
     structTypes ← (⊂,'P')@('<=>'∊⍨⊃¨)structTypes
@@ -23,7 +23,6 @@
     ((,'=')≢1↑⍵)∧1≥|≡⍵:⍵
     ptr
   }
-  ⎕←funcName
   OutputStr ← (NestedStructToStrReturn outType),' ',pathToBin,'|',funcName,⊃,/' ',¨NestedStructToStr¨inpTypes
 ∇
 
@@ -86,8 +85,7 @@ maxAllignment ← 8
   :If ∨/nestMask
     (nestMask/struct) ← ⊂¨PadStruct¨⊃¨nestMask/struct
   :EndIf
-  ⎕←struct
-  r ← ⊃,/ struct,¨⍴∘(⊂'U1')¨⎕←StructPaddingNeeded structSizes
+  r ← ⊃,/ struct,¨⍴∘(⊂'U1')¨StructPaddingNeeded structSizes
 ∇
 
 ⍝ ┌────────────────────────────────┐
@@ -703,7 +701,7 @@ automationEventList ← ⍬ ⍝ Automation event list
 
 ∇Start pathToRaylibBinaryArg
 :If ⍬≡pathToRaylibBinaryArg
-  pathToRaylibBinaryArg ← {⍵:'../libraylib.so.5.0.0'⋄'raylib.dll'}'Linux'≡'-64'~⍨⊃#⎕WG'APLVersion'
+  pathToRaylibBinaryArg ← {⍵:'../libraylib.so.5.0.0'⋄'..\raylib.dll'}'Linux'≡'-64'~⍨⊃#⎕WG'APLVersion'
 :Endif
 pathToRaylibBinary ← pathToRaylibBinaryArg
 ⎕NA                     R('InitWindow'                       (i i str                                       )) ⍝ width height title                                                ⍝ Initialize window and OpenGL context
