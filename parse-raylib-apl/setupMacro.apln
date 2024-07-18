@@ -9,17 +9,16 @@
   NestedStructToStr ← {
     2=+/∧\'<=>'∊⍨⍵ : '=P'
     1≥|≡⍵:⍵
-    types←∇¨⍵/⍨m←×|≡¨⍵
-    mask←'<=>'∊⍨⊃¨types
-    types ← (,'P')@(mask⍨)types
+    structTypes ← PadStruct ⍵/⍨m←×|≡¨⍵
     (left right) ← {n←⍵∊'[]',⎕D⋄((~n)/⍵)(n/⍵)}(~m)/⍵
-    left,right,⍨'{','}',⍨1↓⊃,/' ',¨types
+    structTypes ← ∇¨structTypes
+    structTypes ← (⊂,'P')@('<=>'∊⍨⊃¨)structTypes
+    left,right,⍨'{','}',⍨1↓⊃,/' ',¨structTypes
   }
   NestedStructToStrReturn ← {
-    ((,'*')≢1↑⍵)∧1≥|≡⍵:⍵
+    ((,'=')≢1↑⍵)∧1≥|≡⍵:⍵
     ptr
   }
-
   OutputStr ← (NestedStructToStrReturn outType),' ',pathToBin,'|',funcName,⊃,/' ',¨NestedStructToStr¨inpTypes
 ∇
 
@@ -29,13 +28,61 @@ c    ← 'I1'
 i    ← 'I4'
 f    ← 'F4'
 u    ← 'U4'
-i8   ← 'I1'
-u8   ← 'U1'
+i1   ← 'I1'
+u1   ← 'U1'
+u8   ← 'U8'
 str  ← '=0C1'
 ustr ← '=C1'
 ptr  ← ,'P'
+f8   ← 'F8'
+i8   ← 'I8'
+u2   ← 'U2'
 
 R ← {⍺←''⋄⍺ MakeImporter (⊂pathToRaylibBinary),⍵}
+
+types ← (i u i1 ptr f8 i8 u2 f u1 u8 'F4[2]' 'F4[4]' 'U1[32]' 'I4[4]')
+sizes ← (4 4  1 8    8  8  2 4  1  8   8       8       8        8    )
+maxAllignment ← 8
+
+∇ r ← StructPaddingNeeded fieldSizes
+    ;alignedStructSizes
+    ;lastSize
+  alignedStructSizes ← ,0
+  :For size :In fieldSizes
+    lastSize ← ⊃⌽alignedStructSizes
+    :If maxAllignment < size+lastSize
+      alignedStructSizes ,← size
+    :Else
+      alignedStructSizes ↓⍨← ¯1
+      alignedStructSizes ,← maxAllignment,lastSize+size
+    :EndIf
+  :EndFor
+  alignedStructSizes ↓⍨← 1
+  fieldSizes
+  r ← maxAllignment-alignedStructSizes
+∇
+
+∇ r ← PadStruct struct
+    ;nestMask;structSizes
+  struct ~← '[]',⎕D ⍝ TODO check if this part is able to be removed. I added this to remove list literals, but why were they there to begin with?
+  ptrsMask ← '<=>'∊⍨⊃¨struct
+  nestMask ← (~ptrsMask)∧1<|≡¨struct
+  knownLengthsMask ← ptrsMask∨nestMask
+  structSizes ← 0⍨¨struct
+  (knownLengthsMask/structSizes) ← 8
+  struct ← ,¨⊂¨struct
+  :If ∨/(≢sizes)<types⍳⊃¨(~knownLengthsMask)/struct
+    1⊃⍬⊣⎕←'Length of type unknown, please add to types list in this script: ',{⍵/⍨(≢types)<types⍳⍵}⊃¨(~knownLengthsMask)/struct
+  :EndIf
+  ((~knownLengthsMask)/structSizes) ← sizes[types⍳⊃¨(~knownLengthsMask)/struct]
+  :If ∨/0=structSizes
+    1⊃⍬⊣⎕←'Byte lengths of some types/structs were unacounted for: ',struct/⍨0=structSizes
+  :EndIf
+  :If ∨/nestMask
+    (nestMask/struct) ← ⊂¨PadStruct¨⊃¨nestMask/struct
+  :EndIf
+  r ← ⊃,/ struct,¨⍴∘(⊂'U1')¨StructPaddingNeeded structSizes
+∇
 
 ⍝ ┌────────────────────────────────┐
 ⍝ │ End of setup for easy ffi.     │
