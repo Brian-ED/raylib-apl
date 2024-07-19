@@ -1,4 +1,7 @@
-shapes
+#!/usr/bin/dyalogscript
+
+raylib ← ⎕Fix'file:///mnt/0AD47A53D47A414D/Users/brian/Persinal/Scripts/APL/raylib-apl/link/raylib.apln'
+raylib.Start⍬
 
 ⍝ sizes of the shapes
 rec←60 ⋄ cir←400

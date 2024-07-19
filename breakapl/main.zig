@@ -84,3 +84,13 @@ export fn pad(s:padded) void {
         print("{}", .{err});
     }
 }
+
+
+const retStruct = extern struct {
+    a: u8,
+    b: u64,
+};
+
+export fn ret() retStruct {
+    return .{.a=1, .b=2};
+}
