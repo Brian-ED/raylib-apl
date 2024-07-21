@@ -12,7 +12,7 @@ ffi.c
 
 # Tests for seeing how ⎕NA communicates with specific arguments
 breakapl/zig-out
-breakapl/zig-cache
+breakapl/.zig-cache
 
 # Output for zig files, since dyalog doesn't have a way of seeing STDOUT easily
 breakapl/junk_file.txt
