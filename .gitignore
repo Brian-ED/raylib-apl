@@ -2,12 +2,15 @@
 *.dws
 *.code-workspace
 
-# the dll file can be gotten at https://github.com/raysan5/raylib/releases/tag/5.0
+# The dll file can be gotten at https://github.com/raysan5/raylib/releases/tag/5.0
 # make sure it's 5.0
 raylib.dll
 libraylib.*
 
-# some testing Brian's doing with C
+# built from https://github.com/Brian-ED/temp-c-raylib
+libtemp-c-raylib.so
+
+# Some testing Brian's doing with C
 ffi.c
 
 # Tests for seeing how ⎕NA communicates with specific arguments

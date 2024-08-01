@@ -1,5 +1,6 @@
+#!/usr/bin/env bqn
 ⟨HeaderToFFI⟩ ← •Import "parseAPL.bqn"
-file ← •FChars "raylib.h"
+file ← •FChars "../lib/raylib.h"
 file HeaderToFFI˜↩ "RLAPI"
 destination ← "../link/raylib.apln"
 destination •FChars file

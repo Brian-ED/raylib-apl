@@ -1,7 +1,7 @@
 #!/usr/bin/dyalogscript
-
-raylib ← ⎕Fix'file:///mnt/0AD47A53D47A414D/Users/brian/Persinal/Scripts/APL/raylib-apl/link/raylib.apln'
-raylib.Start⍬
+dir ← ⊃1⎕NPARTS''
+raylib ← ⎕Fix'file:///',dir,'../link/raylib.apln'
+raylib.Start '../libtemp-c-raylib.so'
 
 ⍝ sizes of the shapes
 rec←60 ⋄ cir←400
@@ -21,8 +21,8 @@ raylib.SetTraceLogLevel raylib.traceLogLevel.lOG_NONE
 
 :While ~raylib.WindowShouldClose
 
-    ⍝ mouse pos floored (STRUCT RETURNS NOT WORKING CURRENTLY)
-    pos←500 500⊣raylib.GetMousePosition
+    ⍝ mouse pos floored
+    pos ← raylib.GetMousePositionRetPtr ,⊂,⊂0 0
 
     _←raylib.BeginDrawing
         _←raylib.ClearBackground ,⊂black,0 0 0 0

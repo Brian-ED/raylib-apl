@@ -70,7 +70,7 @@ typeReplacements ← ⍉shortendStructNames∾[
   " "  ‿"void"
 ]
 
-defaultPathDefinition ← "{⍵:'../libraylib.so.5.0.0'⋄'..\raylib.dll'}'Linux'≡'-64'~⍨⊃#⎕WG'APLVersion'"
+defaultPathDefinition ← "{⍵:'../libtemp-c-raylib.so'⋄'..\raylib.dll'}'Linux'≡'-64'~⍨⊃#⎕WG'APLVersion'"
 
 SetPath ← {path𝕊ffi:
   def ← defaultPathDefinition
@@ -137,6 +137,7 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
     !𝕩⊣˝⊸≡"defines"‿"structs"‿"aliases"‿"enums"‿"callbacks"‿"functions"
     ⊢˝¨¨⌾(0‿1‿3‿4‿5⊸⊏)⊢˝𝕩
   } ParseJSON ToPrettyJson data
+  functions ∾⟜⟨⟨⟩⟩⍟(3=≠)¨↩
 
   top ← ⟨
     ":Namespace raylib"
@@ -192,13 +193,24 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
     ∾ ∾∾⟜(⋈⋈)¨⟜aliasLines⌾(¯1⊸↓)assembled⊔˜+`»+˝p≡⌜names
   }
   functionsDone ← topOfFunctions∾{
-    [returns⋄names⋄argTypes⋄argNames⋄desc] ← 2‿0‿3‿4‿1⊏{
-      (3↑𝕩)∾⍉{<˘⍉∘‿2⥊⊢˝˘>⊑𝕩}˘⊢˝𝕩
-    }⍉(↕0‿4)∾´∾⟜⟨⟨⟩⟩⍟(3=≠)¨functions
+    sLines ← 0¨functions
+
+    returnTypes ← {funcName‿description‿retType‿args: retType}¨functions
+
+    s2Lines ← "void"⊸≢¨returnTypes
+    !¬∨´s2Lines∧sLines # I don't want the lines to collide
+
+    [names⋄desc⋄returns⋄argTypes⋄argNames] ← {
+      (3↑𝕩)∾⍉{<˘⍉(↕0‿2)∾´⊢˝¨<⁼𝕩}˘⊢˝𝕩
+    }⍉(1+s2Lines∨sLines)/(↕0‿4)∾´functions
+
+    sAllLinesExtended ← (↕∘≠⊸+⌾/↑˜+´+≠)s2Lines∨sLines
+    s1LinesExtended‿s2LinesExtended ← s2Lines{((+´+≠)𝕩+𝕨)↑𝕨⊸{(¬𝕩∊/𝕨)/𝕩+↕≠𝕩}⌾/𝕨+𝕩}{𝔽⋈𝔽˜}sLines
+
     <˘"⎕NA "‿" R('"‿" ("‿")) ⍝"‿" ⍝ "⟨
-      MapFuncReturnType
-      ∾⟜"'"¨
-      (1↓·∾' '⊸∾¨)¨ · (2⌊≠)◶⟨⋈"⍬"⋄⟨",⊂"⟩∾⊢⋄⊢⟩¨ MapArgTypes¨
+      ""¨⌾((»s2LinesExtended)⊸/) MapFuncReturnType
+      ∾⟜"'"¨·∾⟜"RetPtr"¨⌾((»s2LinesExtended)⊸/)·∾⟜"Ref"¨⌾((»s1LinesExtended)⊸/)MapNames¨
+      (1↓·∾' '⊸∾¨)¨ · (2⌊≠)◶⟨⋈"⍬"⋄⟨",⊂"⟩∾⊢⋄⊢⟩¨ (MapArgTypes(1+s2Lines∨sLines)/returnTypes) <∘{"('="≡3↑𝕩?"ptr"; "('=',"∾𝕩∾")"}⊸∾¨⌾((»s2LinesExtended)⊸/) MapArgTypes¨
       (∾' '⊸∾¨)¨
       ⊢
     ⟩_MetaParse ⍉[returns⋄names⋄argTypes⋄argNames⋄desc]
@@ -483,8 +495,6 @@ ParseHeader ← {𝕨𝕊headerChars:
 
     paramNames ⊐⟜'['⊸↑¨↩
 
-    paramTypes‿paramNames {<˘"..."⊸≡◶⟨⋈⋄"..."‿"args"⟩´˘⌾⍉>𝕩}↩
-
     desc ← GetDescription 𝕩
 
     name‿desc‿retType‿paramNames‿paramTypes
@@ -492,6 +502,8 @@ ParseHeader ← {𝕨𝕊headerChars:
     # Read function lines
     # Read function line (starting with `define`)
   }¨definePrefix⊸(⊣≡≠⊸↑)¨⊸/lines
+
+  functions {∧´"..."⊸≢¨3⊑𝕩}¨⊸/↩
 
   defines‿structs‿aliases‿enums‿callbacks‿functions
 }
