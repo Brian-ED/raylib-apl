@@ -1,6 +1,6 @@
 #!/usr/bin/dyalogscript
 dir ← ⊃1⎕NPARTS''
-raylib ← ⎕Fix'file:///',dir,'../link/raylib.apln'
+⎕Fix dir,'../link/raylib.apln'
 raylib.Start '../libtemp-c-raylib.so'
 
 ⍝ sizes of the shapes

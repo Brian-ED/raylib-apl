@@ -1,0 +1,66 @@
+:Namespace setup
+⍝ Makes an importer that improves the ffi function creation syntax
+∇ OutputStr ← {outType} MakeImporter (pathToBin funcName inpTypes)
+    ;NestedStructToStr ;NestedStructToStrReturn
+  ⍝ outType's default is ''
+  :If 0=⎕NC'outType'
+    outType←''
+  :EndIf
+
+  NestedStructToStr ← {
+    2=+/∧\'<=>'∊⍨⍵ : '=P'
+    1≥|≡⍵:⍵
+    structTypes ← PadStruct ⍵/⍨m←×|≡¨⍵
+    (left right) ← {n←⍵∊'[]',⎕D⋄((~n)/⍵)(n/⍵)}(~m)/⍵
+    structTypes ← ∇¨structTypes
+    structTypes ← (⊂,'P')@('<=>'∊⍨⊃¨)structTypes
+    left,right,⍨'{','}',⍨1↓⊃,/' ',¨structTypes
+  }
+  NestedStructToStrReturn ← {
+    ((,'=')≢1↑⍵)∧1≥|≡⍵:⍵
+    ptr
+  }
+  OutputStr ← (NestedStructToStrReturn outType),' ',pathToBin,'|',funcName,⊃,/' ',¨NestedStructToStr¨inpTypes
+∇
+
+⍝ predefined C types
+bool ← 'I1'
+c    ← 'I1'
+i    ← 'I4'
+f    ← 'F4'
+u    ← 'U4'
+i1   ← 'I1'
+u1   ← 'U1'
+u8   ← 'U8'
+str  ← '=0C1'
+ustr ← '=C1'
+ptr  ← ,'P'
+f8   ← 'F8'
+i8   ← 'I8'
+u2   ← 'U2'
+
+R ← {⍺←''⋄⍺ MakeImporter (⊂pathToBinary),⍵}
+
+ComputerAllignment ← 8
+types ← i u i1 ptr f8 i8 u2 f u1 u8 'U3' 'F4[2]' 'F4[2]' 'F4[2]' 'F4[2]' 'F4[2]' 'F4[2]' 'F4[4]' 'F4[4]' 'I4[4]' 'U1[32]' 'U4[4]'
+sizes ← 4 4  1 8    8  8  2 4  1  8   3    8       8       8       8       8       8       8       8      8        8        8     8
+
+PadBareStruct ← {
+  a ← ⊃{⍵,(⊂⍺),⍨(⊂u1)⍴⍨(2*⌈2⍟sizes⊃⍨types⍳⊂⍺)|-+/sizes[types⍳⍵]}/⌽⍵,⍨⊂⍬
+  a,(⊂u1)⍴⍨ComputerAllignment|-+/sizes[types⍳a]
+}
+
+∇ r ← PadStruct struct
+    ;nestMask;structSizes
+  struct ~← '[]',⎕D ⍝ TODO check if this part is able to be removed. I added this to remove list literals, but why were they there to begin with?
+  ptrsMask ← '<=>'∊⍨⊃¨struct
+  nestMask ← (~ptrsMask)∧1<|≡¨struct
+  :If ∨/~ptrsMask∨nestMask∨struct∊types
+    1⊃⍬⊣⎕←'Length of type unknown, please add to types list in this script: ',struct/⍨~ptrsMask∨nestMask∨struct∊types
+  :EndIf
+  :If ∨/nestMask
+    (nestMask/struct) PadStruct⍤⊣←0
+  :EndIf
+  r ← PadBareStruct struct
+∇
+:EndNamespace
