@@ -12,7 +12,6 @@
 nl ← @+10 # newline
 wnl ← @+13 # windows newline prefix
 Box ← ⟨⟩⊸≡◶⟨>⋄↕0‿0⟩⊢»¨⟜<' '⥊˜0⌈´≠¨
-LowerNames ← +⟜(32×1="A["⊸⍋)⌾(1↑⎉1⊢)⍟(⟨⟩⊸≢)
 _MetaParse ← {∾˘´[𝕗,𝕨]{F‿w𝕊𝕩:<w⊸∾˘Box F𝕩}˘○⍉↕∘0‿3⍟(⟨⟩⊸≡)𝕩}
 
 remap ← {𝕎𝕏}´{(𝕨⊸≡∧"*"≡1↑⊣)◶⟨⋈⋄𝕩⋈˜1↓⊣⟩´}´¨⟨
@@ -96,7 +95,7 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
       s ← ¬consts∨¬⊑¨'*'⊸∊¨𝕩
       cleaned←constText⊸∾⁼¨⌾(consts⊸/)𝕩
       [kept,removed] ← 2‿∘⥊⍉Remap⌾⌽˘> ∨`∘∊⟜"[*"⊸(¬⊸/∨`⌾⌽∘≠⟜' '⊸/⊸⋈SwitchOrder∘/)¨cleaned
-      replaced ← kept {LowerNames MapNames⌾⋈𝕨}⍟(0⊸≡)¨(c⊐kept)⊏bqn∾0
+      replaced ← kept {MapNames⌾⋈𝕨}⍟(0⊸≡)¨(c⊐kept)⊏bqn∾0
       removed {'='¨⌾(('*'=𝕩)⊸/)𝕩}¨↩
       removed {""𝕊𝕩:𝕩;'"'≡⊑𝕩?𝕨⊸∾⌾('"'⊸∾⁼)𝕩;"('"∾𝕨∾"',"∾𝕩∾')'}¨replaced
     }
@@ -113,13 +112,13 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
     cleaned←constText⊸∾⁼¨⌾((constText⊸(⊣≡≠⊸↑)¨𝕩)⊸/)𝕩
     mask ← ∨`∘∊⟜"[*<>"¨cleaned
     [kept,removed] ← 2‿∘⥊⍉Remap⌾⌽˘> mask{⟨∨`⌾⌽∘≠⟜' '⊸/𝕩/˜¬𝕨 ⋄ SwitchOrder 𝕨/𝕩⟩}¨cleaned
-    replaced ← kept LowerNames∘(MapNames⌾⋈)∘⊣⍟(0⊸≡)¨(c⊐kept)⊏bqn∾0
+    replaced ← kept MapNames⌾⋈∘⊣⍟(0⊸≡)¨(c⊐kept)⊏bqn∾0
     ({'='¨⌾((𝕩='*')⊸/)𝕩}¨ removed) AddRemoved¨ replaced
   }
 
   mapStructNames ← {
     [bqn,c]←⍉shortendStructNames
-    {𝕩LowerNames∘(MapNames⌾⋈)∘⊣⍟(0⊸≡)¨(c⊐𝕩)⊏bqn∾0}
+    {𝕩MapNames⌾⋈∘⊣⍟(0⊸≡)¨(c⊐𝕩)⊏bqn∾0}
   }
 
   mapFuncReturnType ← {
@@ -127,7 +126,7 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
     {
       cleaned←𝕩↓˜¨constText≠⊸×constText⊸(⊣≡≠⊸↑)¨𝕩
       [kept,removed] ← 2‿∘⥊⍉Remap⌾⌽˘> ∨`∘∊⟜"[*"⊸(¬⊸/¯1⊸↓⍟(" "≡¯1⊸↑)⊸⋈SwitchOrder∘/)¨cleaned
-      replaced ← kept LowerNames∘(MapNames⌾⋈)∘⊣⍟(0⊸≡)¨(c⊐kept)⊏bqn∾0
+      replaced ← kept MapNames⌾⋈∘⊣⍟(0⊸≡)¨(c⊐kept)⊏bqn∾0
       remMask ← ⊑¨'*'⊸∊¨ removed
       {'('∾𝕩∾')'}⍟(∨´",⊣"⊸∊)¨"ptr⊣"⊸∾⍟(("ustr"≡¯4⊸↑)∨"str"≡¯3⊸↑)¨ "ptr"¨⌾(remMask⊸/) removed AddRemoved¨ replaced
     }
@@ -172,14 +171,14 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
       ¬∨´⟨"PI"≡name, ∨´type⊸≡¨exclTypes, ⟨⟩≡val ⟩
     }˘⊸/(↕0‿4)∾´defines
     OnItem ← {"''"⍟(""""""⊸≡)𝕩}⌾(0‿¯1⊸⊏)
-    <˘""‿""‿" ← "‿" ⍝ "⟨LowerNames¨MapNames,⟨⟩¨,OnItem¨•Repr¨,⊢⟩_MetaParse filtered
+    <˘""‿""‿" ← "‿" ⍝ "⟨MapNames,⟨⟩¨,OnItem¨•Repr¨,⊢⟩_MetaParse filtered
   }
 
   enumsDone ← {
     [names,descriptions,values]←⍉(↕0‿3)∾´enums
     tabled ← >¨⊢˝¨¨ values
-    bodys ← (<˘"  "‿" ← "‿"  ⍝ "⟨LowerNames¨MapNames,•Repr¨,⊢⟩_MetaParse⊢)¨tabled
-    headers ← ":Namespace "⊸∾¨ (MapNames names) LowerNames⊸∾¨<˘" ⍝ "⊸∾˘Box descriptions
+    bodys ← (<˘"  "‿" ← "‿"  ⍝ "⟨MapNames,•Repr¨,⊢⟩_MetaParse⊢)¨tabled
+    headers ← ":Namespace "⊸∾¨ (MapNames names) ∾¨<˘" ⍝ "⊸∾˘Box descriptions
     ∾headers<⊸∾¨∾⟜⟨":EndNamespace"⋄""⟩¨bodys
   }
 
@@ -188,7 +187,7 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
     headers ← (MapStructNames names) ∾⟜" ← ⍬ ⍝ "⊸∾¨ descriptions
     bodys ← (MapStructNames names){<˘("  "∾𝕨∾",←⊂ ")‿" ⍝ "‿"  ⍝ "⟨MapStructTypes,⊢,⊢⟩_MetaParse >𝕩}¨⊢˝¨¨fields
     assembled ← headers ""⊸⋈⊸∾¨ bodys
-    aliasLines←»⊸∨∘≠⟜' '⊸/¨<˘""‿" ← "‿" ⍝ "⟨LowerNames¨MapNames,MapArgTypes,⊢⟩_MetaParse ⌽⌾(2⊸↑)˘>⊢˝¨aliases
+    aliasLines←»⊸∨∘≠⟜' '⊸/¨<˘""‿" ← "‿" ⍝ "⟨MapNames,MapArgTypes,⊢⟩_MetaParse ⌽⌾(2⊸↑)˘>⊢˝¨aliases
     p←⊑¨⊢˝¨aliases
     ∾ ∾∾⟜(⋈⋈)¨⟜aliasLines⌾(¯1⊸↓)assembled⊔˜+`»+˝p≡⌜names
   }

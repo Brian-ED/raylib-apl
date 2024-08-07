@@ -4,7 +4,7 @@
 ⎕FIX (⊃1⎕NPARTS''),'../parse-raylib-apl/setup.apln'
 ⎕THIS ⎕NS setup
 
-ePSILON ← 1e¯6 ⍝
+EPSILON ← 1e¯6 ⍝
 
 
 
@@ -22,25 +22,25 @@ v4 ← ⍬ ⍝ Vector4 type
   v4,←⊂ f ⍝ y  ⍝
   v4,←⊂ f ⍝ z  ⍝
   v4,←⊂ f ⍝ w  ⍝
-quaternion ← v4 ⍝ Quaternion type
+Quaternion ← v4 ⍝ Quaternion type
 
-matrix ← ⍬ ⍝ Matrix type (OpenGL style 4x4 - right handed, column major)
-  matrix,←⊂ f ⍝ m0   ⍝ Matrix first row (4 components)
-  matrix,←⊂ f ⍝ m4   ⍝ Matrix first row (4 components)
-  matrix,←⊂ f ⍝ m8   ⍝ Matrix first row (4 components)
-  matrix,←⊂ f ⍝ m12  ⍝ Matrix first row (4 components)
-  matrix,←⊂ f ⍝ m1   ⍝ Matrix second row (4 components)
-  matrix,←⊂ f ⍝ m5   ⍝ Matrix second row (4 components)
-  matrix,←⊂ f ⍝ m9   ⍝ Matrix second row (4 components)
-  matrix,←⊂ f ⍝ m13  ⍝ Matrix second row (4 components)
-  matrix,←⊂ f ⍝ m2   ⍝ Matrix third row (4 components)
-  matrix,←⊂ f ⍝ m6   ⍝ Matrix third row (4 components)
-  matrix,←⊂ f ⍝ m10  ⍝ Matrix third row (4 components)
-  matrix,←⊂ f ⍝ m14  ⍝ Matrix third row (4 components)
-  matrix,←⊂ f ⍝ m3   ⍝ Matrix fourth row (4 components)
-  matrix,←⊂ f ⍝ m7   ⍝ Matrix fourth row (4 components)
-  matrix,←⊂ f ⍝ m11  ⍝ Matrix fourth row (4 components)
-  matrix,←⊂ f ⍝ m15  ⍝ Matrix fourth row (4 components)
+Matrix ← ⍬ ⍝ Matrix type (OpenGL style 4x4 - right handed, column major)
+  Matrix,←⊂ f ⍝ m0   ⍝ Matrix first row (4 components)
+  Matrix,←⊂ f ⍝ m4   ⍝ Matrix first row (4 components)
+  Matrix,←⊂ f ⍝ m8   ⍝ Matrix first row (4 components)
+  Matrix,←⊂ f ⍝ m12  ⍝ Matrix first row (4 components)
+  Matrix,←⊂ f ⍝ m1   ⍝ Matrix second row (4 components)
+  Matrix,←⊂ f ⍝ m5   ⍝ Matrix second row (4 components)
+  Matrix,←⊂ f ⍝ m9   ⍝ Matrix second row (4 components)
+  Matrix,←⊂ f ⍝ m13  ⍝ Matrix second row (4 components)
+  Matrix,←⊂ f ⍝ m2   ⍝ Matrix third row (4 components)
+  Matrix,←⊂ f ⍝ m6   ⍝ Matrix third row (4 components)
+  Matrix,←⊂ f ⍝ m10  ⍝ Matrix third row (4 components)
+  Matrix,←⊂ f ⍝ m14  ⍝ Matrix third row (4 components)
+  Matrix,←⊂ f ⍝ m3   ⍝ Matrix fourth row (4 components)
+  Matrix,←⊂ f ⍝ m7   ⍝ Matrix fourth row (4 components)
+  Matrix,←⊂ f ⍝ m11  ⍝ Matrix fourth row (4 components)
+  Matrix,←⊂ f ⍝ m15  ⍝ Matrix fourth row (4 components)
 
 float3 ← ⍬ ⍝ NOTE: Helper types to be used instead of array return types for *ToFloat functions
   float3,←⊂ f,'[3]' ⍝ v  ⍝
@@ -101,8 +101,8 @@ pathToBinary ← pathToBinaryArg
 ⎕NA            R('Vector2DivideRetPtr'                  (('=',v2) v2 v2                          )) ⍝ v1 v2                                           ⍝
 ⎕NA v2         R('Vector2Normalize'                     (,⊂ v2                                   )) ⍝ v                                               ⍝
 ⎕NA            R('Vector2NormalizeRetPtr'               (('=',v2) v2                             )) ⍝ v                                               ⍝
-⎕NA v2         R('Vector2Transform'                     (v2 matrix                               )) ⍝ v mat                                           ⍝
-⎕NA            R('Vector2TransformRetPtr'               (('=',v2) v2 matrix                      )) ⍝ v mat                                           ⍝
+⎕NA v2         R('Vector2Transform'                     (v2 Matrix                               )) ⍝ v mat                                           ⍝
+⎕NA            R('Vector2TransformRetPtr'               (('=',v2) v2 Matrix                      )) ⍝ v mat                                           ⍝
 ⎕NA v2         R('Vector2Lerp'                          (v2 v2 f                                 )) ⍝ v1 v2 amount                                    ⍝
 ⎕NA            R('Vector2LerpRetPtr'                    (('=',v2) v2 v2 f                        )) ⍝ v1 v2 amount                                    ⍝
 ⎕NA v2         R('Vector2Reflect'                       (v2 v2                                   )) ⍝ v normal                                        ⍝
@@ -162,10 +162,10 @@ pathToBinary ← pathToBinaryArg
 ⎕NA v3         R('Vector3Reject'                        (v3 v3                                   )) ⍝ v1 v2                                           ⍝
 ⎕NA            R('Vector3RejectRetPtr'                  (('=',v3) v3 v3                          )) ⍝ v1 v2                                           ⍝
 ⎕NA            R('Vector3OrthoNormalize'                (('=',v3) ('=',v3)                       )) ⍝ v1 v2                                           ⍝
-⎕NA v3         R('Vector3Transform'                     (v3 matrix                               )) ⍝ v mat                                           ⍝
-⎕NA            R('Vector3TransformRetPtr'               (('=',v3) v3 matrix                      )) ⍝ v mat                                           ⍝
-⎕NA v3         R('Vector3RotateByQuaternion'            (v3 quaternion                           )) ⍝ v q                                             ⍝
-⎕NA            R('Vector3RotateByQuaternionRetPtr'      (('=',v3) v3 quaternion                  )) ⍝ v q                                             ⍝
+⎕NA v3         R('Vector3Transform'                     (v3 Matrix                               )) ⍝ v mat                                           ⍝
+⎕NA            R('Vector3TransformRetPtr'               (('=',v3) v3 Matrix                      )) ⍝ v mat                                           ⍝
+⎕NA v3         R('Vector3RotateByQuaternion'            (v3 Quaternion                           )) ⍝ v q                                             ⍝
+⎕NA            R('Vector3RotateByQuaternionRetPtr'      (('=',v3) v3 Quaternion                  )) ⍝ v q                                             ⍝
 ⎕NA v3         R('Vector3RotateByAxisAngle'             (v3 v3 f                                 )) ⍝ v axis angle                                    ⍝
 ⎕NA            R('Vector3RotateByAxisAngleRetPtr'       (('=',v3) v3 v3 f                        )) ⍝ v axis angle                                    ⍝
 ⎕NA v3         R('Vector3Lerp'                          (v3 v3 f                                 )) ⍝ v1 v2 amount                                    ⍝
@@ -178,8 +178,8 @@ pathToBinary ← pathToBinaryArg
 ⎕NA            R('Vector3MaxRetPtr'                     (('=',v3) v3 v3                          )) ⍝ v1 v2                                           ⍝
 ⎕NA v3         R('Vector3Barycenter'                    (v3 v3 v3 v3                             )) ⍝ p a b c                                         ⍝
 ⎕NA            R('Vector3BarycenterRetPtr'              (('=',v3) v3 v3 v3 v3                    )) ⍝ p a b c                                         ⍝
-⎕NA v3         R('Vector3Unproject'                     (v3 matrix matrix                        )) ⍝ source projection view                          ⍝
-⎕NA            R('Vector3UnprojectRetPtr'               (('=',v3) v3 matrix matrix               )) ⍝ source projection view                          ⍝
+⎕NA v3         R('Vector3Unproject'                     (v3 Matrix Matrix                        )) ⍝ source projection view                          ⍝
+⎕NA            R('Vector3UnprojectRetPtr'               (('=',v3) v3 Matrix Matrix               )) ⍝ source projection view                          ⍝
 ⎕NA float3     R('Vector3ToFloatV'                      (,⊂ v3                                   )) ⍝ v                                               ⍝
 ⎕NA            R('Vector3ToFloatVRetPtr'                (('=',float3) v3                         )) ⍝ v                                               ⍝
 ⎕NA v3         R('Vector3Invert'                        (,⊂ v3                                   )) ⍝ v                                               ⍝
@@ -192,92 +192,92 @@ pathToBinary ← pathToBinaryArg
 ⎕NA            R('Vector3EqualsRetPtr'                  (('=',i) v3 v3                           )) ⍝ p q                                             ⍝
 ⎕NA v3         R('Vector3Refract'                       (v3 v3 f                                 )) ⍝ v n r                                           ⍝
 ⎕NA            R('Vector3RefractRetPtr'                 (('=',v3) v3 v3 f                        )) ⍝ v n r                                           ⍝
-⎕NA f          R('MatrixDeterminant'                    (,⊂ matrix                               )) ⍝ mat                                             ⍝
-⎕NA            R('MatrixDeterminantRetPtr'              (('=',f) matrix                          )) ⍝ mat                                             ⍝
-⎕NA f          R('MatrixTrace'                          (,⊂ matrix                               )) ⍝ mat                                             ⍝
-⎕NA            R('MatrixTraceRetPtr'                    (('=',f) matrix                          )) ⍝ mat                                             ⍝
-⎕NA matrix     R('MatrixTranspose'                      (,⊂ matrix                               )) ⍝ mat                                             ⍝
-⎕NA            R('MatrixTransposeRetPtr'                (('=',matrix) matrix                     )) ⍝ mat                                             ⍝
-⎕NA matrix     R('MatrixInvert'                         (,⊂ matrix                               )) ⍝ mat                                             ⍝
-⎕NA            R('MatrixInvertRetPtr'                   (('=',matrix) matrix                     )) ⍝ mat                                             ⍝
-⎕NA matrix     R('MatrixIdentity'                       (⍬                                       )) ⍝                                                 ⍝
-⎕NA            R('MatrixIdentityRetPtr'                 (,⊂ ('=',matrix)                         )) ⍝                                                 ⍝
-⎕NA matrix     R('MatrixAdd'                            (matrix matrix                           )) ⍝ left right                                      ⍝
-⎕NA            R('MatrixAddRetPtr'                      (('=',matrix) matrix matrix              )) ⍝ left right                                      ⍝
-⎕NA matrix     R('MatrixSubtract'                       (matrix matrix                           )) ⍝ left right                                      ⍝
-⎕NA            R('MatrixSubtractRetPtr'                 (('=',matrix) matrix matrix              )) ⍝ left right                                      ⍝
-⎕NA matrix     R('MatrixMultiply'                       (matrix matrix                           )) ⍝ left right                                      ⍝
-⎕NA            R('MatrixMultiplyRetPtr'                 (('=',matrix) matrix matrix              )) ⍝ left right                                      ⍝
-⎕NA matrix     R('MatrixTranslate'                      (f f f                                   )) ⍝ x y z                                           ⍝
-⎕NA            R('MatrixTranslateRetPtr'                (('=',matrix) f f f                      )) ⍝ x y z                                           ⍝
-⎕NA matrix     R('MatrixRotate'                         (v3 f                                    )) ⍝ axis angle                                      ⍝
-⎕NA            R('MatrixRotateRetPtr'                   (('=',matrix) v3 f                       )) ⍝ axis angle                                      ⍝
-⎕NA matrix     R('MatrixRotateX'                        (,⊂ f                                    )) ⍝ angle                                           ⍝
-⎕NA            R('MatrixRotateXRetPtr'                  (('=',matrix) f                          )) ⍝ angle                                           ⍝
-⎕NA matrix     R('MatrixRotateY'                        (,⊂ f                                    )) ⍝ angle                                           ⍝
-⎕NA            R('MatrixRotateYRetPtr'                  (('=',matrix) f                          )) ⍝ angle                                           ⍝
-⎕NA matrix     R('MatrixRotateZ'                        (,⊂ f                                    )) ⍝ angle                                           ⍝
-⎕NA            R('MatrixRotateZRetPtr'                  (('=',matrix) f                          )) ⍝ angle                                           ⍝
-⎕NA matrix     R('MatrixRotateXYZ'                      (,⊂ v3                                   )) ⍝ angle                                           ⍝
-⎕NA            R('MatrixRotateXYZRetPtr'                (('=',matrix) v3                         )) ⍝ angle                                           ⍝
-⎕NA matrix     R('MatrixRotateZYX'                      (,⊂ v3                                   )) ⍝ angle                                           ⍝
-⎕NA            R('MatrixRotateZYXRetPtr'                (('=',matrix) v3                         )) ⍝ angle                                           ⍝
-⎕NA matrix     R('MatrixScale'                          (f f f                                   )) ⍝ x y z                                           ⍝
-⎕NA            R('MatrixScaleRetPtr'                    (('=',matrix) f f f                      )) ⍝ x y z                                           ⍝
-⎕NA matrix     R('MatrixFrustum'                        (f8 f8 f8 f8 f8 f8                       )) ⍝ left right bottom top near far                  ⍝
-⎕NA            R('MatrixFrustumRetPtr'                  (('=',matrix) f8 f8 f8 f8 f8 f8          )) ⍝ left right bottom top near far                  ⍝
-⎕NA matrix     R('MatrixPerspective'                    (f8 f8 f8 f8                             )) ⍝ fovY aspect nearPlane farPlane                  ⍝
-⎕NA            R('MatrixPerspectiveRetPtr'              (('=',matrix) f8 f8 f8 f8                )) ⍝ fovY aspect nearPlane farPlane                  ⍝
-⎕NA matrix     R('MatrixOrtho'                          (f8 f8 f8 f8 f8 f8                       )) ⍝ left right bottom top nearPlane farPlane        ⍝
-⎕NA            R('MatrixOrthoRetPtr'                    (('=',matrix) f8 f8 f8 f8 f8 f8          )) ⍝ left right bottom top nearPlane farPlane        ⍝
-⎕NA matrix     R('MatrixLookAt'                         (v3 v3 v3                                )) ⍝ eye target up                                   ⍝
-⎕NA            R('MatrixLookAtRetPtr'                   (('=',matrix) v3 v3 v3                   )) ⍝ eye target up                                   ⍝
-⎕NA float16    R('MatrixToFloatV'                       (,⊂ matrix                               )) ⍝ mat                                             ⍝
-⎕NA            R('MatrixToFloatVRetPtr'                 (('=',float16) matrix                    )) ⍝ mat                                             ⍝
-⎕NA quaternion R('QuaternionAdd'                        (quaternion quaternion                   )) ⍝ q1 q2                                           ⍝
-⎕NA            R('QuaternionAddRetPtr'                  (('=',quaternion) quaternion quaternion  )) ⍝ q1 q2                                           ⍝
-⎕NA quaternion R('QuaternionAddValue'                   (quaternion f                            )) ⍝ q add                                           ⍝
-⎕NA            R('QuaternionAddValueRetPtr'             (('=',quaternion) quaternion f           )) ⍝ q add                                           ⍝
-⎕NA quaternion R('QuaternionSubtract'                   (quaternion quaternion                   )) ⍝ q1 q2                                           ⍝
-⎕NA            R('QuaternionSubtractRetPtr'             (('=',quaternion) quaternion quaternion  )) ⍝ q1 q2                                           ⍝
-⎕NA quaternion R('QuaternionSubtractValue'              (quaternion f                            )) ⍝ q sub                                           ⍝
-⎕NA            R('QuaternionSubtractValueRetPtr'        (('=',quaternion) quaternion f           )) ⍝ q sub                                           ⍝
-⎕NA quaternion R('QuaternionIdentity'                   (⍬                                       )) ⍝                                                 ⍝
-⎕NA            R('QuaternionIdentityRetPtr'             (,⊂ ('=',quaternion)                     )) ⍝                                                 ⍝
-⎕NA f          R('QuaternionLength'                     (,⊂ quaternion                           )) ⍝ q                                               ⍝
-⎕NA            R('QuaternionLengthRetPtr'               (('=',f) quaternion                      )) ⍝ q                                               ⍝
-⎕NA quaternion R('QuaternionNormalize'                  (,⊂ quaternion                           )) ⍝ q                                               ⍝
-⎕NA            R('QuaternionNormalizeRetPtr'            (('=',quaternion) quaternion             )) ⍝ q                                               ⍝
-⎕NA quaternion R('QuaternionInvert'                     (,⊂ quaternion                           )) ⍝ q                                               ⍝
-⎕NA            R('QuaternionInvertRetPtr'               (('=',quaternion) quaternion             )) ⍝ q                                               ⍝
-⎕NA quaternion R('QuaternionMultiply'                   (quaternion quaternion                   )) ⍝ q1 q2                                           ⍝
-⎕NA            R('QuaternionMultiplyRetPtr'             (('=',quaternion) quaternion quaternion  )) ⍝ q1 q2                                           ⍝
-⎕NA quaternion R('QuaternionScale'                      (quaternion f                            )) ⍝ q mul                                           ⍝
-⎕NA            R('QuaternionScaleRetPtr'                (('=',quaternion) quaternion f           )) ⍝ q mul                                           ⍝
-⎕NA quaternion R('QuaternionDivide'                     (quaternion quaternion                   )) ⍝ q1 q2                                           ⍝
-⎕NA            R('QuaternionDivideRetPtr'               (('=',quaternion) quaternion quaternion  )) ⍝ q1 q2                                           ⍝
-⎕NA quaternion R('QuaternionLerp'                       (quaternion quaternion f                 )) ⍝ q1 q2 amount                                    ⍝
-⎕NA            R('QuaternionLerpRetPtr'                 (('=',quaternion) quaternion quaternion f)) ⍝ q1 q2 amount                                    ⍝
-⎕NA quaternion R('QuaternionNlerp'                      (quaternion quaternion f                 )) ⍝ q1 q2 amount                                    ⍝
-⎕NA            R('QuaternionNlerpRetPtr'                (('=',quaternion) quaternion quaternion f)) ⍝ q1 q2 amount                                    ⍝
-⎕NA quaternion R('QuaternionSlerp'                      (quaternion quaternion f                 )) ⍝ q1 q2 amount                                    ⍝
-⎕NA            R('QuaternionSlerpRetPtr'                (('=',quaternion) quaternion quaternion f)) ⍝ q1 q2 amount                                    ⍝
-⎕NA quaternion R('QuaternionFromVector3ToVector3'       (v3 v3                                   )) ⍝ from to                                         ⍝
-⎕NA            R('QuaternionFromVector3ToVector3RetPtr' (('=',quaternion) v3 v3                  )) ⍝ from to                                         ⍝
-⎕NA quaternion R('QuaternionFromMatrix'                 (,⊂ matrix                               )) ⍝ mat                                             ⍝
-⎕NA            R('QuaternionFromMatrixRetPtr'           (('=',quaternion) matrix                 )) ⍝ mat                                             ⍝
-⎕NA matrix     R('QuaternionToMatrix'                   (,⊂ quaternion                           )) ⍝ q                                               ⍝
-⎕NA            R('QuaternionToMatrixRetPtr'             (('=',matrix) quaternion                 )) ⍝ q                                               ⍝
-⎕NA quaternion R('QuaternionFromAxisAngle'              (v3 f                                    )) ⍝ axis angle                                      ⍝
-⎕NA            R('QuaternionFromAxisAngleRetPtr'        (('=',quaternion) v3 f                   )) ⍝ axis angle                                      ⍝
-⎕NA            R('QuaternionToAxisAngle'                (quaternion ('=',v3) ('=',f)             )) ⍝ q outAxis outAngle                              ⍝
-⎕NA quaternion R('QuaternionFromEuler'                  (f f f                                   )) ⍝ pitch yaw roll                                  ⍝
-⎕NA            R('QuaternionFromEulerRetPtr'            (('=',quaternion) f f f                  )) ⍝ pitch yaw roll                                  ⍝
-⎕NA v3         R('QuaternionToEuler'                    (,⊂ quaternion                           )) ⍝ q                                               ⍝
-⎕NA            R('QuaternionToEulerRetPtr'              (('=',v3) quaternion                     )) ⍝ q                                               ⍝
-⎕NA quaternion R('QuaternionTransform'                  (quaternion matrix                       )) ⍝ q mat                                           ⍝
-⎕NA            R('QuaternionTransformRetPtr'            (('=',quaternion) quaternion matrix      )) ⍝ q mat                                           ⍝
-⎕NA i          R('QuaternionEquals'                     (quaternion quaternion                   )) ⍝ p q                                             ⍝
-⎕NA            R('QuaternionEqualsRetPtr'               (('=',i) quaternion quaternion           )) ⍝ p q                                             ⍝
+⎕NA f          R('MatrixDeterminant'                    (,⊂ Matrix                               )) ⍝ mat                                             ⍝
+⎕NA            R('MatrixDeterminantRetPtr'              (('=',f) Matrix                          )) ⍝ mat                                             ⍝
+⎕NA f          R('MatrixTrace'                          (,⊂ Matrix                               )) ⍝ mat                                             ⍝
+⎕NA            R('MatrixTraceRetPtr'                    (('=',f) Matrix                          )) ⍝ mat                                             ⍝
+⎕NA Matrix     R('MatrixTranspose'                      (,⊂ Matrix                               )) ⍝ mat                                             ⍝
+⎕NA            R('MatrixTransposeRetPtr'                (('=',Matrix) Matrix                     )) ⍝ mat                                             ⍝
+⎕NA Matrix     R('MatrixInvert'                         (,⊂ Matrix                               )) ⍝ mat                                             ⍝
+⎕NA            R('MatrixInvertRetPtr'                   (('=',Matrix) Matrix                     )) ⍝ mat                                             ⍝
+⎕NA Matrix     R('MatrixIdentity'                       (⍬                                       )) ⍝                                                 ⍝
+⎕NA            R('MatrixIdentityRetPtr'                 (,⊂ ('=',Matrix)                         )) ⍝                                                 ⍝
+⎕NA Matrix     R('MatrixAdd'                            (Matrix Matrix                           )) ⍝ left right                                      ⍝
+⎕NA            R('MatrixAddRetPtr'                      (('=',Matrix) Matrix Matrix              )) ⍝ left right                                      ⍝
+⎕NA Matrix     R('MatrixSubtract'                       (Matrix Matrix                           )) ⍝ left right                                      ⍝
+⎕NA            R('MatrixSubtractRetPtr'                 (('=',Matrix) Matrix Matrix              )) ⍝ left right                                      ⍝
+⎕NA Matrix     R('MatrixMultiply'                       (Matrix Matrix                           )) ⍝ left right                                      ⍝
+⎕NA            R('MatrixMultiplyRetPtr'                 (('=',Matrix) Matrix Matrix              )) ⍝ left right                                      ⍝
+⎕NA Matrix     R('MatrixTranslate'                      (f f f                                   )) ⍝ x y z                                           ⍝
+⎕NA            R('MatrixTranslateRetPtr'                (('=',Matrix) f f f                      )) ⍝ x y z                                           ⍝
+⎕NA Matrix     R('MatrixRotate'                         (v3 f                                    )) ⍝ axis angle                                      ⍝
+⎕NA            R('MatrixRotateRetPtr'                   (('=',Matrix) v3 f                       )) ⍝ axis angle                                      ⍝
+⎕NA Matrix     R('MatrixRotateX'                        (,⊂ f                                    )) ⍝ angle                                           ⍝
+⎕NA            R('MatrixRotateXRetPtr'                  (('=',Matrix) f                          )) ⍝ angle                                           ⍝
+⎕NA Matrix     R('MatrixRotateY'                        (,⊂ f                                    )) ⍝ angle                                           ⍝
+⎕NA            R('MatrixRotateYRetPtr'                  (('=',Matrix) f                          )) ⍝ angle                                           ⍝
+⎕NA Matrix     R('MatrixRotateZ'                        (,⊂ f                                    )) ⍝ angle                                           ⍝
+⎕NA            R('MatrixRotateZRetPtr'                  (('=',Matrix) f                          )) ⍝ angle                                           ⍝
+⎕NA Matrix     R('MatrixRotateXYZ'                      (,⊂ v3                                   )) ⍝ angle                                           ⍝
+⎕NA            R('MatrixRotateXYZRetPtr'                (('=',Matrix) v3                         )) ⍝ angle                                           ⍝
+⎕NA Matrix     R('MatrixRotateZYX'                      (,⊂ v3                                   )) ⍝ angle                                           ⍝
+⎕NA            R('MatrixRotateZYXRetPtr'                (('=',Matrix) v3                         )) ⍝ angle                                           ⍝
+⎕NA Matrix     R('MatrixScale'                          (f f f                                   )) ⍝ x y z                                           ⍝
+⎕NA            R('MatrixScaleRetPtr'                    (('=',Matrix) f f f                      )) ⍝ x y z                                           ⍝
+⎕NA Matrix     R('MatrixFrustum'                        (f8 f8 f8 f8 f8 f8                       )) ⍝ left right bottom top near far                  ⍝
+⎕NA            R('MatrixFrustumRetPtr'                  (('=',Matrix) f8 f8 f8 f8 f8 f8          )) ⍝ left right bottom top near far                  ⍝
+⎕NA Matrix     R('MatrixPerspective'                    (f8 f8 f8 f8                             )) ⍝ fovY aspect nearPlane farPlane                  ⍝
+⎕NA            R('MatrixPerspectiveRetPtr'              (('=',Matrix) f8 f8 f8 f8                )) ⍝ fovY aspect nearPlane farPlane                  ⍝
+⎕NA Matrix     R('MatrixOrtho'                          (f8 f8 f8 f8 f8 f8                       )) ⍝ left right bottom top nearPlane farPlane        ⍝
+⎕NA            R('MatrixOrthoRetPtr'                    (('=',Matrix) f8 f8 f8 f8 f8 f8          )) ⍝ left right bottom top nearPlane farPlane        ⍝
+⎕NA Matrix     R('MatrixLookAt'                         (v3 v3 v3                                )) ⍝ eye target up                                   ⍝
+⎕NA            R('MatrixLookAtRetPtr'                   (('=',Matrix) v3 v3 v3                   )) ⍝ eye target up                                   ⍝
+⎕NA float16    R('MatrixToFloatV'                       (,⊂ Matrix                               )) ⍝ mat                                             ⍝
+⎕NA            R('MatrixToFloatVRetPtr'                 (('=',float16) Matrix                    )) ⍝ mat                                             ⍝
+⎕NA Quaternion R('QuaternionAdd'                        (Quaternion Quaternion                   )) ⍝ q1 q2                                           ⍝
+⎕NA            R('QuaternionAddRetPtr'                  (('=',Quaternion) Quaternion Quaternion  )) ⍝ q1 q2                                           ⍝
+⎕NA Quaternion R('QuaternionAddValue'                   (Quaternion f                            )) ⍝ q add                                           ⍝
+⎕NA            R('QuaternionAddValueRetPtr'             (('=',Quaternion) Quaternion f           )) ⍝ q add                                           ⍝
+⎕NA Quaternion R('QuaternionSubtract'                   (Quaternion Quaternion                   )) ⍝ q1 q2                                           ⍝
+⎕NA            R('QuaternionSubtractRetPtr'             (('=',Quaternion) Quaternion Quaternion  )) ⍝ q1 q2                                           ⍝
+⎕NA Quaternion R('QuaternionSubtractValue'              (Quaternion f                            )) ⍝ q sub                                           ⍝
+⎕NA            R('QuaternionSubtractValueRetPtr'        (('=',Quaternion) Quaternion f           )) ⍝ q sub                                           ⍝
+⎕NA Quaternion R('QuaternionIdentity'                   (⍬                                       )) ⍝                                                 ⍝
+⎕NA            R('QuaternionIdentityRetPtr'             (,⊂ ('=',Quaternion)                     )) ⍝                                                 ⍝
+⎕NA f          R('QuaternionLength'                     (,⊂ Quaternion                           )) ⍝ q                                               ⍝
+⎕NA            R('QuaternionLengthRetPtr'               (('=',f) Quaternion                      )) ⍝ q                                               ⍝
+⎕NA Quaternion R('QuaternionNormalize'                  (,⊂ Quaternion                           )) ⍝ q                                               ⍝
+⎕NA            R('QuaternionNormalizeRetPtr'            (('=',Quaternion) Quaternion             )) ⍝ q                                               ⍝
+⎕NA Quaternion R('QuaternionInvert'                     (,⊂ Quaternion                           )) ⍝ q                                               ⍝
+⎕NA            R('QuaternionInvertRetPtr'               (('=',Quaternion) Quaternion             )) ⍝ q                                               ⍝
+⎕NA Quaternion R('QuaternionMultiply'                   (Quaternion Quaternion                   )) ⍝ q1 q2                                           ⍝
+⎕NA            R('QuaternionMultiplyRetPtr'             (('=',Quaternion) Quaternion Quaternion  )) ⍝ q1 q2                                           ⍝
+⎕NA Quaternion R('QuaternionScale'                      (Quaternion f                            )) ⍝ q mul                                           ⍝
+⎕NA            R('QuaternionScaleRetPtr'                (('=',Quaternion) Quaternion f           )) ⍝ q mul                                           ⍝
+⎕NA Quaternion R('QuaternionDivide'                     (Quaternion Quaternion                   )) ⍝ q1 q2                                           ⍝
+⎕NA            R('QuaternionDivideRetPtr'               (('=',Quaternion) Quaternion Quaternion  )) ⍝ q1 q2                                           ⍝
+⎕NA Quaternion R('QuaternionLerp'                       (Quaternion Quaternion f                 )) ⍝ q1 q2 amount                                    ⍝
+⎕NA            R('QuaternionLerpRetPtr'                 (('=',Quaternion) Quaternion Quaternion f)) ⍝ q1 q2 amount                                    ⍝
+⎕NA Quaternion R('QuaternionNlerp'                      (Quaternion Quaternion f                 )) ⍝ q1 q2 amount                                    ⍝
+⎕NA            R('QuaternionNlerpRetPtr'                (('=',Quaternion) Quaternion Quaternion f)) ⍝ q1 q2 amount                                    ⍝
+⎕NA Quaternion R('QuaternionSlerp'                      (Quaternion Quaternion f                 )) ⍝ q1 q2 amount                                    ⍝
+⎕NA            R('QuaternionSlerpRetPtr'                (('=',Quaternion) Quaternion Quaternion f)) ⍝ q1 q2 amount                                    ⍝
+⎕NA Quaternion R('QuaternionFromVector3ToVector3'       (v3 v3                                   )) ⍝ from to                                         ⍝
+⎕NA            R('QuaternionFromVector3ToVector3RetPtr' (('=',Quaternion) v3 v3                  )) ⍝ from to                                         ⍝
+⎕NA Quaternion R('QuaternionFromMatrix'                 (,⊂ Matrix                               )) ⍝ mat                                             ⍝
+⎕NA            R('QuaternionFromMatrixRetPtr'           (('=',Quaternion) Matrix                 )) ⍝ mat                                             ⍝
+⎕NA Matrix     R('QuaternionToMatrix'                   (,⊂ Quaternion                           )) ⍝ q                                               ⍝
+⎕NA            R('QuaternionToMatrixRetPtr'             (('=',Matrix) Quaternion                 )) ⍝ q                                               ⍝
+⎕NA Quaternion R('QuaternionFromAxisAngle'              (v3 f                                    )) ⍝ axis angle                                      ⍝
+⎕NA            R('QuaternionFromAxisAngleRetPtr'        (('=',Quaternion) v3 f                   )) ⍝ axis angle                                      ⍝
+⎕NA            R('QuaternionToAxisAngle'                (Quaternion ('=',v3) ('=',f)             )) ⍝ q outAxis outAngle                              ⍝
+⎕NA Quaternion R('QuaternionFromEuler'                  (f f f                                   )) ⍝ pitch yaw roll                                  ⍝
+⎕NA            R('QuaternionFromEulerRetPtr'            (('=',Quaternion) f f f                  )) ⍝ pitch yaw roll                                  ⍝
+⎕NA v3         R('QuaternionToEuler'                    (,⊂ Quaternion                           )) ⍝ q                                               ⍝
+⎕NA            R('QuaternionToEulerRetPtr'              (('=',v3) Quaternion                     )) ⍝ q                                               ⍝
+⎕NA Quaternion R('QuaternionTransform'                  (Quaternion Matrix                       )) ⍝ q mat                                           ⍝
+⎕NA            R('QuaternionTransformRetPtr'            (('=',Quaternion) Quaternion Matrix      )) ⍝ q mat                                           ⍝
+⎕NA i          R('QuaternionEquals'                     (Quaternion Quaternion                   )) ⍝ p q                                             ⍝
+⎕NA            R('QuaternionEqualsRetPtr'               (('=',i) Quaternion Quaternion           )) ⍝ p q                                             ⍝
 ∇
 :EndNamespace
