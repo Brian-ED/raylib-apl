@@ -21,7 +21,7 @@ _←rl.DisableCursor
 ⍝ Camera mode type
 
 ⍝texture ← rl.LoadTexture "resources/models/obj/castle_diffuse.png"
-camera ← (50 50 50) (0 10 0) (0 1 0) 45 rl.CameraProjection.CAMERA_PERSPECTIVE
+camera ← (50 50 50) (0 10 0) (0 1 0) 45 rl.CameraProjection.CAMERA_PERSPECTIVE 0 0 0 0
 
 ⍝ Model
 ⍝   Matrix transform;       // Local transform matrix
@@ -33,22 +33,22 @@ camera ← (50 50 50) (0 10 0) (0 1 0) 45 rl.CameraProjection.CAMERA_PERSPECTIVE
 ⍝   int boneCount;          // Number of bones
 ⍝   BoneInfo *bones;        // Bones information (skeleton)
 ⍝   Transform *bindPose;    // Bones base transformation (pose)
-⍝⟨ ⟨ 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 ⟩ 1 1 P P P 0 P P ⟩
 
 model _ ← rl.LoadModelRetPtr (,⊂(⊂16⍴0),12⍴0) 'OBJ/RubberDuck_LOD0.obj'
 position ← 0 0 0
+
+⍝ ⎕NA somehow doesn't need padding at {F4 F4 F4}. Using {F4 F4 F4 U1 U1 U1 U1} makes the model dissapear.
+⎕NA rl.pathToBinary,'|DrawModel {{F4 F4 F4 F4 F4 F4 F4 F4 F4 F4 F4 F4 F4 F4 F4 F4} I4 I4 P P P I4 U1 U1 U1 U1 P P} {F4 F4 F4} F4 {U1 U1 U1 U1 U1 U1 U1 U1}'
 
 :While ~rl.WindowShouldClose
   camera ← rl.UpdateCamera ((,⊂camera) rl.CameraMode.CAMERA_THIRD_PERSON)
   rl.BeginDrawing
     rl.ClearBackground ,⊂8↑255 255 255 255
     rl.DrawFPS 40 40
-
     rl.BeginMode3D ,⊂,⊂camera
-      rl.DrawModel (model position 1 (8↑white))
+      DrawModel (model position 1 (8↑white))
       rl.DrawGrid 200 10
     rl.EndMode3D
-
   rl.EndDrawing
 :EndWhile
 

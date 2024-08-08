@@ -79,7 +79,7 @@ PadStruct ← {
 
   ⍝ {U4 I4 I4 I4 I4} → {U4 I4 I4 I4 I4 U1 U1 U1 U1}
   ⍝ ={U4 I4 I4 I4 I4} {P I4 I4 I4 I4}
-  items,u1⍴∘⊂⍨ComputerAlignment(>×|)size
+  items,u1⍴∘⊂⍨ComputerAlignment|size
 }
 
 :EndNamespace
