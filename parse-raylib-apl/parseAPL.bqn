@@ -145,13 +145,19 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
     ""
   ⟩
   topOfFunctions ← ⟨
-    "∇Start pathToBinaryArg"
+    "⍝ Mode is either 3:All changes, 2:only manual changes 1:only automatic changes, or 0: no changes"
+    "∇{mode} Init pathToBinaryArg"
     ":If ⍬≡pathToBinaryArg"
     "  pathToBinaryArg ← "∾defaultPathDefinition
     ":Endif"
     "pathToBinary ← pathToBinaryArg"
+    ":If 0=⎕NC 'mode'"
+    "  mode ← 3 ⍝ Default is All changes"
+    ":EndIf"
+    ""
   ⟩
   bottom ← ⟨
+    "AfterDefaultDefinitions mode"
     "∇"
   ⟩
 
@@ -205,13 +211,18 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
     sAllLinesExtended ← (↕∘≠⊸+⌾/↑˜+´+≠)s2Lines∨sLines
     s1LinesExtended‿s2LinesExtended ← s2Lines{((+´+≠)𝕩+𝕨)↑𝕨⊸{(¬𝕩∊/𝕨)/𝕩+↕≠𝕩}⌾/𝕨+𝕩}{𝔽⋈𝔽˜}sLines
 
-    <˘"⎕NA "‿" R('"‿" ("‿")) ⍝"‿" ⍝ "⟨
-      ""¨⌾((»s2LinesExtended)⊸/) MapFuncReturnType
-      ∾⟜"'"¨·∾⟜"RetPtr"¨⌾((»s2LinesExtended)⊸/)·∾⟜"Ref"¨⌾((»s1LinesExtended)⊸/)MapNames¨
-      (1↓·∾' '⊸∾¨)¨ · (2⌊≠)◶⟨⋈"⍬"⋄⟨",⊂"⟩∾⊢⋄⊢⟩¨ (MapArgTypes(1+s2Lines∨sLines)/returnTypes) <∘{"('="≡3↑𝕩?"ptr"; "('=',"∾𝕩∾")"}⊸∾¨⌾((»s2LinesExtended)⊸/) MapArgTypes¨
-      (∾' '⊸∾¨)¨
-      ⊢
-    ⟩_MetaParse ⍉[returns⋄names⋄argTypes⋄argNames⋄desc]
+    <˘"'"‿"(⎕NA⊢⎕NA⍤⊢) "‿" R('"‿" ("‿")) ⍝"‿" ⍝ "⟨
+      ∾⟜"'"¨·∾⟜"RAYLIB"¨·∾⟜"RetPtr"¨⌾((»s2LinesExtended)⊸/)·∾⟜"Ref"¨⌾((»s1LinesExtended)⊸/)MapNames¨
+      ""¨⌾((»s2LinesExtended)⊸/) MapFuncReturnType # Returns
+      ∾⟜"'"¨·∾⟜"RetPtr"¨⌾((»s2LinesExtended)⊸/)·∾⟜"Ref"¨⌾((»s1LinesExtended)⊸/)MapNames¨ # Function Names
+      { # Argument types
+        a←(MapArgTypes returnTypes/˜1+s2Lines∨sLines) <∘{"('="≡3↑𝕩?"ptr"; "('>',"∾𝕩∾")"}⊸∾¨⌾((»s2LinesExtended)⊸/) MapArgTypes¨𝕩
+        b← (2⌊≠)◶⟨⋈"⍬"⋄⟨",⊂"⟩∾⊢⋄⊢⟩¨a
+        (1↓·∾' '⊸∾¨)¨b
+      }
+      (∾' '⊸∾¨)¨ # Argument names turned into comments
+      ⊢ # Function comment
+    ⟩_MetaParse ⍉[names⋄returns⋄names⋄argTypes⋄argNames⋄desc]
   }
   1↓∾nl∾¨top∾bottom∾˜∨`⌾⌽∘≠⟜' '⊸/¨∾1↓∾⟨""⟩⊸⋈¨definesDone‿enumsDone‿structsDone‿functionsDone
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/dyalogscript
 dir ← ⊃1⎕NPARTS''
 ⎕Fix dir,'../link/raylib.apln'
-raylib.Start '../libtemp-c-raylib.so'
+raylib.Init '../libtemp-c-raylib.so'
 
 ⍝ sizes of the shapes
 rec←60 ⋄ cir←400
@@ -17,7 +17,7 @@ red ← 255 0 0 255
 raylib.InitWindow 800 800 'Hello!!!'
 raylib.SetTargetFPS 60
 
-raylib.SetTraceLogLevel raylib.TraceLogLevel.LOG_NONE
+raylib.SetTraceLogLevel raylib.TraceLogLevel.LOG_WARNING
 
 :While ~raylib.WindowShouldClose
 
