@@ -23,8 +23,6 @@ rl.SetTraceLogLevel rl.TraceLogLevel.LOG_WARNING
         rl.DrawFPS 40 40
         rl.DrawEllipse (pos,200 200),⊂8↑rl.color.red
         {_←rl.DrawRectangle (⊂8↑rl.color.white),⍨(rec rec),⍨⍵+pos-rec÷2}⍤¯1⊢ outerRecs
-        ⍝ color, shape,         positions
-        ⍝ this drawing function is being used to draw on a black canvas
     rl.EndDrawing
 :EndWhile
 rl.CloseWindow

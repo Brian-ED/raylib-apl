@@ -27,31 +27,31 @@ model _ ← rl.LoadModelRetPtr ⍬ 'OBJ/RubberDuck_LOD0.obj'
 
 ⍝ For every frame till user closes the window
 :While ~rl.WindowShouldClose
-  ⍝ Look for keystrokes from user, move the camera
-  camera ← rl.UpdateCamera ((,⊂camera) rl.CameraMode.CAMERA_THIRD_PERSON)
+    ⍝ Look for keystrokes from user, move the camera
+    camera ← rl.UpdateCamera ((,⊂camera) rl.CameraMode.CAMERA_THIRD_PERSON)
 
-  ⍝ Preparing another buffer to draw the new frame, with white background
-  rl.BeginDrawing
-    rl.ClearBackground ,⊂8↑rl.color.white
+    ⍝ Preparing another buffer to draw the new frame, with white background
+    rl.BeginDrawing
+        rl.ClearBackground ,⊂8↑rl.color.white
 
-    ⍝ Draws FPS at x=40 y=40
-    rl.DrawFPS 40 40
+        ⍝ Draws FPS at x=40 y=40
+        rl.DrawFPS 40 40
 
-    ⍝ Draw 3d stuff relative to the camera
-    rl.BeginMode3D ,⊂,⊂camera
+        ⍝ Draw 3d stuff relative to the camera
+        rl.BeginMode3D ,⊂,⊂camera
 
-      ⍝ draws grid
-      rl.DrawGrid 20 10
+            ⍝ draws grid
+            rl.DrawGrid 20 10
 
-      ⍝ Draw the duck model at position
-      position ← 0 0 0  ⋄  scale ← 1
-      rl.DrawModel (model position scale (8↑rl.color.white))
+            ⍝ Draw the duck model at position
+            position ← 0 0 0  ⋄  scale ← 1
+            rl.DrawModel (model position scale (8↑rl.color.white))
 
-    ⍝ Stop drawing 3d
-    rl.EndMode3D
+        ⍝ Stop drawing 3d
+        rl.EndMode3D
 
-  ⍝ wait till next frame is needed, then switch to this new buffer we've drawn
-  rl.EndDrawing
+    ⍝ wait till next frame is needed, then switch to this new buffer we've drawn
+    rl.EndDrawing
 :EndWhile
 
 ⍝ Unloading model, freeing it's memory.
