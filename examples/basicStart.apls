@@ -1,12 +1,9 @@
-#!/usr/bin/dyalogscript
+#!cd $dir && /usr/bin/dyalogscript $fileName
 
-dir ← ⊃1⎕NPARTS''
-rl ← 0⎕Fix dir,'../link/raylib.apln'
+rl ← 0⎕Fix (⊃1⎕NPARTS''),'../link/raylib.apln'
 rl.Init⍬
-rl.SetTraceLogLevel ,rl.TraceLogLevel.LOG_WARNING
 
 rl.InitWindow 800 800 'abc'
-rl.SetTargetFPS 60
 :While ~rl.WindowShouldClose
   rl.BeginDrawing
     rl.ClearBackground ,⊂8↑rl.color.gray

@@ -86,6 +86,9 @@ Assert ← {⍺←'assertion failure' ⋄ 0∊⍵:⍺ ⎕SIGNAL 8 ⋄ shy←0}
 
 isWindowOpen ← 0
 ∇AfterDefaultDefinitions mode
+  SetTraceLogLevel ,TraceLogLevel.LOG_WARNING
+  SetTargetFPS 60
+
   ⍝ Replace all names of ⍺ that are in ⍵ with the ⍵ counterpart
   ReplaceNames ← {⍵.(⍎'⍺.',⊢,'←',⊢)¨⍣(×≢a)⊢a←⊃∩/(⍺⍵).⎕NL¯2}
 

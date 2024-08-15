@@ -1,7 +1,6 @@
-#!/usr/bin/dyalogscript
-dir ← ⊃1⎕NPARTS''
-⎕Fix dir,'../link/raylib.apln'
-raylib.Init '../libtemp-c-raylib.so'
+#!cd $dir && /usr/bin/dyalogscript $fileName
+rl ← 0 ⎕Fix (⊃1⎕NPARTS''),'../link/raylib.apln'
+rl.Init '../libtemp-c-raylib.so'
 
 ⍝ sizes of the shapes
 rec←60 ⋄ cir←400
@@ -10,27 +9,22 @@ rec←60 ⋄ cir←400
 distFromMiddle ← 170
 outerRecs ← distFromMiddle×¯1+2×↑,¯1+⍳(2 2)
 
-white ← 4⍴255
-black ← ¯4↑255
-gray ← 150 150 150 255
-red ← 255 0 0 255
-raylib.InitWindow 800 800 'Hello!!!'
-raylib.SetTargetFPS 60
+rl.InitWindow 800 800 'Hello!!!'
 
-raylib.SetTraceLogLevel raylib.TraceLogLevel.LOG_WARNING
+rl.SetTraceLogLevel rl.TraceLogLevel.LOG_WARNING
 
-:While ~raylib.WindowShouldClose
+:While ~rl.WindowShouldClose
 
     ⍝ mouse pos floored
-    pos ← raylib.GetMousePositionRetPtr ,⊂,⊂0 0
+    pos ← rl.GetMousePositionRetPtr ,⊂,⊂0 0
 
-    raylib.BeginDrawing
-        raylib.ClearBackground ,⊂8↑black
-        raylib.DrawFPS 40 40
-        raylib.DrawEllipse (pos,200 200),⊂8↑red
-        {_←raylib.DrawRectangle (⊂8↑white),⍨(rec rec),⍨⍵+pos-rec÷2}⍤¯1⊢ outerRecs
+    rl.BeginDrawing
+        rl.ClearBackground ,⊂8↑rl.color.black
+        rl.DrawFPS 40 40
+        rl.DrawEllipse (pos,200 200),⊂8↑rl.color.red
+        {_←rl.DrawRectangle (⊂8↑rl.color.white),⍨(rec rec),⍨⍵+pos-rec÷2}⍤¯1⊢ outerRecs
         ⍝ color, shape,         positions
         ⍝ this drawing function is being used to draw on a black canvas
-    raylib.EndDrawing
+    rl.EndDrawing
 :EndWhile
-raylib.CloseWindow
+rl.CloseWindow
