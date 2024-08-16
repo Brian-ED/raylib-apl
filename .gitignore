@@ -19,3 +19,9 @@ breakapl/.zig-cache
 
 # Output for zig files, since dyalog doesn't have a way of seeing STDOUT easily
 breakapl/junk_file.txt
+
+# Incomplete examples
+examples/6_shaders
+
+# Spoilers for dyalog 24 ;)
+examples/presenting
