@@ -1,6 +1,6 @@
 #!cd $dir && /usr/bin/dyalogscript $fileName
 rl ← 0 ⎕Fix (⊃1⎕NPARTS''),'../link/raylib.apln'
-rl.Init '../libtemp-c-raylib.so'
+rl.Init⍬
 
 ⍝ sizes of the shapes
 rec←60 ⋄ cir←400
