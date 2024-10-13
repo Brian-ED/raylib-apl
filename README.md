@@ -24,7 +24,7 @@ Use `⍬` to use the default path `raylib-apl/libraylib.so`.
 You may [\]Link](https://dyalog.github.io/link/4.0/API/) to the `raylib-apl/link` folder.
 This imports `raylib.apln`, `rlgl.apln`, and `raymath.apln`, each of which are from [raylib](https://github.com/raysan5/raylib). A 2d physics library called [physac](https://github.com/victorfisac/Physac) is also included as `physac.apln`, and a GUI library called [raygui](https://github.com/raysan5/raygui) as `raygui.apln`.
 
-Example using raylib with link is shown below:
+Example using raylib with `]link` is shown below:
 ```apl
 ]cd /mnt/0AD47A53D47A414D/Users/brian/Persinal/Scripts/APL/raylib-apl/link
 ]link.create # .
