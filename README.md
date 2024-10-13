@@ -5,6 +5,10 @@ raylib-apl is a library made to write cross-platform graphical applications usin
 Breaking changes to any feature in raylib-apl should be expected for now, as this library is very young and experimental. Read further on under "Warning".
 
 # Documentation
+raylib-apl currently only supports windows. This is due to a bug in `⎕NA` that makes functions taking structs as arguments error.
+
+# Getting started
+Current examples expect a `libraylib.so` file to be in the raylib-apl directory, downloadable [here](https://github.com/raysan5/raylib/releases/tag/5.0). Make sure you download raylib version `5.0`, and to specifically take out the `libraylib.so` from the `lib` folder. You may delete the rest.
 
 ### Importing raylib
 run the following:
@@ -21,8 +25,6 @@ rl.Init 'path to binary.so'
 # Warning
 Breaking changes to any feature in raylib-apl should be expected for now, as this library is very young and experimental. You will crash Dyalog a lot. If you experience code 999, there was likely a "segfault"/error in raylib. These are usually due to using functions in the wrong contexts, like drawing a box before `rl.BeginDrawing`, or loading an image before opening the window.
 
-# Getting started
-Current examples expect a .dll to be in the raylib-apl directory, downloadable [here](https://github.com/raysan5/raylib/releases/tag/5.0). Make sure you download version 5.0.
 
 ## Using Link: (UNFINISHED DOCUMENTATION)
 Then [\]Link](https://dyalog.github.io/link/4.0/API/) to the examples directory and run the examples as functions.
