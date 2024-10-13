@@ -9,7 +9,7 @@ Breaking changes to any feature in raylib-apl should be expected for now, as thi
 raylib-apl currently only supports windows. This is due to a bug in `⎕NA` that makes functions taking structs as arguments error.
 
 # Getting started
-Current examples expect a `libraylib.so` file to be in the raylib-apl directory, downloadable [here](https://github.com/raysan5/raylib/releases/tag/5.0). Make sure you download raylib version `5.0`, and to specifically take out the `libraylib.so` from the `lib` folder. You may delete the rest.
+Current examples expect a `libtemp-c-raylib.so` file to be in the `raylib-apl/` directory, downloadable [here](https://github.com/Brian-ED/temp-c-raylib/releases/tag/v0.1.0).
 
 ### Importing raylib
 To import raylib-apl as a namespace, run the following:
