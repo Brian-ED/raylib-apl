@@ -1,7 +1,7 @@
 #!cd $dir && /usr/bin/dyalogscript $fileName
 dir ← ⊃1⎕NPARTS''
 rl ← 0⎕Fix dir,'../link/raylib.apln'
-rl.Init '../libtemp-c-raylib.so'
+rl.Init ⍬
 
 rl.InitWindow 800 800 'Hello!!!'
 rl.DisableCursor
@@ -15,15 +15,6 @@ camera ← (50 50 50) (0 10 0) (0 1 0) 45 rl.CameraProjection.CAMERA_PERSPECTIVE
 ⍝ Camera mode type
 
 model _ ← rl.LoadModelRetPtr ⍬ 'OBJ/RubberDuck_LOD0.obj'
-⍝ Matrix transform     ⍝ Local transform matrix
-⍝ int meshCount        ⍝ Number of meshes
-⍝ int materialCount    ⍝ Number of materials
-⍝ Mesh *meshes         ⍝ Meshes array
-⍝ Material *materials  ⍝ Materials array
-⍝ int *meshMaterial    ⍝ Mesh material number
-⍝ int boneCount        ⍝ Number of bones
-⍝ BoneInfo *bones      ⍝ Bones information (skeleton)
-⍝ Transform *bindPose  ⍝ Bones base transformation (pose)
 
 ⍝ For every frame till user closes the window
 :While ~rl.WindowShouldClose
@@ -32,13 +23,13 @@ model _ ← rl.LoadModelRetPtr ⍬ 'OBJ/RubberDuck_LOD0.obj'
 
     ⍝ Preparing another buffer to draw the new frame, with white background
     rl.BeginDrawing
-        rl.ClearBackground ,⊂8↑rl.color.white
+        rl.ClearBackground ⊂8↑rl.color.white
 
         ⍝ Draws FPS at x=40 y=40
         rl.DrawFPS 40 40
 
         ⍝ Draw 3d stuff relative to the camera
-        rl.BeginMode3D ,⊂,⊂camera
+        rl.BeginMode3D ⊂camera
 
             ⍝ draws grid
             rl.DrawGrid 20 10
