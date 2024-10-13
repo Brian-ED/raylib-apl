@@ -22,7 +22,7 @@ Breaking changes to any feature in raylib-apl should be expected for now, as thi
 # Documentation
 raylib-apl currently only supports windows. This is due to a bug in `⎕NA` that makes functions taking structs as arguments error.
 
-# Getting started
+## Getting started
 Current examples expect a `libtemp-c-raylib.so` file to be in the `raylib-apl/` directory, downloadable [here](https://github.com/Brian-ED/temp-c-raylib/releases/tag/v0.1.0).
 
 ### Importing raylib
