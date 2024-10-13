@@ -2,7 +2,8 @@
 # raylib-apl
 raylib-apl is a library made to write cross-platform graphical applications using the Dyalog APL programming language.
 
-Breaking changes to any feature in raylib-apl should be expected for now, as this library is very young and experimental. Read further on under "Warning".
+# Warning
+Breaking changes to any feature in raylib-apl should be expected for now, as this library is very young and experimental. You will crash Dyalog a lot. If you experience code 999, there was likely a "segfault"/error in raylib. These are usually due to using functions in the wrong contexts, like drawing a box before `rl.BeginDrawing`, or loading an image before opening the window.
 
 # Documentation
 raylib-apl currently only supports windows. This is due to a bug in `⎕NA` that makes functions taking structs as arguments error.
@@ -11,25 +12,37 @@ raylib-apl currently only supports windows. This is due to a bug in `⎕NA` that
 Current examples expect a `libraylib.so` file to be in the raylib-apl directory, downloadable [here](https://github.com/raysan5/raylib/releases/tag/5.0). Make sure you download raylib version `5.0`, and to specifically take out the `libraylib.so` from the `lib` folder. You may delete the rest.
 
 ### Importing raylib
-run the following:
-`rl ← 0 ⎕FIX (⊃1⎕NPARTS''),'../parse-raylib-apl/setup.apln'`
-
-To import all names in raylib to current scope, run the following:
-`⎕THIS ⎕NS 0 ⎕FIX (⊃1⎕NPARTS''),'../parse-raylib-apl/setup.apln'`
-
-After importing raylib, Give `rl.Init` left argument of 1 to not modify raylib at all. 0 as left argument to Init runs default changes. If no left argument given, default to 1.
+To import raylib-apl as a namespace, run the following:
+```apl
+rl ← 0⎕Fix (⊃1⎕NPARTS''),'../link/raylib.apln'
+rl.Init⍬
 ```
-rl.Init 'path to binary.so'
+You can give `rl.Init` a path as argument that points to `libraylib.so`.
+Use `⍬` to use the default path `raylib-apl/libraylib.so`.
+
+## Using Link:
+You may [\]Link](https://dyalog.github.io/link/4.0/API/) to the `raylib-apl/link` folder.
+This imports `raylib.apln`, `rlgl.apln`, and `raymath.apln`, each of which are from [raylib](https://github.com/raysan5/raylib). A 2d physics library called [physac](https://github.com/victorfisac/Physac) is also included as `physac.apln`, and a GUI library called [raygui](https://github.com/raysan5/raygui) as `raygui.apln`.
+
+Example using raylib with link is shown below:
+```apl
+]cd /mnt/0AD47A53D47A414D/Users/brian/Persinal/Scripts/APL/raylib-apl/link
+]link.create # .
+raylib.Init⍬
+
+⍝ Your raylib code starts here
+_←raylib.InitWindow 800 800 'Hello!!!'
+:While ~raylib.WindowShouldClose
+    _←raylib.BeginDrawing
+        _←raylib.ClearBackground ,⊂8↑raylib.color.gray
+    _←raylib.EndDrawing
+:EndWhile
+_←raylib.CloseWindow
 ```
 
-# Warning
-Breaking changes to any feature in raylib-apl should be expected for now, as this library is very young and experimental. You will crash Dyalog a lot. If you experience code 999, there was likely a "segfault"/error in raylib. These are usually due to using functions in the wrong contexts, like drawing a box before `rl.BeginDrawing`, or loading an image before opening the window.
-
-
-## Using Link: (UNFINISHED DOCUMENTATION)
-Then [\]Link](https://dyalog.github.io/link/4.0/API/) to the examples directory and run the examples as functions.
-
-## Using dyalogscript: (UNFINISHED DOCUMENTATION)
+## Using dyalogscript
+All raylib-apl examples support using [dyalogscript](https://help.dyalog.com/19.0/#UserGuide/Installation%20and%20Configuration/Shell%20Scripts.htm?Highlight=dyalogscript), by having the following on the top of every example:
+`#!cd $dir && /usr/bin/dyalogscript $fileName`
 
 # ⎕NA problems
 
