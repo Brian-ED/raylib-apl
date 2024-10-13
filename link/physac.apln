@@ -35,8 +35,8 @@ PolygonData ← ⍬ ⍝
   PolygonData,←⊂ v2,'[SECITREV_XAM_CASYHP]' ⍝ normals      ⍝ Polygon vertex normals vectors
 
 PhysicsShape ← ⍬ ⍝
-  PhysicsShape,←⊂ PhysicsShapeType ⍝ type        ⍝ Physics shape type (circle or polygon)
-  PhysicsShape,←⊂ PhysicsBody      ⍝ body        ⍝ Shape physics body reference
+  PhysicsShape,←⊂ u1               ⍝ type        ⍝ Physics shape type (circle or polygon)
+  PhysicsShape,←⊂ ptr              ⍝ body        ⍝ Shape physics body reference
   PhysicsShape,←⊂ f                ⍝ radius      ⍝ Circle shape radius (used for circle shapes)
   PhysicsShape,←⊂ Mat2             ⍝ transform   ⍝ Vertices transform matrix 2x2
   PhysicsShape,←⊂ PolygonData      ⍝ vertexData  ⍝ Polygon shape vertices position and normals data (just used for polygon shapes)
@@ -64,8 +64,8 @@ PhysicsBodyData ← ⍬ ⍝
 
 PhysicsManifoldData ← ⍬ ⍝
   PhysicsManifoldData,←⊂ u           ⍝ id               ⍝ Reference unique identifier
-  PhysicsManifoldData,←⊂ PhysicsBody ⍝ bodyA            ⍝ Manifold first physics body reference
-  PhysicsManifoldData,←⊂ PhysicsBody ⍝ bodyB            ⍝ Manifold second physics body reference
+  PhysicsManifoldData,←⊂ ptr ⍝ bodyA            ⍝ Manifold first physics body reference
+  PhysicsManifoldData,←⊂ ptr ⍝ bodyB            ⍝ Manifold second physics body reference
   PhysicsManifoldData,←⊂ f           ⍝ penetration      ⍝ Depth of penetration from collision
   PhysicsManifoldData,←⊂ v2          ⍝ normal           ⍝ Normal direction vector from 'a' to 'b'
   PhysicsManifoldData,←⊂ v2,'[2]'    ⍝ contacts         ⍝ Points of contact during collision
@@ -90,27 +90,27 @@ pathToBinary ← pathToBinaryArg
 'IsPhysicsEnabledRAYLIB'                  (⎕NA⊢⎕NA⍤⊢) bool        R('IsPhysicsEnabled'                   (⍬                         )) ⍝                          ⍝ Returns true if physics thread is currently enabled
 'IsPhysicsEnabledRetPtrRAYLIB'            (⎕NA⊢⎕NA⍤⊢)             R('IsPhysicsEnabledRetPtr'             (,⊂ ('>',bool)             )) ⍝                          ⍝ Returns true if physics thread is currently enabled
 'SetPhysicsGravityRAYLIB'                 (⎕NA⊢⎕NA⍤⊢)             R('SetPhysicsGravity'                  (f f                       )) ⍝ x y                      ⍝ Sets physics global gravity force
-'CreatePhysicsBodyCircleRAYLIB'           (⎕NA⊢⎕NA⍤⊢) PhysicsBody R('CreatePhysicsBodyCircle'            (v2 f f                    )) ⍝ pos radius density       ⍝ Creates a new circle physics body with generic parameters
-'CreatePhysicsBodyCircleRetPtrRAYLIB'     (⎕NA⊢⎕NA⍤⊢)             R('CreatePhysicsBodyCircleRetPtr'      (('>',PhysicsBody) v2 f f  )) ⍝ pos radius density       ⍝ Creates a new circle physics body with generic parameters
-'CreatePhysicsBodyRectangleRAYLIB'        (⎕NA⊢⎕NA⍤⊢) PhysicsBody R('CreatePhysicsBodyRectangle'         (v2 f f f                  )) ⍝ pos width height density ⍝ Creates a new rectangle physics body with generic parameters
-'CreatePhysicsBodyRectangleRetPtrRAYLIB'  (⎕NA⊢⎕NA⍤⊢)             R('CreatePhysicsBodyRectangleRetPtr'   (('>',PhysicsBody) v2 f f f)) ⍝ pos width height density ⍝ Creates a new rectangle physics body with generic parameters
-'CreatePhysicsBodyPolygonRAYLIB'          (⎕NA⊢⎕NA⍤⊢) PhysicsBody R('CreatePhysicsBodyPolygon'           (v2 f i f                  )) ⍝ pos radius sides density ⍝ Creates a new polygon physics body with generic parameters
-'CreatePhysicsBodyPolygonRetPtrRAYLIB'    (⎕NA⊢⎕NA⍤⊢)             R('CreatePhysicsBodyPolygonRetPtr'     (('>',PhysicsBody) v2 f i f)) ⍝ pos radius sides density ⍝ Creates a new polygon physics body with generic parameters
-'PhysicsAddForceRAYLIB'                   (⎕NA⊢⎕NA⍤⊢)             R('PhysicsAddForce'                    (PhysicsBody v2            )) ⍝ body force               ⍝ Adds a force to a physics body
-'PhysicsAddTorqueRAYLIB'                  (⎕NA⊢⎕NA⍤⊢)             R('PhysicsAddTorque'                   (PhysicsBody f             )) ⍝ body amount              ⍝ Adds an angular force to a physics body
-'PhysicsShatterRAYLIB'                    (⎕NA⊢⎕NA⍤⊢)             R('PhysicsShatter'                     (PhysicsBody v2 f          )) ⍝ body position force      ⍝ Shatters a polygon shape physics body to little physics bodies with explosion force
+'CreatePhysicsBodyCircleRAYLIB'           (⎕NA⊢⎕NA⍤⊢) ptr         R('CreatePhysicsBodyCircle'            (v2 f f                    )) ⍝ pos radius density       ⍝ Creates a new circle physics body with generic parameters
+'CreatePhysicsBodyCircleRetPtrRAYLIB'     (⎕NA⊢⎕NA⍤⊢)             R('CreatePhysicsBodyCircleRetPtr'      (('>',ptr) v2 f f  )) ⍝ pos radius density       ⍝ Creates a new circle physics body with generic parameters
+'CreatePhysicsBodyRectangleRAYLIB'        (⎕NA⊢⎕NA⍤⊢) ptr         R('CreatePhysicsBodyRectangle'         (v2 f f f                  )) ⍝ pos width height density ⍝ Creates a new rectangle physics body with generic parameters
+'CreatePhysicsBodyRectangleRetPtrRAYLIB'  (⎕NA⊢⎕NA⍤⊢)             R('CreatePhysicsBodyRectangleRetPtr'   (('>',ptr) v2 f f f)) ⍝ pos width height density ⍝ Creates a new rectangle physics body with generic parameters
+'CreatePhysicsBodyPolygonRAYLIB'          (⎕NA⊢⎕NA⍤⊢) ptr         R('CreatePhysicsBodyPolygon'           (v2 f i f                  )) ⍝ pos radius sides density ⍝ Creates a new polygon physics body with generic parameters
+'CreatePhysicsBodyPolygonRetPtrRAYLIB'    (⎕NA⊢⎕NA⍤⊢)             R('CreatePhysicsBodyPolygonRetPtr'     (('>',ptr) v2 f i f)) ⍝ pos radius sides density ⍝ Creates a new polygon physics body with generic parameters
+'PhysicsAddForceRAYLIB'                   (⎕NA⊢⎕NA⍤⊢)             R('PhysicsAddForce'                    (ptr v2            )) ⍝ body force               ⍝ Adds a force to a physics body
+'PhysicsAddTorqueRAYLIB'                  (⎕NA⊢⎕NA⍤⊢)             R('PhysicsAddTorque'                   (ptr f             )) ⍝ body amount              ⍝ Adds an angular force to a physics body
+'PhysicsShatterRAYLIB'                    (⎕NA⊢⎕NA⍤⊢)             R('PhysicsShatter'                     (ptr v2 f          )) ⍝ body position force      ⍝ Shatters a polygon shape physics body to little physics bodies with explosion force
 'GetPhysicsBodiesCountRAYLIB'             (⎕NA⊢⎕NA⍤⊢) i           R('GetPhysicsBodiesCount'              (⍬                         )) ⍝                          ⍝ Returns the current amount of created physics bodies
 'GetPhysicsBodiesCountRetPtrRAYLIB'       (⎕NA⊢⎕NA⍤⊢)             R('GetPhysicsBodiesCountRetPtr'        (,⊂ ('>',i)                )) ⍝                          ⍝ Returns the current amount of created physics bodies
-'GetPhysicsBodyRAYLIB'                    (⎕NA⊢⎕NA⍤⊢) PhysicsBody R('GetPhysicsBody'                     (,⊂ i                      )) ⍝ index                    ⍝ Returns a physics body of the bodies pool at a specific index
-'GetPhysicsBodyRetPtrRAYLIB'              (⎕NA⊢⎕NA⍤⊢)             R('GetPhysicsBodyRetPtr'               (('>',PhysicsBody) i       )) ⍝ index                    ⍝ Returns a physics body of the bodies pool at a specific index
+'GetPhysicsBodyRAYLIB'                    (⎕NA⊢⎕NA⍤⊢) ptr         R('GetPhysicsBody'                     (,⊂ i                      )) ⍝ index                    ⍝ Returns a physics body of the bodies pool at a specific index
+'GetPhysicsBodyRetPtrRAYLIB'              (⎕NA⊢⎕NA⍤⊢)             R('GetPhysicsBodyRetPtr'               (('>',ptr) i       )) ⍝ index                    ⍝ Returns a physics body of the bodies pool at a specific index
 'GetPhysicsShapeTypeRAYLIB'               (⎕NA⊢⎕NA⍤⊢) i           R('GetPhysicsShapeType'                (,⊂ i                      )) ⍝ index                    ⍝ Returns the physics body shape type (PHYSICS_CIRCLE or PHYSICS_POLYGON)
 'GetPhysicsShapeTypeRetPtrRAYLIB'         (⎕NA⊢⎕NA⍤⊢)             R('GetPhysicsShapeTypeRetPtr'          (('>',i) i                 )) ⍝ index                    ⍝ Returns the physics body shape type (PHYSICS_CIRCLE or PHYSICS_POLYGON)
 'GetPhysicsShapeVerticesCountRAYLIB'      (⎕NA⊢⎕NA⍤⊢) i           R('GetPhysicsShapeVerticesCount'       (,⊂ i                      )) ⍝ index                    ⍝ Returns the amount of vertices of a physics body shape
 'GetPhysicsShapeVerticesCountRetPtrRAYLIB'(⎕NA⊢⎕NA⍤⊢)             R('GetPhysicsShapeVerticesCountRetPtr' (('>',i) i                 )) ⍝ index                    ⍝ Returns the amount of vertices of a physics body shape
-'GetPhysicsShapeVertexRAYLIB'             (⎕NA⊢⎕NA⍤⊢) v2          R('GetPhysicsShapeVertex'              (PhysicsBody i             )) ⍝ body vertex              ⍝ Returns transformed position of a body shape (body position + vertex transformed position)
-'GetPhysicsShapeVertexRetPtrRAYLIB'       (⎕NA⊢⎕NA⍤⊢)             R('GetPhysicsShapeVertexRetPtr'        (('>',v2) PhysicsBody i    )) ⍝ body vertex              ⍝ Returns transformed position of a body shape (body position + vertex transformed position)
-'SetPhysicsBodyRotationRAYLIB'            (⎕NA⊢⎕NA⍤⊢)             R('SetPhysicsBodyRotation'             (PhysicsBody f             )) ⍝ body radians             ⍝ Sets physics body shape transform based on radians parameter
-'DestroyPhysicsBodyRAYLIB'                (⎕NA⊢⎕NA⍤⊢)             R('DestroyPhysicsBody'                 (,⊂ PhysicsBody            )) ⍝ body                     ⍝ Unitializes and destroy a physics body
+'GetPhysicsShapeVertexRAYLIB'             (⎕NA⊢⎕NA⍤⊢) v2          R('GetPhysicsShapeVertex'              (ptr i             )) ⍝ body vertex              ⍝ Returns transformed position of a body shape (body position + vertex transformed position)
+'GetPhysicsShapeVertexRetPtrRAYLIB'       (⎕NA⊢⎕NA⍤⊢)             R('GetPhysicsShapeVertexRetPtr'        (('>',v2) ptr i    )) ⍝ body vertex              ⍝ Returns transformed position of a body shape (body position + vertex transformed position)
+'SetPhysicsBodyRotationRAYLIB'            (⎕NA⊢⎕NA⍤⊢)             R('SetPhysicsBodyRotation'             (ptr f             )) ⍝ body radians             ⍝ Sets physics body shape transform based on radians parameter
+'DestroyPhysicsBodyRAYLIB'                (⎕NA⊢⎕NA⍤⊢)             R('DestroyPhysicsBody'                 (,⊂ ptr            )) ⍝ body                     ⍝ Unitializes and destroy a physics body
 'ClosePhysicsRAYLIB'                      (⎕NA⊢⎕NA⍤⊢)             R('ClosePhysics'                       (⍬                         )) ⍝                          ⍝ Unitializes physics pointers and closes physics loop thread
 AfterDefaultDefinitions mode
 ∇
