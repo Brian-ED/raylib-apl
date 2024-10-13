@@ -4,7 +4,7 @@ raylib-apl is a library made to write cross-platform graphical applications usin
 ## Features
 <img align="right" style="width:180px" src="https://github.com/user-attachments/assets/b89f440b-e804-4c1b-ada9-820826fb8b08">
 
-- Input-methods: Keyboard, Mouse, Controler and Touchscreen.  
+- Input-methods: Keyboard, Mouse, Controler and Touchscreen.
 - Graphics: 2D, 3D, Sound, Text, Vector graphics, Images/Textures and shaders.
 - Multiple Fonts formats supported (TTF, OTF, Image fonts, AngelCode fonts)
 - Multiple texture formats supported, including compressed formats (DXT, ETC, ASTC)
