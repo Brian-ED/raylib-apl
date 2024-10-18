@@ -6,18 +6,19 @@ rl.Init ⍬
 rl.InitWindow 800 800 'Hello!!!'
 rl.DisableCursor
 
-camera ← (50 50 50) (0 10 0) (0 1 0) 45 rl.CameraProjection.CAMERA_PERSPECTIVE 0 0 0 0
 ⍝ Define the camera to look into our 3d world
-⍝ Camera position
-⍝ Camera looking at point
-⍝ Camera up vector (rotation towards target)
-⍝ Camera field-of-view Y
-⍝ Camera mode type
+camera  ←⊂ 50 50 50 ⍝ Camera position
+camera ,←⊂  0 10  0 ⍝ Camera looking at point
+camera ,←⊂  0  1  0 ⍝ Camera up vector (rotation towards target)
+camera ,←⊂ 45       ⍝ Camera field-of-view Y
+camera ,←⊂ rl.CameraProjection.CAMERA_PERSPECTIVE ⍝ Camera type
+camera ,←  4⍴0
 
 model _ ← rl.LoadModelRetPtr ⍬ 'OBJ/RubberDuck_LOD0.obj'
 
 ⍝ For every frame till user closes the window
 :While ~rl.WindowShouldClose
+
     ⍝ Look for keystrokes from user, move the camera
     camera ← rl.UpdateCamera ((,⊂camera) rl.CameraMode.CAMERA_THIRD_PERSON)
 
