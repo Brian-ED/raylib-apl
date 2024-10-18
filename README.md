@@ -20,7 +20,7 @@ raylib-apl is a library made to write cross-platform graphical applications usin
 Breaking changes to any feature in raylib-apl should be expected for now, as this library is very young and experimental. You will crash Dyalog a lot. If you experience code 999, there was likely a "segfault"/error in raylib. These are usually due to using functions in the wrong contexts, like drawing a box before `rl.BeginDrawing`, or loading an image before opening the window.
 
 # Documentation
-raylib-apl currently only supports windows. This is due to a bug in `⎕NA` that makes functions taking structs as arguments error.
+raylib-apl currently only supports Linux. This is due to a bug in `⎕NA` that makes functions taking structs as arguments error.
 
 ## Getting started
 Current examples expect a `libtemp-c-raylib.so` file to be in the `raylib-apl/` directory, downloadable [here](https://github.com/Brian-ED/temp-c-raylib/releases/tag/v0.1.0).
