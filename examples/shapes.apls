@@ -1,6 +1,7 @@
 #!cd $dir && /usr/bin/dyalogscript $fileName
-rl ← 0 ⎕Fix (⊃1⎕NPARTS''),'../link/raylib.apln'
-rl.Init⍬
+dir ← ⊃1⎕NPARTS''
+rl ← 0 ⎕Fix dir,'../link/raylib.apln'
+rl.Init (dir,'../link/')⍬
 
 ⍝ sizes of the shapes
 rec←60 ⋄ cir←400

@@ -28,10 +28,12 @@ Current examples expect a `libtemp-c-raylib.so` file to be in the `raylib-apl/` 
 ### Importing raylib
 To import raylib-apl as a namespace, run the following:
 ```apl
-rl ← 0⎕Fix (⊃1⎕NPARTS''),'../link/raylib.apln'
-rl.Init⍬
+#!cd $dir && /usr/bin/dyalogscript $fileName
+dir ← ⊃1⎕NPARTS''
+rl ← 0⎕Fix dir,'../link/raylib.apln'
+rl.Init (dir,'../link/')⍬
 ```
-You can give `rl.Init` a path as argument that points to `libraylib.so`.
+You can give `rl.Init` a path as second argument that points to `libraylib.so`.
 Use `⍬` to use the default path `raylib-apl/libraylib.so`.
 
 ### Using Link:
@@ -40,9 +42,9 @@ This imports `raylib.apln`, `rlgl.apln`, and `raymath.apln`, each of which are f
 
 Example using raylib with `]link` is shown below:
 ```apl
-]cd /mnt/0AD47A53D47A414D/Users/brian/Persinal/Scripts/APL/raylib-apl/link
+]cd /home/brian/Persinal/Scripts/APL/raylib-apl/link
 ]link.create # .
-raylib.Init⍬
+raylib.Init '' ⍬
 
 ⍝ Your raylib code starts here
 _←raylib.InitWindow 800 800 'Hello!!!'
@@ -68,7 +70,7 @@ This changes the state of the computer screen of course, but it also changes som
 # Begin scope where window is open
 raylib.InitWindow 400 400 'Title'
 
-  # Inside this scope, I am allowed to use a lot more functions. 
+  # Inside this scope, I am allowed to use a lot more functions.
 
 # End scope where window is open, meaning closing window
 raylib.CloseWindow
