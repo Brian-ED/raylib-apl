@@ -22,6 +22,8 @@ Breaking changes to any feature in raylib-apl should be expected for now, as thi
 # Documentation
 raylib-apl currently only supports Linux. This is due to a bug in `⎕NA` that makes functions taking structs as arguments error.
 
+Feel free to watch [How to install raylib-apl on Linux](https://youtu.be/XdDAqfMHjwI?si=iEv_RxAfz94cIUQC) on youtube.
+
 ## Getting started
 Current examples expect a `libtemp-c-raylib.so` file to be in the `raylib-apl/` directory, downloadable [here](https://github.com/Brian-ED/temp-c-raylib/releases/tag/v0.1.0).
 
