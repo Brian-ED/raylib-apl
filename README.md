@@ -2,7 +2,7 @@
 raylib-apl is a library made to write cross-platform graphical applications using the Dyalog APL programming language.
 
 ## Features
-<img align="right" style="width:180px" src="https://github.com/user-attachments/assets/b89f440b-e804-4c1b-ada9-820826fb8b08">
+<img align="right" style="width:240px" src="https://github.com/user-attachments/assets/bf969426-7741-4eda-aa03-5c90ee6f87de">
 
 - Input-methods: Keyboard, Mouse, Controler and Touchscreen.
 - Graphics: 2D, 3D, Sound, Text, Vector graphics, Images/Textures and shaders.
