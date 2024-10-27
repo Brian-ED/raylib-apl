@@ -25,7 +25,8 @@ raylib-apl currently only supports Linux. This is due to a bug in `⎕NA` that m
 ## Getting started
 *Feel free to watch [How to install raylib-apl on Linux](https://youtu.be/XdDAqfMHjwI?si=iEv_RxAfz94cIUQC) on youtube.*
 
-Current examples expect a `libtemp-c-raylib.so` file to be in the `raylib-apl/` directory, downloadable [here](https://github.com/Brian-ED/temp-c-raylib/releases/tag/v0.1.0).
+raylib-apl requires a `libtemp-c-raylib.so` file, downloadable [here](https://github.com/Brian-ED/temp-c-raylib/releases/tag/v0.1.0).
+The examples expect the file to be located at the `raylib-apl/` directory.
 
 ### Importing raylib
 To import raylib-apl as a namespace, run the following:
