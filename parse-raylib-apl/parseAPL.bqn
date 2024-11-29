@@ -165,7 +165,6 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
     ""
   ⟩
   bottom ← ⟨
-    "AfterDefaultDefinitions mode"
     "∇"
   ⟩
 

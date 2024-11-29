@@ -288,6 +288,5 @@ float16 ← ⍬ ⍝
 'QuaternionTransformRetPtrRAYLIB'           (⎕NA⊢⎕NA⍤⊢)            R('QuaternionTransformRetPtr'            (('>',Quaternion) Quaternion Matrix      )) ⍝ q mat                                           ⍝
 'QuaternionEqualsRAYLIB'                    (⎕NA⊢⎕NA⍤⊢) i          R('QuaternionEquals'                     (Quaternion Quaternion                   )) ⍝ p q                                             ⍝
 'QuaternionEqualsRetPtrRAYLIB'              (⎕NA⊢⎕NA⍤⊢)            R('QuaternionEqualsRetPtr'               (('>',i) Quaternion Quaternion           )) ⍝ p q                                             ⍝
-AfterDefaultDefinitions mode
 ∇
 :EndNamespace

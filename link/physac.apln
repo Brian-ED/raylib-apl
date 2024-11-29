@@ -112,6 +112,5 @@ PhysicsManifoldData ← ⍬ ⍝
 'SetPhysicsBodyRotationRAYLIB'            (⎕NA⊢⎕NA⍤⊢)             R('SetPhysicsBodyRotation'             (PhysicsBody f             )) ⍝ body radians             ⍝ Sets physics body shape transform based on radians parameter
 'DestroyPhysicsBodyRAYLIB'                (⎕NA⊢⎕NA⍤⊢)             R('DestroyPhysicsBody'                 (,⊂ PhysicsBody            )) ⍝ body                     ⍝ Unitializes and destroy a physics body
 'ClosePhysicsRAYLIB'                      (⎕NA⊢⎕NA⍤⊢)             R('ClosePhysics'                       (⍬                         )) ⍝                          ⍝ Unitializes physics pointers and closes physics loop thread
-AfterDefaultDefinitions mode
 ∇
 :EndNamespace

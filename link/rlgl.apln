@@ -545,6 +545,5 @@ rlglData ← ⍬ ⍝
 'rlGetMatrixProjectionStereoRetPtrRAYLIB' (⎕NA⊢⎕NA⍤⊢)               R('rlGetMatrixProjectionStereoRetPtr'  (('>',Matrix) i           )) ⍝ eye                                                                  ⍝
 'rlGetMatrixViewOffsetStereoRAYLIB'       (⎕NA⊢⎕NA⍤⊢) Matrix        R('rlGetMatrixViewOffsetStereo'        (,⊂ i                     )) ⍝ eye                                                                  ⍝
 'rlGetMatrixViewOffsetStereoRetPtrRAYLIB' (⎕NA⊢⎕NA⍤⊢)               R('rlGetMatrixViewOffsetStereoRetPtr'  (('>',Matrix) i           )) ⍝ eye                                                                  ⍝
-AfterDefaultDefinitions mode
 ∇
 :EndNamespace

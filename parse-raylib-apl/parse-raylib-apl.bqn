@@ -2,6 +2,7 @@
 ⟨HeaderToFFI⟩ ← •Import "parseAPL.bqn"
 file ← •FChars "../lib/raylib.h"
 file HeaderToFFI˜↩ "RLAPI"
+file ("∇"∾˜("AfterDefaultDefinitions mode"∾@+10)∾˜∾⟜"∇"⁼)↩
 file ∾˜↩ ":Namespace raylib"∾@+10
 file ∾ ↩ ":EndNamespace"∾˜@+10
 destination ← "../link/raylib.apln"

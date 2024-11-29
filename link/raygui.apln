@@ -578,6 +578,5 @@ GuiTextStyle ← ⍬ ⍝ NOTE: Text style is defined by control
 'GuiColorPickerHSVRetPtrRAYLIB'(⎕NA⊢⎕NA⍤⊢)           R('GuiColorPickerHSVRetPtr' (('>',i) Rectangle str ('=',v3)                          )) ⍝ bounds text colorHsv                                           ⍝ Color Picker control that avoids conversion to RGB on each call (multiple color controls)
 'GuiColorPanelHSVRAYLIB'       (⎕NA⊢⎕NA⍤⊢) i         R('GuiColorPanelHSV'        (Rectangle str ('=',v3)                                  )) ⍝ bounds text colorHsv                                           ⍝ Color Panel control that returns HSV color value, used by GuiColorPickerHSV()
 'GuiColorPanelHSVRetPtrRAYLIB' (⎕NA⊢⎕NA⍤⊢)           R('GuiColorPanelHSVRetPtr'  (('>',i) Rectangle str ('=',v3)                          )) ⍝ bounds text colorHsv                                           ⍝ Color Panel control that returns HSV color value, used by GuiColorPickerHSV()
-AfterDefaultDefinitions mode
 ∇
 :EndNamespace
