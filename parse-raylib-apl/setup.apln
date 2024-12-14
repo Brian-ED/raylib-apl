@@ -85,14 +85,14 @@ PadStruct ← {
 ∇AfterDefaultDefinitions mode
   replacements ⊢← 0 ⎕FIX pathToMe,'../parse-raylib-apl/replacements.apln'
 
-  SetTraceLogLevel ,TraceLogLevel.LOG_WARNING
-  SetTargetFPS 60
+  SetTraceLogLevelRAYLIB ,TraceLogLevel.LOG_WARNING
+  SetTargetFPSRAYLIB 60
 
   ⍝ Replace all names of ⍺ that are in ⍵ with the ⍵ counterpart
   ReplaceNames ← {⍵.(⍎'⍺.',⊢,'←',⊢)¨⍣(×≢a)⊢a←⊃∩/(⍺⍵).⎕NL¯3}
 
   :If mode∊1 3 ⍝ Automatic replacements
-    ⎕This ReplaceNames replacements
+    replacements {r←⍵ ⋄ r←r⊣'r'⎕NS⍺} ⎕THIS
   :EndIf
 
   :If mode∊2 3 ⍝ Custom replacements
@@ -104,22 +104,9 @@ PadStruct ← {
 replacements ← ⎕NS''
 
 :Namespace customReplacements
-  isWindowOpen ← 0
-  Assert ← {⍺←'assertion failure' ⋄ 0∊⍵:⍺ ⎕SIGNAL 8 ⋄ shy←0}
-
-  ∇InitWindow arg
-    Assert 0=isWindowOpen
-    isWindowOpen⊢←1
-    InitWindowRAYLIB arg
-  ∇
-
-  ∇CloseWindow
-    Assert 1=isWindowOpen
-    isWindowOpen⊢←0
-    CloseWindowRAYLIB
-  ∇
 
   ∇r←LoadTextureFromImage image
+    Assert scopeInitWindow
     r←LoadTextureFromImageRetPtrRAYLIB (⍬ image)
   ∇
 
@@ -128,7 +115,7 @@ replacements ← ⎕NS''
   ∇
 
   ∇model←LoadModel filePath
-    model ← ⊃LoadModelRetPtr ⍬ filePath
+    model ← ⊃LoadModelRetPtrRAYLIB ⍬ filePath
   ∇
 
 :EndNamespace
