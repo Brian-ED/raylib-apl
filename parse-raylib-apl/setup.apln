@@ -115,7 +115,14 @@ replacements ← ⎕NS''
   ∇
 
   ∇model←LoadModel filePath
-    model ← ⊃LoadModelRetPtrRAYLIB ⍬ filePath
+    model ← ⊃LoadModelRetPtrRAYLIB (⍬ filePath)
+  ∇
+
+  ⍝ Made function return output. funcRAYLIB version doesn't due to bug
+  ∇r←UpdateCamera(camera mode)
+    'UpdateCamera errored' Assert ∨/(scopeInitWindow)
+    'UpdateCamera errored' Assert ∧/⍬
+    r←UpdateCameraRAYLIB(camera mode)
   ∇
 
 :EndNamespace
