@@ -122,7 +122,7 @@ replacements ← ⎕NS''
   ∇r←UpdateCamera(camera mode)
     'UpdateCamera errored' Assert ∨/(scopeInitWindow)
     'UpdateCamera errored' Assert ∧/⍬
-    r←UpdateCameraRAYLIB(camera mode)
+    r←UpdateCameraRAYLIB((⊂camera) mode)
   ∇
 
 :EndNamespace

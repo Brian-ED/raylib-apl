@@ -20,7 +20,7 @@ model ← rl.LoadModel dir,'OBJ/RubberDuck_LOD0.obj'
 :While ~rl.WindowShouldClose
 
     ⍝ Look for keystrokes from user, move the camera
-    camera ← rl.UpdateCamera ((,⊂camera) rl.CameraMode.CAMERA_THIRD_PERSON)
+    camera ← rl.UpdateCamera (camera rl.CameraMode.CAMERA_THIRD_PERSON)
 
     ⍝ Preparing another buffer to draw the new frame, with white background
     rl.BeginDrawing
