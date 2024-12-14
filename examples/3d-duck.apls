@@ -24,13 +24,13 @@ model ← rl.LoadModel dir,'OBJ/RubberDuck_LOD0.obj'
 
     ⍝ Preparing another buffer to draw the new frame, with white background
     rl.BeginDrawing
-        rl.ClearBackground ⊂8↑rl.color.white
+        rl.ClearBackground 8↑rl.color.white
 
         ⍝ Draws FPS at x=40 y=40
         rl.DrawFPS 40 40
 
         ⍝ Draw 3d stuff relative to the camera
-        rl.BeginMode3D ⊂camera
+        rl.BeginMode3D camera
 
             ⍝ draws grid
             rl.DrawGrid 20 10
@@ -47,5 +47,5 @@ model ← rl.LoadModel dir,'OBJ/RubberDuck_LOD0.obj'
 :EndWhile
 
 ⍝ Unloading model, freeing it's memory.
-rl.UnloadModel ,⊂model
+rl.UnloadModel model
 rl.CloseWindow

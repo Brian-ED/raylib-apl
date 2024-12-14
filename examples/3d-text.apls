@@ -1,0 +1,153 @@
+#!cd $dir && /usr/bin/dyalogscript $fileName
+dir ← ⊃1⎕NPARTS''
+rl ← 0 ⎕Fix dir,'../link/raylib.apln'
+rl.Init (dir,'../link/')⍬
+
+gl ← 0 ⎕Fix dir,'../link/rlgl.apln'
+gl.Init (dir,'../link/')⍬
+
+rl.InitWindow 400 400 'hellooo'
+
+LETTER_BOUNDRY_COLOR ← 8↑rl.color.blue
+LETTER_BOUNDRY_SIZE ← 10
+
+⍝ Define the camera to look into our 3d world
+camera  ←⊂ 50 50 50 ⍝ Camera position
+camera ,←⊂  0 10  0 ⍝ Camera looking at point
+camera ,←⊂  0  1  0 ⍝ Camera up vector (rotation towards target)
+camera ,←⊂ 45       ⍝ Camera field-of-view Y
+camera ,←⊂ rl.CameraProjection.CAMERA_PERSPECTIVE ⍝ Camera type
+camera ,←  4⍴0
+
+tab newline← ⎕ucs 8 10
+
+⍝ @•FFI"*:i8"‿"memcpy"‿"&i8"‿"*f32"‿"u64"
+libc ← '/lib/x86_64-linux-gnu/libc.so.6'
+dyalib ← 'dyalog64.so'
+⍝f←rl.MakeImporter libc 'memcpy' ((rl.GlyphInfo) ('=',rl.GlyphInfo) 'U8')
+⍝⎕NA rl.i rl.MakeImporter libc 'getpid' ⍬
+'getI4'⎕NA dyalib,'|MEMCPY >I4[] P U8'
+'getF4'⎕NA dyalib,'|MEMCPY >I4[] P U8'
+
+show_letter_boundry ← 1
+
+rl.(⎕NA pathToBinary,'|DrawCubeV {F4 F4 F4} {F4 F4 F4} {U1 U1 U1 U1 U1 U1 U1 U1}') ⍝ position size color                                               ⍝ Draw cube (Vector version)
+
+⍝ Draw codepoint at specified position in 3D space
+∇DrawTextCodepoint3D(font codepoint position fontSize backface tint)
+    baseSize glyphCount glyphPadding texture recs glyphs ← font
+    tex_id tex_width tex_height tex_mipmaps tex_format ← texture
+
+    ⍝ Character index position in sprite font
+    ⍝ NOTE: In case a codepoint is not available in the font, index returned points to '?'
+    index ← rl.GetGlyphIndex(font codepoint)
+    scale ← fontSize÷baseSize
+
+    ⍝ Character destination rectangle on screen
+    ⍝ NOTE: We consider charsPadding on drawing
+    (value offsetX offsetY advanceX)←(10×index)↓ getI4 (⍴⍨4+10×index) glyphs (4+10×index)
+    (⊃position) +← baseSize÷⍨ fontSize× offsetX - glyphPadding
+    (⊃⌽position) +← baseSize÷⍨ fontSize× offsetY - glyphPadding
+
+    ⍝ Character source rectangle from font texture atlas
+    ⍝ NOTE: We consider chars padding when drawing, it could be required for outline/glow shader effects
+
+    ⍝ NOTE: We consider charsPadding on drawing
+    (x y width height)←(4×index)↓ getF4 (⍴⍨4×1+index) glyphs (4×1+index)
+    srcRec_x srcRec_y ←  (x y) - glyphPadding
+    srcRec_width srcRec_height ←  (width height) + 2×glyphPadding
+
+    width height ← scale× baseSize÷⍨ (width height) + 2×glyphPadding
+
+    :if tex_id > 0
+
+        x ← y ← z ← 0
+
+        ⍝ normalized texture coordinates of the glyph inside the font texture (0.0f -> 1.0f)
+        tx ty ← (srcRec_x srcRec_y)÷(tex_width tex_height)
+        tw th ← (tex_width tex_height)÷⍨(srcRec_x srcRec_y)+(srcRec_width srcRec_height)
+
+        :If show_letter_boundry
+            rl.DrawCubeWiresV (7↑position+ (width÷2) 0 (height÷2)) (7↑10 LETTER_BOUNDRY_SIZE 10) LETTER_BOUNDRY_COLOR
+            rl.DrawCubeV ⎕←(0 0 0+ (width÷2) 0 (height÷2)) (100 LETTER_BOUNDRY_SIZE 100) LETTER_BOUNDRY_COLOR
+        :Endif
+
+
+        gl.rlCheckRenderBatchLimit⊂ 4 + 4×backface
+        gl.rlSetTexture⊂ tex_id
+
+        gl.rlPushMatrix
+            gl.rlTranslatef position
+            gl.rlBegin⊂ gl.RL_QUADS
+                gl.rlColor4ub 4↑tint
+
+                ⍝ Front Face
+                gl.rlNormal3f 0 1 0  ⍝ Normal Pointing Up
+                gl.rlTexCoord2f tx ty ⋄ gl.rlVertex3f ( x          y  z          )  ⍝ Top Left Of The Texture and Quad
+                gl.rlTexCoord2f tx th ⋄ gl.rlVertex3f ( x          y (z + height))  ⍝ Bottom Left Of The Texture and Quad
+                gl.rlTexCoord2f tw th ⋄ gl.rlVertex3f ((x + width) y (z + height))  ⍝ Bottom Right Of The Texture and Quad
+                gl.rlTexCoord2f tw ty ⋄ gl.rlVertex3f ((x + width) y  z          )  ⍝ Top Right Of The Texture and Quad
+
+                :if (backface)
+
+                    ⍝ Back Face
+                    gl.rlNormal3f 0 ¯1 0 ⍝ Normal Pointing Down
+                    gl.rlTexCoord2f tx ty ⋄ gl.rlVertex3f( x          y  z          ) ⍝ Top Right Of The Texture and Quad
+                    gl.rlTexCoord2f tw ty ⋄ gl.rlVertex3f((x + width) y  z          ) ⍝ Top Left Of The Texture and Quad
+                    gl.rlTexCoord2f tw th ⋄ gl.rlVertex3f((x + width) y (z + height)) ⍝ Bottom Left Of The Texture and Quad
+                    gl.rlTexCoord2f tx th ⋄ gl.rlVertex3f( x          y (z + height)) ⍝ Bottom Right Of The Texture and Quad
+                :EndIf
+            gl.rlEnd
+        gl.rlPopMatrix
+
+        gl.rlSetTexture 0
+    :EndIf
+∇
+
+⍝ Draw a 2D text in 3D space
+⍝∇DrawText3D (font text position fontSize fontSpacing lineSpacing backface tint)
+⍝    baseSize glyphCount glyphPadding texture recs glyphs ← font
+⍝
+⍝    textOffsetY ← 0            ⍝ Offset between lines (on line break '\n')
+⍝    textOffsetX ← 0            ⍝ Offset X to next character to draw
+⍝
+⍝    scale ← fontSize÷baseSize
+⍝
+⍝    :for codepoint :in text
+⍝
+⍝        :if codepoint = newline
+⍝            ⍝ NOTE: Fixed line spacing of 1.5 line-height
+⍝            ⍝ TODO: Support custom line spacing defined by user
+⍝            textOffsetY +← scale + scale × lineSpacing÷baseSize
+⍝            textOffsetX ← 0
+⍝        :else
+⍝            :If ∧/codepoint≠' ',tab
+⍝                DrawTextCodepoint3D (font codepoint ((position.x + textOffsetX) position.y (position.z + textOffsetY)) fontSize 1 tint)
+⍝            :EndIf
+⍝
+⍝            textOffsetX +← scale× baseSize÷⍨ fontSpacing + 20
+⍝        :endif
+⍝
+⍝    :EndFor
+⍝∇
+
+:While ~rl.WindowShouldClose
+    font ← rl.GetFontDefaultRetPtr ⊂⍬
+    camera ← rl.UpdateCameraRetPtr ((,⊂camera) rl.CameraMode.CAMERA_THIRD_PERSON)
+
+    rl.BeginDrawing
+        rl.ClearBackground ,⊂8↑rl.color.black
+
+        rl.BeginMode3D ,⊂camera
+            ⍝                                              fontSize backface tint
+            DrawTextCodepoint3D (font (⎕UCS,'h') (0 100 0) 300       1        (8↑rl.color.white))
+
+            rl.DrawGrid 20 10
+        rl.EndMode3D
+
+        rl.DrawText 'hi' 30 30 10 (8↑rl.color.red)
+    rl.EndDrawing
+
+:EndWhile
+
+rl.CloseWindow
