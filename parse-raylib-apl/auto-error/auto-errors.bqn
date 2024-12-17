@@ -34,17 +34,12 @@ out∾↩""‿""
   out∾↩<'∇'∾("r←")⊸∾⍟r n∾(' '⊸∾·"("⊸∾⁼∾⟜")"⁼)⍟(×∘≠∧∧´∘≠⟜' ')  arg      # This 1 here is temporary, a "catch all" for the incomplete auto-error txt file.
   out∾↩⋈"    '"∾n∾" errored' Assert ∨/"∾"1"⍟("()"⊸≡)"("⊸∾∾⟜")" 3↓∾") ("⊸∾¨{3↓∾" ∧ scope"⊸∾¨𝕩}¨aw
   out∾↩⋈"    '"∾n∾" errored' Assert ∧/"∾"⍬"⍟("()"⊸≡)"("⊸∾∾⟜")" 3↓∾") ("⊸∾¨{3↓∾" ∨ scope"⊸∾¨𝕩}¨daw
-  {𝕊:
-    out∾↩<"    scope"∾(⊑𝕩)∾" ← 1"
-  }⍟(×≠)n⊸≡¨⊸/begin
-  {𝕊:
-    out∾↩<"    scope"∾(⊑𝕩)∾" ← 0"
-  }⍟(×≠)(n⊸≡¨end)⊸/begin
-  out∾↩<"    "∾("r←")⊸∾⍟r("RAYLIB"∾˜n)∾  ",⊂"⊸∾⍟(×∘≠∧∧´∘≠⟜' ')arg
+  {𝕊:out∾↩<"    scope"∾𝕩∾" ← 1"}∘⊑⍟(×≠)n⊸≡¨⊸/begin
+  {𝕊:out∾↩<"    scope"∾𝕩∾" ← 0"}∘⊑⍟(×≠)(n⊸≡¨end)⊸/begin
+  out∾↩<"    "∾"r←"⊸∾⍟r("RAYLIB"∾˜n)∾  ",⊂"⊸∾⍟(×∘≠∧∧´∘≠⟜' ')arg
 
   out∾↩<"∇"
 
-  # Last time i was attempting to add retptr and raylib suffixes to extend auto-warnings to all functions in raylib-apl
 }˘⍉ (∾⟜"RetPtr"¨⌾((»s2LinesExtended)⊸/)∾⟜"Ref"¨⌾((»s1LinesExtended)⊸/))⌾⊏ [replic/name,replic/allow,replic/disallow,argNames,"void"⊸≢¨outtype]
 
 out∾˜↩":Namespace replacements"‿""
