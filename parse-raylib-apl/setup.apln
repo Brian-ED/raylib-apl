@@ -104,26 +104,7 @@ PadStruct ← {
 replacements ← ⎕NS''
 
 :Namespace customReplacements
-
-  ∇r←LoadTextureFromImage image
-    Assert scopeInitWindow
-    r←LoadTextureFromImageRetPtrRAYLIB (⍬ image)
-  ∇
-
-  ∇r←UpdateTextureU1 (tex U1Arr)
-    r←UpdateTexture (tex ptr)
-  ∇
-
-  ∇model←LoadModel filePath
-    model ← ⊃LoadModelRetPtrRAYLIB (⍬ filePath)
-  ∇
-
-  ⍝ Made function return output. funcRAYLIB version doesn't due to bug
-  ∇r←UpdateCamera(camera mode)
-    'UpdateCamera errored' Assert ∨/(scopeInitWindow)
-    'UpdateCamera errored' Assert ∧/⍬
-    r←UpdateCameraRAYLIB((⊂camera) mode)
-  ∇
+⍝ Automatic replacements are good enough currently :D
 
 :EndNamespace
 

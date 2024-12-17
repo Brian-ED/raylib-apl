@@ -17,13 +17,13 @@ rl.SetTraceLogLevel rl.TraceLogLevel.LOG_WARNING
 :While ~rl.WindowShouldClose
 
     ⍝ mouse pos floored
-    pos ← rl.GetMousePositionRetPtr ,⊂,⊂0 0
+    pos ← rl.GetMousePositionRetPtr
 
     rl.BeginDrawing
         rl.ClearBackground ,⊂8↑rl.color.black
         rl.DrawFPS 40 40
         rl.DrawEllipse (pos,200 200),⊂8↑rl.color.red
-        {_←rl.DrawRectangle (⊂8↑rl.color.white),⍨(rec rec),⍨⍵+pos-rec÷2}⍤¯1⊢ outerRecs
+        {rl.DrawRectangle (⊂8↑rl.color.white),⍨(rec rec),⍨⍵+pos-rec÷2}⍤¯1⊢ outerRecs
     rl.EndDrawing
 :EndWhile
 rl.CloseWindow

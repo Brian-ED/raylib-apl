@@ -20,6 +20,7 @@ s1LinesExtended‿s2LinesExtended ← s2Lines{((+´+≠)𝕩+𝕨)↑𝕨⊸{(¬
   names
   argNames
   outType
+  argTypes
 ] •Import "auto-error/auto-errors.bqn"
 
 file ToFFI↩
