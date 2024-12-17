@@ -38,7 +38,13 @@ out∾↩""‿""
   {𝕊:out∾↩<"    scope"∾𝕩∾" ← 0"}∘⊑⍟(×≠)(n⊸≡¨end)⊸/begin
   out∾↩"∇"⋈˜"    "∾"r←"⊸∾⍟r(n∾"RAYLIB")∾",⊂"⊸∾⍟(×∘≠∧∧´∘≠⟜' ')arg
 
-}˘⍉ (∾⟜"RetPtr"¨⌾((»s2LinesExtended)⊸/)∾⟜"Ref"¨⌾((»s1LinesExtended)⊸/))⌾⊏ [replic/name,replic/allow,replic/disallow,argNames,"void"⊸≢¨outtype]
+}˘⍉ [
+  ∾⟜"RetPtr"¨⌾((»s2LinesExtended)⊸/)∾⟜"Ref"¨⌾((»s1LinesExtended)⊸/) replic/name
+  replic/allow
+  replic/disallow
+  argNames
+  "void"⊸≢¨outtype
+]
 
 out∾˜↩":Namespace replacements"‿""
 out∾↩""‿":EndNamespace"
