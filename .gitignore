@@ -7,3 +7,6 @@ libtemp-c-raylib.so
 
 # Incomplete examples
 examples/6_shaders
+
+# vscode settings
+.vscode
