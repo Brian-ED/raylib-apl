@@ -1,0 +1,82 @@
+#!cd $dir && /usr/bin/dyalogscript $fileName
+⍝ Copied from https://github.com/arceryz/raylib-tesseract
+
+dir ← ⊃1⎕NPARTS''
+rl ← 0⎕Fix dir,'../link/raylib.apln'
+rl.Init (dir,'../link/')⍬
+
+rl.InitWindow 800 800 'Tesseract'
+⍝ Define the camera to look into our 3d world
+camera  ←⊂ 4 4 4 ⍝ Camera position
+camera ,←⊂ 0 0 0 ⍝ Camera looking at point
+camera ,←⊂ 0 0 1 ⍝ Camera up vector (rotation towards target)
+camera ,←⊂ 50    ⍝ Camera field-of-view Y
+camera ,←⊂ rl.CameraProjection.CAMERA_PERSPECTIVE ⍝ Camera type
+camera ,←  4⍴0
+
+model _ ← rl.LoadModelRetPtr dir,'OBJ/RubberDuck_LOD0.obj'
+frame ← 1
+
+
+'DrawLine3D2' ⎕NA dir,'../libtemp-c-raylib.so|DrawLine3D {F4 F4 F4} {F4 F4 F4} {U1 U1 U1 U1 U1 U1 U1 U1}'
+'DrawSphere2' ⎕NA dir,'../libtemp-c-raylib.so|DrawSphere {F4 F4 F4} F4 {U1 U1 U1 U1 U1 U1 U1 U1}'
+
+⍝ For every frame till user closes the window
+:While ~rl.WindowShouldClose
+    ⍝ Look for keystrokes from user, move the camera
+    camera ← rl.UpdateCamera (camera rl.CameraMode.CAMERA_THIRD_PERSON)
+
+    ⍝ Preparing another buffer to draw the new frame, with white background
+    rl.BeginDrawing
+        rl.ClearBackground 8↑rl.color.black
+
+        ⍝ Draws FPS at x=40 y=40
+        rl.DrawFPS 40 40
+
+        ⍝ Draw 3d stuff relative to the camera
+        rl.BeginMode3D camera
+            frame+←1
+            rotation ← ○180÷⍨frame
+
+            o ← {
+                x y z w ← ⍵
+
+                ⍝ Rotate the XW part of the vector.
+                x w ← x w +.×⍨ (2 2⍴2 1 1 2-@2⍤○⊢) rotation
+
+                ⍝ Projection from XYZW to XYZ from perspective point (0, 0, 0, 3).
+                ⍝ Essentially: Trace a ray from (0, 0, 0, 3) > p and continue until W = 0.
+                c ← 3÷ 3- w
+                x y z ← c × x y z
+                x y z w
+            }¨⊃∘1 ¯1¨¨⍳4⍴2
+
+            ⍝ Split XYZ coordinate and W values for drawing later.
+            w_values ← ⊃⍤⌽¨o
+            transformed ← ¯1↓¨o
+
+            transformed {
+                DrawSphere2 (⍺ (|⍵÷20) (8↑rl.color.white))
+            }¨w_values
+
+            tesseract ← ,⊃∘1 ¯1¨¨⍳4⍴2
+
+            ∘.{
+                t ← ,transformed
+                v1 ← ⍵⊃tesseract
+                v2 ← ⍺⊃tesseract
+                diff ← +/v1=v2
+                ⍝ Draw only differing by 1 coordinate and the lower index only (duplicate lines).
+                (⍵<⍺)∧diff=3: DrawLine3D2 (⍵⊃t) (⍺⊃t) (8↑rl.color.blue)
+            }⍨⍳16
+
+
+        ⍝ Stop drawing 3d
+        rl.EndMode3D
+
+    ⍝ wait till next frame is needed, then switch to this new buffer we've drawn
+    rl.EndDrawing
+:EndWhile
+
+rl.UnloadModel model
+rl.CloseWindow
