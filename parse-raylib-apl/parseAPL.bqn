@@ -634,7 +634,7 @@ ToPrettyJson ← {𝕊defines‿structs‿aliases‿enums‿callbacks‿function
         ⋈"      ""name"": """∾name∾""","
         ⋈"      ""description"": """∾(Escape desc)∾""","
         ⋈"      ""values"": ["
-        ¯1⊸↓⌾(¯1⊸⊑)⍟(⟨⟩⊸≢)∾{𝕊valueName‿value‿valueDesc:
+        ¯1⊸↓⌾(¯1⊸⊑)⍟(⟨⟩⊸≢)⟨⟩∾´∾{𝕊valueName‿value‿valueDesc:
           ⟨
             "        {"
             "          ""name"": """∾valueName∾""","
