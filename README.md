@@ -17,7 +17,7 @@ raylib-apl is a library made to write cross-platform graphical applications usin
 - VR stereo rendering support with configurable HMD device parameters
 
 # Warning
-Breaking changes to any feature in raylib-apl should be expected for now, as this library is very young and experimental. You will crash Dyalog a lot. If you experience code 999, there was likely a "segfault"/error in raylib. These are usually due to using functions in the wrong contexts, like drawing a box before `rl.BeginDrawing`, or loading an image before opening the window.
+Breaking changes to any feature in raylib-apl should be expected for now, as this library is very young and experimental. If you experience code 999, there was likely a "segfault"/error in raylib.
 
 # Documentation
 raylib-apl currently only supports Linux. This is due to a bug in `⎕NA` that makes functions taking structs as arguments error.
