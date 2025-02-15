@@ -43,12 +43,12 @@ returnViaRef ← '*'={⊢´⊑𝕩∾<" "}¨argTypes
   out∾↩"∇"⋈˜"    "∾"r←"⊸∾⍟r(n∾"RAYLIB")∾",⊂"⊸∾⍟(×∘≠∧∧´∘≠⟜' ') ('('∾∾⟜')')⍟(×≠) ("⍬"∾' '⊸∾⍟(×≠))⍟retPtrF arg
 
 }˘⍉ [
-  ∾⟜"RetPtr"¨⌾((»s2LinesExtended)⊸/)∾⟜"Ref"¨⌾((»s1LinesExtended)⊸/) replic/name
+  ∾⟜"RetPtr"¨⌾((0»s2LinesExtended)⊸/)∾⟜"Ref"¨⌾((0»s1LinesExtended)⊸/) replic/name
   replic/allow
   replic/disallow
   argNames
   returnViaRef∨"void"⊸≢¨outtype
-  »s2LinesExtended
+  0»s2LinesExtended
 ]
 
 out∾˜↩":Namespace replacements"‿""

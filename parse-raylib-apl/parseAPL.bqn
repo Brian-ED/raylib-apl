@@ -12,9 +12,10 @@
 nl ← @+10 # newline
 wnl ← @+13 # windows newline prefix
 Box ← ⟨⟩⊸≡◶⟨>⋄↕0‿0⟩⊢»¨⟜<' '⥊˜0⌈´≠¨
+LowerNames ← +⟜(32×1="A["⊸⍋)⌾(1↑⎉1⊢)⍟(⟨⟩⊸≢)
 _MetaParse ← {∾˘´[𝕗,𝕨]{F‿w𝕊𝕩:<w⊸∾˘Box F𝕩}˘○⍉↕∘0‿3⍟(⟨⟩⊸≡)𝕩}
 
-remap ← {𝕎𝕏}´{(𝕨⊸≡∧"*"≡1↑⊣)◶⟨⋈⋄𝕩⋈˜1↓⊣⟩´}´¨⟨
+remap ← {𝕏⌾⌽}{𝕎𝕏}´{(𝕨⊸≡∧"*"≡1↑⊣)◶⟨⋈⋄𝕩⋈˜1↓⊣⟩´}´¨⟨
   "unsigned char"  ‿"ustr"
   "char"           ‿"str"
   "void"           ‿"ptr"
@@ -99,7 +100,7 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
       consts←constText⊸(⊣≡≠⊸↑)¨𝕩
       s ← ¬consts∨¬⊑¨'*'⊸∊¨𝕩
       cleaned←constText⊸∾⁼¨⌾(consts⊸/)𝕩
-      [kept,removed] ← 2‿∘⥊⍉Remap⌾⌽˘ (↕0‿2)∾´ ∨`∘∊⟜"[*"⊸(¬⊸/∨`⌾⌽∘≠⟜' '⊸/⊸⋈SwitchOrder∘/)¨cleaned
+      [kept,removed] ← 2‿∘⥊⍉Remap˘ (↕0‿2)∾´ ∨`∘∊⟜"[*"⊸(¬⊸/∨`⌾⌽∘≠⟜' '⊸/⊸⋈SwitchOrder∘/)¨cleaned
       replaced ← kept {MapNames⌾⋈𝕨}⍟(0⊸≡)¨(c⊐kept)⊏bqn∾0
       removed {'='¨⌾(('*'=𝕩)⊸/)𝕩}¨↩
       removed {""𝕊𝕩:𝕩;'"'≡⊑𝕩?𝕨⊸∾⌾('"'⊸∾⁼)𝕩;"('"∾𝕨∾"',"∾𝕩∾')'}¨replaced
@@ -112,11 +113,12 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
     ⊑"<=>"∊˜⊑𝕨? "'"∾𝕨∾"',"∾𝕩;
     𝕩∾",'"∾𝕨∾"'"
   }
+
   MapStructTypes ← {
     [bqn,c] ← typeReplacements
     cleaned←constText⊸∾⁼¨⌾((constText⊸(⊣≡≠⊸↑)¨𝕩)⊸/)𝕩
     mask ← ∨`∘∊⟜"[*<>"¨cleaned
-    [kept,removed] ← 2‿∘⥊⍉Remap⌾⌽˘> mask{⟨∨`⌾⌽∘≠⟜' '⊸/𝕩/˜¬𝕨 ⋄ SwitchOrder 𝕨/𝕩⟩}¨cleaned
+    [kept,removed] ← 2‿∘⥊⍉Remap˘> mask{⟨∨`⌾⌽∘≠⟜' '⊸/𝕩/˜¬𝕨 ⋄ SwitchOrder 𝕨/𝕩⟩}¨cleaned
     replaced ← kept MapNames⌾⋈∘⊣⍟(0⊸≡)¨(c⊐kept)⊏bqn∾0
     ({'='¨⌾((𝕩='*')⊸/)𝕩}¨ removed) AddRemoved¨ replaced
   }
@@ -130,7 +132,7 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
     [bqn,c] ← typeReplacements
     {
       cleaned←𝕩↓˜¨constText≠⊸×constText⊸(⊣≡≠⊸↑)¨𝕩
-      [kept,removed] ← 2‿∘⥊⍉Remap⌾⌽˘> ∨`∘∊⟜"[*"⊸(¬⊸/¯1⊸↓⍟(" "≡¯1⊸↑)⊸⋈SwitchOrder∘/)¨cleaned
+      [kept,removed] ← 2‿∘⥊⍉Remap˘> ∨`∘∊⟜"[*"⊸(¬⊸/¯1⊸↓⍟(" "≡¯1⊸↑)⊸⋈SwitchOrder∘/)¨cleaned
       replaced ← kept MapNames⌾⋈∘⊣⍟(0⊸≡)¨(c⊐kept)⊏bqn∾0
       remMask ← ⊑¨'*'⊸∊¨ removed
       {'('∾𝕩∾')'}⍟(∨´",⊣"⊸∊)¨"ptr⊣"⊸∾⍟(("ustr"≡¯4⊸↑)∨"str"≡¯3⊸↑)¨ "ptr"¨⌾(remMask⊸/) removed AddRemoved¨ replaced
@@ -305,7 +307,7 @@ ParseHeader ← {𝕨𝕊headerChars:
           int‿long⊑˜'L'=𝕩
         }⊑¬∘«∘∊⟜"0123456789xL.+-ABCDEFabcdef"⊸/chars
     ;
-      type ← 0‿macro⊑˜")"≡¯1↑name
+      type ← unknown‿macro⊑˜")"≡¯1↑name
       type‿guard⊑˜0=≠args
     }
     # Extracting value
@@ -325,7 +327,7 @@ ParseHeader ← {𝕨𝕊headerChars:
 
       # Read number operand
       # Found a valid number -> update largestType
-      type ⌈↩ ⌈´{
+      type ⌈´↩ {
         isFloat←∨´('.'=𝕩)∧∧`𝕩∊"0123456789abcdefABCDEFxL.+-"
         [
           long_math‿int_math
