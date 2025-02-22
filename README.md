@@ -29,13 +29,13 @@ raylib-apl requires a `libtemp-c-raylib.so` file, downloadable [here](https://gi
 The examples expect the file to be located at the `raylib-apl/` directory.
 
 ### Importing raylib
-To import raylib-apl as a namespace, take the code below and replace `../../` with the proper path to raylib-apl:
+To import raylib-apl as a namespace, take the code below and replace `../` with the proper path to raylib-apl:
 ```apl
-#!cd $dir && /usr/bin/dyalogscript $fileName
-dir ← ⊃1⎕NPARTS''
-rl ← 0⎕Fix dir,'../../raylib-apl/link/raylib.apln'
-rl.Init (dir,'../../raylib-apl/link/')⍬
+rlDir ← '../raylib-apl/link/',⍨⊃1⎕NPARTS''
+rl ← 0⎕Fix rlDir,'raylib.apln'
+rl.Init rlDir⍬
 ```
+When making a script file like the raylib-apl's examples, I would recommend the `.apls` file extension and adding this line at the top of the script `#!cd $dir && /usr/bin/dyalogscript $fileName`.
 You can give `rl.Init` a path as second argument that points to `libraylib.so`.
 Use `⍬` to use the default path `raylib-apl/libraylib.so`.
 

@@ -1,10 +1,10 @@
 #!cd $dir && /usr/bin/dyalogscript $fileName
-dir ← ⊃1⎕NPARTS''
-rl ← 0 ⎕Fix dir,'../../link/raylib.apln'
-rl.Init (dir,'../../link/')⍬
+rlDir ← '../../../raylib-apl/link/',⍨⊃1⎕NPARTS''
+rl ← 0 ⎕Fix rlDir,'raylib.apln'
+rl.Init rlDir⍬
 
-gl ← 0 ⎕Fix dir,'../../link/rlgl.apln'
-gl.Init (dir,'../../link/')⍬
+gl ← 0 ⎕Fix rlDir,'rlgl.apln'
+gl.Init rlDir⍬
 
 rl.InitWindow 400 400 'hellooo'
 
