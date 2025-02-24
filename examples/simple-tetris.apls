@@ -1,0 +1,101 @@
+#!cd $dir && /usr/bin/dyalogscript $fileName
+dir ← ⊃1⎕NPARTS''
+rl ← 0⎕Fix dir,'../../raylib-apl/link/raylib.apln'
+rl.Init (dir,'../../raylib-apl/link/')⍬
+
+board ←⍉⍪0 0 0 0 0 0 0
+board ⍪← 0 0 0 0 0 0 0
+board ⍪← 0 0 0 0 0 0 0
+board ⍪← 0 0 0 0 0 0 0
+board ⍪← 0 0 0 0 0 0 0
+board ⍪← 0 0 0 0 0 0 0
+board ⍪← 0 0 0 0 0 0 0
+board ⍪← 0 0 0 0 0 0 0
+board ⍪← 0 0 0 0 0 0 0
+
+
+∇r←NewBoard
+    a ←⍉⍪0 0 1 0
+    a ⍪← 0 1 1 1
+    a ⍪← 0 0 0 0
+    a ⍪← 0 0 0 0
+
+    b ←⍉⍪1 1 1 1
+    b ⍪← 0 0 0 0
+    b ⍪← 0 0 0 0
+    b ⍪← 0 0 0 0
+
+    c ←⍉⍪0 0 1 0
+    c ⍪← 0 0 1 0
+    c ⍪← 0 0 1 1
+    c ⍪← 0 0 0 0
+
+    d ←⍉⍪0 0 1 0
+    d ⍪← 0 0 1 0
+    d ⍪← 0 1 1 0
+    d ⍪← 0 0 0 0
+
+    e ←⍉⍪0 1 1 0
+    e ⍪← 0 1 1 0
+    e ⍪← 0 0 0 0
+    e ⍪← 0 0 0 0
+
+    f ←⍉⍪0 0 1 0
+    f ⍪← 0 1 1 0
+    f ⍪← 0 1 0 0
+    f ⍪← 0 0 0 0
+
+    g ←⍉⍪0 0 1 0
+    g ⍪← 0 0 1 1
+    g ⍪← 0 0 0 1
+    g ⍪← 0 0 0 0
+
+    r ← {(?≢⍵)⊃(⍴board)∘↑¨0,¨⍵}a b c d e f g
+∇
+
+boardMoving ← NewBoard
+
+board ← 0×boardMoving
+
+rl.InitWindow (100×⌽⍴board),⊂'abc'
+
+cellSize ← 100
+frame ← 0
+
+:While ~rl.WindowShouldClose
+    frame +← 1
+    :if (20|frame) = 0
+        :If (∨/1∘⌷,∘,board∘∧) ¯1⊖boardMoving
+            board∨←boardMoving
+            boardMoving←NewBoard
+        :Else
+            boardMoving ← ¯1⊖boardMoving
+        :EndIf
+    :EndIf
+
+    K ← rl.IsKeyPressed
+    leftKey rightKey ← K¨ 263 262 ⍝ left and right movement ← → keys
+    leftKey rightKey ∨← K¨ 65 68  ⍝ left and right movement a c, for wasd movement
+
+    rotLeftKey rotRightKey ← K¨ 265 264 ⍝ rotation, ↑ ↓ keys
+    rotLeftKey rotRightKey ∨← K¨ 81 69  ⍝ rotation, q e, for wasd movement
+
+    boardMoving⌽⍨←leftKey-rightKey
+    topLeft bottomRight ← (⌊/,⌈/)⍸boardMoving
+    topLeft-←1
+    bottomRightRelative ← ,⍨⌈/bottomRight-topLeft
+    (bottomRightRelative↑topLeft↓boardMoving)← (⌽⍉)⍣(rotLeftKey-rotRightKey)⊢bottomRightRelative↑topLeft↓boardMoving
+
+    rl.BeginDrawing
+        {beginPos endPos←⍵
+            size ← endPos-beginPos
+            rl.DrawRectangle beginPos,size,⊂8↑rl.color.yellow
+        }¨cellSize×(-∘1,⍥⊂¨⊢) ⍸⍉board
+        {beginPos endPos←⍵
+            size ← endPos-beginPos
+            rl.DrawRectangle beginPos,size,⊂8↑rl.color.yellow
+        }¨cellSize×(-∘1,⍥⊂¨⊢) ⍸⍉boardMoving
+        rl.ClearBackground ⊂8↑rl.color.gray
+    rl.EndDrawing
+:EndWhile
+rl.CloseWindow
