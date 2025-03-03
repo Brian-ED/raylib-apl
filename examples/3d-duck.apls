@@ -14,7 +14,7 @@ camera ,←⊂ 45       ⍝ Camera field-of-view Y
 camera ,←⊂ rl.CameraProjection.CAMERA_PERSPECTIVE ⍝ Camera type
 camera ,←  4⍴0
 
-model _ ← rl.LoadModelRetPtr dir,'OBJ/RubberDuck_LOD0.obj'
+model _ ← rl.LoadModelRetPtr 'OBJ/RubberDuck_LOD0.obj'
 
 ⍝ For every frame till user closes the window
 :While ~rl.WindowShouldClose
