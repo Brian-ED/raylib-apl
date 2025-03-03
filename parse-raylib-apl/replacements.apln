@@ -101,6 +101,16 @@ scopeInitAudioDevice ← 0
     'CheckCollisionBoxesRetPtr errored' Assert ∧/⍬
     r←CheckCollisionBoxesRetPtrRAYLIB(⍬ box1 box2)
 ∇
+∇r←CheckCollisionCircleLine(center radius p1 p2)
+    'CheckCollisionCircleLine errored' Assert ∨/1
+    'CheckCollisionCircleLine errored' Assert ∧/⍬
+    r←CheckCollisionCircleLineRAYLIB(center radius p1 p2)
+∇
+∇r←CheckCollisionCircleLineRetPtr(center radius p1 p2)
+    'CheckCollisionCircleLineRetPtr errored' Assert ∨/1
+    'CheckCollisionCircleLineRetPtr errored' Assert ∧/⍬
+    r←CheckCollisionCircleLineRetPtrRAYLIB(⍬ center radius p1 p2)
+∇
 ∇r←CheckCollisionCircleRec(center radius rec)
     'CheckCollisionCircleRec errored' Assert ∨/1
     'CheckCollisionCircleRec errored' Assert ∧/⍬
@@ -293,6 +303,26 @@ scopeInitAudioDevice ← 0
     'ColorFromNormalizedRetPtr errored' Assert ∧/⍬
     r←ColorFromNormalizedRetPtrRAYLIB(⍬ normalized)
 ∇
+∇r←ColorIsEqual(col1 col2)
+    'ColorIsEqual errored' Assert ∨/1
+    'ColorIsEqual errored' Assert ∧/⍬
+    r←ColorIsEqualRAYLIB(col1 col2)
+∇
+∇r←ColorIsEqualRetPtr(col1 col2)
+    'ColorIsEqualRetPtr errored' Assert ∨/1
+    'ColorIsEqualRetPtr errored' Assert ∧/⍬
+    r←ColorIsEqualRetPtrRAYLIB(⍬ col1 col2)
+∇
+∇r←ColorLerp(color1 color2 factor)
+    'ColorLerp errored' Assert ∨/1
+    'ColorLerp errored' Assert ∧/⍬
+    r←ColorLerpRAYLIB(color1 color2 factor)
+∇
+∇r←ColorLerpRetPtr(color1 color2 factor)
+    'ColorLerpRetPtr errored' Assert ∨/1
+    'ColorLerpRetPtr errored' Assert ∧/⍬
+    r←ColorLerpRetPtrRAYLIB(⍬ color1 color2 factor)
+∇
 ∇r←ColorNormalize color
     'ColorNormalize errored' Assert ∨/1
     'ColorNormalize errored' Assert ∧/⍬
@@ -342,6 +372,36 @@ scopeInitAudioDevice ← 0
     'CompressDataRetPtr errored' Assert ∨/1
     'CompressDataRetPtr errored' Assert ∧/⍬
     r←CompressDataRetPtrRAYLIB(⍬ data dataSize compDataSize)
+∇
+∇r←ComputeCRC32(data dataSize)
+    'ComputeCRC32 errored' Assert ∨/1
+    'ComputeCRC32 errored' Assert ∧/⍬
+    r←ComputeCRC32RAYLIB(data dataSize)
+∇
+∇r←ComputeCRC32RetPtr(data dataSize)
+    'ComputeCRC32RetPtr errored' Assert ∨/1
+    'ComputeCRC32RetPtr errored' Assert ∧/⍬
+    r←ComputeCRC32RetPtrRAYLIB(⍬ data dataSize)
+∇
+∇r←ComputeMD5(data dataSize)
+    'ComputeMD5 errored' Assert ∨/1
+    'ComputeMD5 errored' Assert ∧/⍬
+    r←ComputeMD5RAYLIB(data dataSize)
+∇
+∇r←ComputeMD5RetPtr(data dataSize)
+    'ComputeMD5RetPtr errored' Assert ∨/1
+    'ComputeMD5RetPtr errored' Assert ∧/⍬
+    r←ComputeMD5RetPtrRAYLIB(⍬ data dataSize)
+∇
+∇r←ComputeSHA1(data dataSize)
+    'ComputeSHA1 errored' Assert ∨/1
+    'ComputeSHA1 errored' Assert ∧/⍬
+    r←ComputeSHA1RAYLIB(data dataSize)
+∇
+∇r←ComputeSHA1RetPtr(data dataSize)
+    'ComputeSHA1RetPtr errored' Assert ∨/1
+    'ComputeSHA1RetPtr errored' Assert ∧/⍬
+    r←ComputeSHA1RetPtrRAYLIB(⍬ data dataSize)
 ∇
 ∇r←DecodeDataBase64(data outputSize)
     'DecodeDataBase64 errored' Assert ∨/1
@@ -393,10 +453,10 @@ scopeInitAudioDevice ← 0
     'DisableEventWaiting errored' Assert ∧/⍬
     DisableEventWaitingRAYLIB
 ∇
-∇DrawBillboard(camera texture position size tint)
+∇DrawBillboard(camera texture position scale tint)
     'DrawBillboard errored' Assert ∨/1
     'DrawBillboard errored' Assert ∧/⍬
-    DrawBillboardRAYLIB(camera texture position size tint)
+    DrawBillboardRAYLIB(camera texture position scale tint)
 ∇
 ∇DrawBillboardPro(camera texture source position up size origin rotation tint)
     'DrawBillboardPro errored' Assert ∨/1
@@ -433,10 +493,10 @@ scopeInitAudioDevice ← 0
     'DrawCircle3D errored' Assert ∧/⍬
     DrawCircle3DRAYLIB(center radius rotationAxis rotationAngle color)
 ∇
-∇DrawCircleGradient(centerX centerY radius color1 color2)
+∇DrawCircleGradient(centerX centerY radius inner outer)
     'DrawCircleGradient errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing)
     'DrawCircleGradient errored' Assert ∧/⍬
-    DrawCircleGradientRAYLIB(centerX centerY radius color1 color2)
+    DrawCircleGradientRAYLIB(centerX centerY radius inner outer)
 ∇
 ∇DrawCircleLines(centerX centerY radius color)
     'DrawCircleLines errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing)
@@ -573,6 +633,16 @@ scopeInitAudioDevice ← 0
     'DrawModelEx errored' Assert ∧/⍬
     DrawModelExRAYLIB(model position rotationAxis rotationAngle scale tint)
 ∇
+∇DrawModelPoints(model position scale tint)
+    'DrawModelPoints errored' Assert ∨/1
+    'DrawModelPoints errored' Assert ∧/⍬
+    DrawModelPointsRAYLIB(model position scale tint)
+∇
+∇DrawModelPointsEx(model position rotationAxis rotationAngle scale tint)
+    'DrawModelPointsEx errored' Assert ∨/1
+    'DrawModelPointsEx errored' Assert ∧/⍬
+    DrawModelPointsExRAYLIB(model position rotationAxis rotationAngle scale tint)
+∇
 ∇DrawModelWires(model position scale tint)
     'DrawModelWires errored' Assert ∨/1
     'DrawModelWires errored' Assert ∧/⍬
@@ -628,20 +698,20 @@ scopeInitAudioDevice ← 0
     'DrawRectangle errored' Assert ∧/⍬
     DrawRectangleRAYLIB(posX posY width height color)
 ∇
-∇DrawRectangleGradientEx(rec col1 col2 col3 col4)
+∇DrawRectangleGradientEx(rec topLeft bottomLeft topRight bottomRight)
     'DrawRectangleGradientEx errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing)
     'DrawRectangleGradientEx errored' Assert ∧/⍬
-    DrawRectangleGradientExRAYLIB(rec col1 col2 col3 col4)
+    DrawRectangleGradientExRAYLIB(rec topLeft bottomLeft topRight bottomRight)
 ∇
-∇DrawRectangleGradientH(posX posY width height color1 color2)
+∇DrawRectangleGradientH(posX posY width height left right)
     'DrawRectangleGradientH errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing)
     'DrawRectangleGradientH errored' Assert ∧/⍬
-    DrawRectangleGradientHRAYLIB(posX posY width height color1 color2)
+    DrawRectangleGradientHRAYLIB(posX posY width height left right)
 ∇
-∇DrawRectangleGradientV(posX posY width height color1 color2)
+∇DrawRectangleGradientV(posX posY width height top bottom)
     'DrawRectangleGradientV errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing)
     'DrawRectangleGradientV errored' Assert ∧/⍬
-    DrawRectangleGradientVRAYLIB(posX posY width height color1 color2)
+    DrawRectangleGradientVRAYLIB(posX posY width height top bottom)
 ∇
 ∇DrawRectangleLines(posX posY width height color)
     'DrawRectangleLines errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing)
@@ -668,10 +738,15 @@ scopeInitAudioDevice ← 0
     'DrawRectangleRounded errored' Assert ∧/⍬
     DrawRectangleRoundedRAYLIB(rec roundness segments color)
 ∇
-∇DrawRectangleRoundedLines(rec roundness segments lineThick color)
+∇DrawRectangleRoundedLines(rec roundness segments color)
     'DrawRectangleRoundedLines errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing)
     'DrawRectangleRoundedLines errored' Assert ∧/⍬
-    DrawRectangleRoundedLinesRAYLIB(rec roundness segments lineThick color)
+    DrawRectangleRoundedLinesRAYLIB(rec roundness segments color)
+∇
+∇DrawRectangleRoundedLinesEx(rec roundness segments lineThick color)
+    'DrawRectangleRoundedLinesEx errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing)
+    'DrawRectangleRoundedLinesEx errored' Assert ∧/⍬
+    DrawRectangleRoundedLinesExRAYLIB(rec roundness segments lineThick color)
 ∇
 ∇DrawRectangleV(position size color)
     'DrawRectangleV errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing)
@@ -967,14 +1042,24 @@ scopeInitAudioDevice ← 0
     r←ExportImageToMemoryRetPtrRAYLIB(⍬ image fileType fileSize)
 ∇
 ∇r←ExportMesh(mesh fileName)
-    'ExportMesh errored' Assert ∨/1
+    'ExportMesh errored' Assert ∨/(scopeInitWindow)
     'ExportMesh errored' Assert ∧/⍬
     r←ExportMeshRAYLIB(mesh fileName)
 ∇
 ∇r←ExportMeshRetPtr(mesh fileName)
-    'ExportMeshRetPtr errored' Assert ∨/1
+    'ExportMeshRetPtr errored' Assert ∨/(scopeInitWindow)
     'ExportMeshRetPtr errored' Assert ∧/⍬
     r←ExportMeshRetPtrRAYLIB(⍬ mesh fileName)
+∇
+∇r←ExportMeshAsCode(mesh fileName)
+    'ExportMeshAsCode errored' Assert ∨/(scopeInitWindow)
+    'ExportMeshAsCode errored' Assert ∧/⍬
+    r←ExportMeshAsCodeRAYLIB(mesh fileName)
+∇
+∇r←ExportMeshAsCodeRetPtr(mesh fileName)
+    'ExportMeshAsCodeRetPtr errored' Assert ∨/(scopeInitWindow)
+    'ExportMeshAsCodeRetPtr errored' Assert ∧/⍬
+    r←ExportMeshAsCodeRetPtrRAYLIB(⍬ mesh fileName)
 ∇
 ∇r←ExportWave(wave fileName)
     'ExportWave errored' Assert ∨/1
@@ -1275,6 +1360,16 @@ scopeInitAudioDevice ← 0
     'GetCharPressedRetPtr errored' Assert ∨/(scopeInitWindow)
     'GetCharPressedRetPtr errored' Assert ∧/⍬
     r←GetCharPressedRetPtrRAYLIB,⊂(⍬)
+∇
+∇r←GetClipboardImage
+    'GetClipboardImage errored' Assert ∨/(scopeInitWindow)
+    'GetClipboardImage errored' Assert ∧/⍬
+    r←GetClipboardImageRAYLIB
+∇
+∇r←GetClipboardImageRetPtr
+    'GetClipboardImageRetPtr errored' Assert ∨/(scopeInitWindow)
+    'GetClipboardImageRetPtr errored' Assert ∧/⍬
+    r←GetClipboardImageRetPtrRAYLIB,⊂(⍬)
 ∇
 ∇r←GetClipboardText
     'GetClipboardText errored' Assert ∨/(scopeInitWindow)
@@ -1736,16 +1831,6 @@ scopeInitAudioDevice ← 0
     'GetMousePositionRetPtr errored' Assert ∧/⍬
     r←GetMousePositionRetPtrRAYLIB,⊂(⍬)
 ∇
-∇r←GetMouseRay(mousePosition camera)
-    'GetMouseRay errored' Assert ∨/(scopeInitWindow)
-    'GetMouseRay errored' Assert ∧/⍬
-    r←GetMouseRayRAYLIB(mousePosition camera)
-∇
-∇r←GetMouseRayRetPtr(mousePosition camera)
-    'GetMouseRayRetPtr errored' Assert ∨/(scopeInitWindow)
-    'GetMouseRayRetPtr errored' Assert ∧/⍬
-    r←GetMouseRayRetPtrRAYLIB(⍬ mousePosition camera)
-∇
 ∇r←GetMouseWheelMove
     'GetMouseWheelMove errored' Assert ∨/(scopeInitWindow)
     'GetMouseWheelMove errored' Assert ∧/⍬
@@ -1936,6 +2021,26 @@ scopeInitAudioDevice ← 0
     'GetScreenToWorld2DRetPtr errored' Assert ∧/⍬
     r←GetScreenToWorld2DRetPtrRAYLIB(⍬ position camera)
 ∇
+∇r←GetScreenToWorldRay(position camera)
+    'GetScreenToWorldRay errored' Assert ∨/(scopeInitWindow)
+    'GetScreenToWorldRay errored' Assert ∧/⍬
+    r←GetScreenToWorldRayRAYLIB(position camera)
+∇
+∇r←GetScreenToWorldRayRetPtr(position camera)
+    'GetScreenToWorldRayRetPtr errored' Assert ∨/(scopeInitWindow)
+    'GetScreenToWorldRayRetPtr errored' Assert ∧/⍬
+    r←GetScreenToWorldRayRetPtrRAYLIB(⍬ position camera)
+∇
+∇r←GetScreenToWorldRayEx(position camera width height)
+    'GetScreenToWorldRayEx errored' Assert ∨/(scopeInitWindow)
+    'GetScreenToWorldRayEx errored' Assert ∧/⍬
+    r←GetScreenToWorldRayExRAYLIB(position camera width height)
+∇
+∇r←GetScreenToWorldRayExRetPtr(position camera width height)
+    'GetScreenToWorldRayExRetPtr errored' Assert ∨/(scopeInitWindow)
+    'GetScreenToWorldRayExRetPtr errored' Assert ∧/⍬
+    r←GetScreenToWorldRayExRetPtrRAYLIB(⍬ position camera width height)
+∇
 ∇r←GetScreenWidth
     'GetScreenWidth errored' Assert ∨/(scopeInitWindow)
     'GetScreenWidth errored' Assert ∧/⍬
@@ -1965,6 +2070,26 @@ scopeInitAudioDevice ← 0
     'GetShaderLocationAttribRetPtr errored' Assert ∨/(scopeInitWindow)
     'GetShaderLocationAttribRetPtr errored' Assert ∧/⍬
     r←GetShaderLocationAttribRetPtrRAYLIB(⍬ shader attribName)
+∇
+∇r←GetShapesTexture
+    'GetShapesTexture errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing)
+    'GetShapesTexture errored' Assert ∧/⍬
+    r←GetShapesTextureRAYLIB
+∇
+∇r←GetShapesTextureRetPtr
+    'GetShapesTextureRetPtr errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing)
+    'GetShapesTextureRetPtr errored' Assert ∧/⍬
+    r←GetShapesTextureRetPtrRAYLIB,⊂(⍬)
+∇
+∇r←GetShapesTextureRectangle
+    'GetShapesTextureRectangle errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing)
+    'GetShapesTextureRectangle errored' Assert ∧/⍬
+    r←GetShapesTextureRectangleRAYLIB
+∇
+∇r←GetShapesTextureRectangleRetPtr
+    'GetShapesTextureRectangleRetPtr errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing)
+    'GetShapesTextureRectangleRetPtr errored' Assert ∧/⍬
+    r←GetShapesTextureRectangleRetPtrRAYLIB,⊂(⍬)
 ∇
 ∇r←GetSplinePointBasis(p1 p2 p3 p4 t)
     'GetSplinePointBasis errored' Assert ∨/1
@@ -2261,6 +2386,11 @@ scopeInitAudioDevice ← 0
     'ImageDrawLine errored' Assert ∧/⍬
     r←ImageDrawLineRAYLIB(dst startPosX startPosY endPosX endPosY color)
 ∇
+∇r←ImageDrawLineEx(dst start end thick color)
+    'ImageDrawLineEx errored' Assert ∨/1
+    'ImageDrawLineEx errored' Assert ∧/⍬
+    r←ImageDrawLineExRAYLIB(dst start end thick color)
+∇
 ∇r←ImageDrawLineV(dst start end color)
     'ImageDrawLineV errored' Assert ∨/1
     'ImageDrawLineV errored' Assert ∧/⍬
@@ -2306,6 +2436,31 @@ scopeInitAudioDevice ← 0
     'ImageDrawTextEx errored' Assert ∧/⍬
     r←ImageDrawTextExRAYLIB(dst font text position fontSize spacing tint)
 ∇
+∇r←ImageDrawTriangle(dst v1 v2 v3 color)
+    'ImageDrawTriangle errored' Assert ∨/1
+    'ImageDrawTriangle errored' Assert ∧/⍬
+    r←ImageDrawTriangleRAYLIB(dst v1 v2 v3 color)
+∇
+∇r←ImageDrawTriangleEx(dst v1 v2 v3 c1 c2 c3)
+    'ImageDrawTriangleEx errored' Assert ∨/1
+    'ImageDrawTriangleEx errored' Assert ∧/⍬
+    r←ImageDrawTriangleExRAYLIB(dst v1 v2 v3 c1 c2 c3)
+∇
+∇r←ImageDrawTriangleFan(dst points pointCount color)
+    'ImageDrawTriangleFan errored' Assert ∨/1
+    'ImageDrawTriangleFan errored' Assert ∧/⍬
+    r←ImageDrawTriangleFanRAYLIB(dst points pointCount color)
+∇
+∇r←ImageDrawTriangleLines(dst v1 v2 v3 color)
+    'ImageDrawTriangleLines errored' Assert ∨/1
+    'ImageDrawTriangleLines errored' Assert ∧/⍬
+    r←ImageDrawTriangleLinesRAYLIB(dst v1 v2 v3 color)
+∇
+∇r←ImageDrawTriangleStrip(dst points pointCount color)
+    'ImageDrawTriangleStrip errored' Assert ∨/1
+    'ImageDrawTriangleStrip errored' Assert ∧/⍬
+    r←ImageDrawTriangleStripRAYLIB(dst points pointCount color)
+∇
 ∇r←ImageFlipHorizontal image
     'ImageFlipHorizontal errored' Assert ∨/1
     'ImageFlipHorizontal errored' Assert ∧/⍬
@@ -2321,6 +2476,16 @@ scopeInitAudioDevice ← 0
     'ImageFormat errored' Assert ∧/⍬
     r←ImageFormatRAYLIB(image newFormat)
 ∇
+∇r←ImageFromChannel(image selectedChannel)
+    'ImageFromChannel errored' Assert ∨/1
+    'ImageFromChannel errored' Assert ∧/⍬
+    r←ImageFromChannelRAYLIB(image selectedChannel)
+∇
+∇r←ImageFromChannelRetPtr(image selectedChannel)
+    'ImageFromChannelRetPtr errored' Assert ∨/1
+    'ImageFromChannelRetPtr errored' Assert ∧/⍬
+    r←ImageFromChannelRetPtrRAYLIB(⍬ image selectedChannel)
+∇
 ∇r←ImageFromImage(image rec)
     'ImageFromImage errored' Assert ∨/1
     'ImageFromImage errored' Assert ∧/⍬
@@ -2330,6 +2495,11 @@ scopeInitAudioDevice ← 0
     'ImageFromImageRetPtr errored' Assert ∨/1
     'ImageFromImageRetPtr errored' Assert ∧/⍬
     r←ImageFromImageRetPtrRAYLIB(⍬ image rec)
+∇
+∇r←ImageKernelConvolution(image kernel kernelSize)
+    'ImageKernelConvolution errored' Assert ∨/1
+    'ImageKernelConvolution errored' Assert ∧/⍬
+    r←ImageKernelConvolutionRAYLIB(image kernel kernelSize)
 ∇
 ∇r←ImageMipmaps image
     'ImageMipmaps errored' Assert ∨/1
@@ -2433,15 +2603,15 @@ scopeInitAudioDevice ← 0
     'IsAudioStreamProcessedRetPtr errored' Assert ∧/⍬
     r←IsAudioStreamProcessedRetPtrRAYLIB(⍬ stream)
 ∇
-∇r←IsAudioStreamReady stream
-    'IsAudioStreamReady errored' Assert ∨/1
-    'IsAudioStreamReady errored' Assert ∧/⍬
-    r←IsAudioStreamReadyRAYLIB,⊂(stream)
+∇r←IsAudioStreamValid stream
+    'IsAudioStreamValid errored' Assert ∨/1
+    'IsAudioStreamValid errored' Assert ∧/⍬
+    r←IsAudioStreamValidRAYLIB,⊂(stream)
 ∇
-∇r←IsAudioStreamReadyRetPtr stream
-    'IsAudioStreamReadyRetPtr errored' Assert ∨/1
-    'IsAudioStreamReadyRetPtr errored' Assert ∧/⍬
-    r←IsAudioStreamReadyRetPtrRAYLIB(⍬ stream)
+∇r←IsAudioStreamValidRetPtr stream
+    'IsAudioStreamValidRetPtr errored' Assert ∨/1
+    'IsAudioStreamValidRetPtr errored' Assert ∧/⍬
+    r←IsAudioStreamValidRetPtrRAYLIB(⍬ stream)
 ∇
 ∇r←IsCursorHidden
     'IsCursorHidden errored' Assert ∨/(scopeInitWindow)
@@ -2483,15 +2653,25 @@ scopeInitAudioDevice ← 0
     'IsFileExtensionRetPtr errored' Assert ∧/⍬
     r←IsFileExtensionRetPtrRAYLIB(⍬ fileName ext)
 ∇
-∇r←IsFontReady font
-    'IsFontReady errored' Assert ∨/1
-    'IsFontReady errored' Assert ∧/⍬
-    r←IsFontReadyRAYLIB,⊂(font)
+∇r←IsFileNameValid fileName
+    'IsFileNameValid errored' Assert ∨/1
+    'IsFileNameValid errored' Assert ∧/⍬
+    r←IsFileNameValidRAYLIB,⊂(fileName)
 ∇
-∇r←IsFontReadyRetPtr font
-    'IsFontReadyRetPtr errored' Assert ∨/1
-    'IsFontReadyRetPtr errored' Assert ∧/⍬
-    r←IsFontReadyRetPtrRAYLIB(⍬ font)
+∇r←IsFileNameValidRetPtr fileName
+    'IsFileNameValidRetPtr errored' Assert ∨/1
+    'IsFileNameValidRetPtr errored' Assert ∧/⍬
+    r←IsFileNameValidRetPtrRAYLIB(⍬ fileName)
+∇
+∇r←IsFontValid font
+    'IsFontValid errored' Assert ∨/1
+    'IsFontValid errored' Assert ∧/⍬
+    r←IsFontValidRAYLIB,⊂(font)
+∇
+∇r←IsFontValidRetPtr font
+    'IsFontValidRetPtr errored' Assert ∨/1
+    'IsFontValidRetPtr errored' Assert ∧/⍬
+    r←IsFontValidRetPtrRAYLIB(⍬ font)
 ∇
 ∇r←IsGamepadAvailable gamepad
     'IsGamepadAvailable errored' Assert ∨/1
@@ -2553,15 +2733,15 @@ scopeInitAudioDevice ← 0
     'IsGestureDetectedRetPtr errored' Assert ∧/⍬
     r←IsGestureDetectedRetPtrRAYLIB(⍬ gesture)
 ∇
-∇r←IsImageReady image
-    'IsImageReady errored' Assert ∨/1
-    'IsImageReady errored' Assert ∧/⍬
-    r←IsImageReadyRAYLIB,⊂(image)
+∇r←IsImageValid image
+    'IsImageValid errored' Assert ∨/1
+    'IsImageValid errored' Assert ∧/⍬
+    r←IsImageValidRAYLIB,⊂(image)
 ∇
-∇r←IsImageReadyRetPtr image
-    'IsImageReadyRetPtr errored' Assert ∨/1
-    'IsImageReadyRetPtr errored' Assert ∧/⍬
-    r←IsImageReadyRetPtrRAYLIB(⍬ image)
+∇r←IsImageValidRetPtr image
+    'IsImageValidRetPtr errored' Assert ∨/1
+    'IsImageValidRetPtr errored' Assert ∧/⍬
+    r←IsImageValidRetPtrRAYLIB(⍬ image)
 ∇
 ∇r←IsKeyDown key
     'IsKeyDown errored' Assert ∨/(scopeInitWindow)
@@ -2613,15 +2793,15 @@ scopeInitAudioDevice ← 0
     'IsKeyUpRetPtr errored' Assert ∧/⍬
     r←IsKeyUpRetPtrRAYLIB(⍬ key)
 ∇
-∇r←IsMaterialReady material
-    'IsMaterialReady errored' Assert ∨/(scopeInitWindow)
-    'IsMaterialReady errored' Assert ∧/⍬
-    r←IsMaterialReadyRAYLIB,⊂(material)
+∇r←IsMaterialValid material
+    'IsMaterialValid errored' Assert ∨/(scopeInitWindow)
+    'IsMaterialValid errored' Assert ∧/⍬
+    r←IsMaterialValidRAYLIB,⊂(material)
 ∇
-∇r←IsMaterialReadyRetPtr material
-    'IsMaterialReadyRetPtr errored' Assert ∨/(scopeInitWindow)
-    'IsMaterialReadyRetPtr errored' Assert ∧/⍬
-    r←IsMaterialReadyRetPtrRAYLIB(⍬ material)
+∇r←IsMaterialValidRetPtr material
+    'IsMaterialValidRetPtr errored' Assert ∨/(scopeInitWindow)
+    'IsMaterialValidRetPtr errored' Assert ∧/⍬
+    r←IsMaterialValidRetPtrRAYLIB(⍬ material)
 ∇
 ∇r←IsModelAnimationValid(model anim)
     'IsModelAnimationValid errored' Assert ∨/1
@@ -2633,15 +2813,15 @@ scopeInitAudioDevice ← 0
     'IsModelAnimationValidRetPtr errored' Assert ∧/⍬
     r←IsModelAnimationValidRetPtrRAYLIB(⍬ model anim)
 ∇
-∇r←IsModelReady model
-    'IsModelReady errored' Assert ∨/1
-    'IsModelReady errored' Assert ∧/⍬
-    r←IsModelReadyRAYLIB,⊂(model)
+∇r←IsModelValid model
+    'IsModelValid errored' Assert ∨/1
+    'IsModelValid errored' Assert ∧/⍬
+    r←IsModelValidRAYLIB,⊂(model)
 ∇
-∇r←IsModelReadyRetPtr model
-    'IsModelReadyRetPtr errored' Assert ∨/1
-    'IsModelReadyRetPtr errored' Assert ∧/⍬
-    r←IsModelReadyRetPtrRAYLIB(⍬ model)
+∇r←IsModelValidRetPtr model
+    'IsModelValidRetPtr errored' Assert ∨/1
+    'IsModelValidRetPtr errored' Assert ∧/⍬
+    r←IsModelValidRetPtrRAYLIB(⍬ model)
 ∇
 ∇r←IsMouseButtonDown button
     'IsMouseButtonDown errored' Assert ∨/(scopeInitWindow)
@@ -2683,16 +2863,6 @@ scopeInitAudioDevice ← 0
     'IsMouseButtonUpRetPtr errored' Assert ∧/⍬
     r←IsMouseButtonUpRetPtrRAYLIB(⍬ button)
 ∇
-∇r←IsMusicReady music
-    'IsMusicReady errored' Assert ∨/1
-    'IsMusicReady errored' Assert ∧/⍬
-    r←IsMusicReadyRAYLIB,⊂(music)
-∇
-∇r←IsMusicReadyRetPtr music
-    'IsMusicReadyRetPtr errored' Assert ∨/1
-    'IsMusicReadyRetPtr errored' Assert ∧/⍬
-    r←IsMusicReadyRetPtrRAYLIB(⍬ music)
-∇
 ∇r←IsMusicStreamPlaying music
     'IsMusicStreamPlaying errored' Assert ∨/1
     'IsMusicStreamPlaying errored' Assert ∧/⍬
@@ -2702,6 +2872,16 @@ scopeInitAudioDevice ← 0
     'IsMusicStreamPlayingRetPtr errored' Assert ∨/1
     'IsMusicStreamPlayingRetPtr errored' Assert ∧/⍬
     r←IsMusicStreamPlayingRetPtrRAYLIB(⍬ music)
+∇
+∇r←IsMusicValid music
+    'IsMusicValid errored' Assert ∨/1
+    'IsMusicValid errored' Assert ∧/⍬
+    r←IsMusicValidRAYLIB,⊂(music)
+∇
+∇r←IsMusicValidRetPtr music
+    'IsMusicValidRetPtr errored' Assert ∨/1
+    'IsMusicValidRetPtr errored' Assert ∧/⍬
+    r←IsMusicValidRetPtrRAYLIB(⍬ music)
 ∇
 ∇r←IsPathFile path
     'IsPathFile errored' Assert ∨/1
@@ -2713,25 +2893,25 @@ scopeInitAudioDevice ← 0
     'IsPathFileRetPtr errored' Assert ∧/⍬
     r←IsPathFileRetPtrRAYLIB(⍬ path)
 ∇
-∇r←IsRenderTextureReady target
-    'IsRenderTextureReady errored' Assert ∨/1
-    'IsRenderTextureReady errored' Assert ∧/⍬
-    r←IsRenderTextureReadyRAYLIB,⊂(target)
+∇r←IsRenderTextureValid target
+    'IsRenderTextureValid errored' Assert ∨/1
+    'IsRenderTextureValid errored' Assert ∧/⍬
+    r←IsRenderTextureValidRAYLIB,⊂(target)
 ∇
-∇r←IsRenderTextureReadyRetPtr target
-    'IsRenderTextureReadyRetPtr errored' Assert ∨/1
-    'IsRenderTextureReadyRetPtr errored' Assert ∧/⍬
-    r←IsRenderTextureReadyRetPtrRAYLIB(⍬ target)
+∇r←IsRenderTextureValidRetPtr target
+    'IsRenderTextureValidRetPtr errored' Assert ∨/1
+    'IsRenderTextureValidRetPtr errored' Assert ∧/⍬
+    r←IsRenderTextureValidRetPtrRAYLIB(⍬ target)
 ∇
-∇r←IsShaderReady shader
-    'IsShaderReady errored' Assert ∨/1
-    'IsShaderReady errored' Assert ∧/⍬
-    r←IsShaderReadyRAYLIB,⊂(shader)
+∇r←IsShaderValid shader
+    'IsShaderValid errored' Assert ∨/1
+    'IsShaderValid errored' Assert ∧/⍬
+    r←IsShaderValidRAYLIB,⊂(shader)
 ∇
-∇r←IsShaderReadyRetPtr shader
-    'IsShaderReadyRetPtr errored' Assert ∨/1
-    'IsShaderReadyRetPtr errored' Assert ∧/⍬
-    r←IsShaderReadyRetPtrRAYLIB(⍬ shader)
+∇r←IsShaderValidRetPtr shader
+    'IsShaderValidRetPtr errored' Assert ∨/1
+    'IsShaderValidRetPtr errored' Assert ∧/⍬
+    r←IsShaderValidRetPtrRAYLIB(⍬ shader)
 ∇
 ∇r←IsSoundPlaying sound
     'IsSoundPlaying errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing ∧ scopeInitAudioDevice)
@@ -2743,35 +2923,35 @@ scopeInitAudioDevice ← 0
     'IsSoundPlayingRetPtr errored' Assert ∧/⍬
     r←IsSoundPlayingRetPtrRAYLIB(⍬ sound)
 ∇
-∇r←IsSoundReady sound
-    'IsSoundReady errored' Assert ∨/1
-    'IsSoundReady errored' Assert ∧/⍬
-    r←IsSoundReadyRAYLIB,⊂(sound)
+∇r←IsSoundValid sound
+    'IsSoundValid errored' Assert ∨/1
+    'IsSoundValid errored' Assert ∧/⍬
+    r←IsSoundValidRAYLIB,⊂(sound)
 ∇
-∇r←IsSoundReadyRetPtr sound
-    'IsSoundReadyRetPtr errored' Assert ∨/1
-    'IsSoundReadyRetPtr errored' Assert ∧/⍬
-    r←IsSoundReadyRetPtrRAYLIB(⍬ sound)
+∇r←IsSoundValidRetPtr sound
+    'IsSoundValidRetPtr errored' Assert ∨/1
+    'IsSoundValidRetPtr errored' Assert ∧/⍬
+    r←IsSoundValidRetPtrRAYLIB(⍬ sound)
 ∇
-∇r←IsTextureReady texture
-    'IsTextureReady errored' Assert ∨/1
-    'IsTextureReady errored' Assert ∧/⍬
-    r←IsTextureReadyRAYLIB,⊂(texture)
+∇r←IsTextureValid texture
+    'IsTextureValid errored' Assert ∨/1
+    'IsTextureValid errored' Assert ∧/⍬
+    r←IsTextureValidRAYLIB,⊂(texture)
 ∇
-∇r←IsTextureReadyRetPtr texture
-    'IsTextureReadyRetPtr errored' Assert ∨/1
-    'IsTextureReadyRetPtr errored' Assert ∧/⍬
-    r←IsTextureReadyRetPtrRAYLIB(⍬ texture)
+∇r←IsTextureValidRetPtr texture
+    'IsTextureValidRetPtr errored' Assert ∨/1
+    'IsTextureValidRetPtr errored' Assert ∧/⍬
+    r←IsTextureValidRetPtrRAYLIB(⍬ texture)
 ∇
-∇r←IsWaveReady wave
-    'IsWaveReady errored' Assert ∨/1
-    'IsWaveReady errored' Assert ∧/⍬
-    r←IsWaveReadyRAYLIB,⊂(wave)
+∇r←IsWaveValid wave
+    'IsWaveValid errored' Assert ∨/1
+    'IsWaveValid errored' Assert ∧/⍬
+    r←IsWaveValidRAYLIB,⊂(wave)
 ∇
-∇r←IsWaveReadyRetPtr wave
-    'IsWaveReadyRetPtr errored' Assert ∨/1
-    'IsWaveReadyRetPtr errored' Assert ∧/⍬
-    r←IsWaveReadyRetPtrRAYLIB(⍬ wave)
+∇r←IsWaveValidRetPtr wave
+    'IsWaveValidRetPtr errored' Assert ∨/1
+    'IsWaveValidRetPtr errored' Assert ∧/⍬
+    r←IsWaveValidRetPtrRAYLIB(⍬ wave)
 ∇
 ∇r←IsWindowFocused
     'IsWindowFocused errored' Assert ∨/(scopeInitWindow)
@@ -3003,6 +3183,16 @@ scopeInitAudioDevice ← 0
     'LoadImageAnimRetPtr errored' Assert ∧/⍬
     r←LoadImageAnimRetPtrRAYLIB(⍬ fileName frames)
 ∇
+∇r←LoadImageAnimFromMemory(fileType fileData dataSize frames)
+    'LoadImageAnimFromMemory errored' Assert ∨/(scopeInitWindow)
+    'LoadImageAnimFromMemory errored' Assert ∧/⍬
+    r←LoadImageAnimFromMemoryRAYLIB(fileType fileData dataSize frames)
+∇
+∇r←LoadImageAnimFromMemoryRetPtr(fileType fileData dataSize frames)
+    'LoadImageAnimFromMemoryRetPtr errored' Assert ∨/(scopeInitWindow)
+    'LoadImageAnimFromMemoryRetPtr errored' Assert ∧/⍬
+    r←LoadImageAnimFromMemoryRetPtrRAYLIB(⍬ fileType fileData dataSize frames)
+∇
 ∇r←LoadImageColors image
     'LoadImageColors errored' Assert ∨/1
     'LoadImageColors errored' Assert ∧/⍬
@@ -3062,16 +3252,6 @@ scopeInitAudioDevice ← 0
     'LoadImageRawRetPtr errored' Assert ∨/(scopeInitWindow)
     'LoadImageRawRetPtr errored' Assert ∧/⍬
     r←LoadImageRawRetPtrRAYLIB(⍬ fileName width height format headerSize)
-∇
-∇r←LoadImageSvg(fileNameOrString width height)
-    'LoadImageSvg errored' Assert ∨/(scopeInitWindow)
-    'LoadImageSvg errored' Assert ∧/⍬
-    r←LoadImageSvgRAYLIB(fileNameOrString width height)
-∇
-∇r←LoadImageSvgRetPtr(fileNameOrString width height)
-    'LoadImageSvgRetPtr errored' Assert ∨/(scopeInitWindow)
-    'LoadImageSvgRetPtr errored' Assert ∧/⍬
-    r←LoadImageSvgRetPtrRAYLIB(⍬ fileNameOrString width height)
 ∇
 ∇r←LoadMaterialDefault
     'LoadMaterialDefault errored' Assert ∨/(scopeInitWindow)
@@ -3293,6 +3473,16 @@ scopeInitAudioDevice ← 0
     'LoadWaveSamplesRetPtr errored' Assert ∧/⍬
     r←LoadWaveSamplesRetPtrRAYLIB(⍬ wave)
 ∇
+∇r←MakeDirectory dirPath
+    'MakeDirectory errored' Assert ∨/1
+    'MakeDirectory errored' Assert ∧/⍬
+    r←MakeDirectoryRAYLIB,⊂(dirPath)
+∇
+∇r←MakeDirectoryRetPtr dirPath
+    'MakeDirectoryRetPtr errored' Assert ∨/1
+    'MakeDirectoryRetPtr errored' Assert ∧/⍬
+    r←MakeDirectoryRetPtrRAYLIB(⍬ dirPath)
+∇
 ∇MaximizeWindow
     'MaximizeWindow errored' Assert ∨/(scopeInitWindow)
     'MaximizeWindow errored' Assert ∧/⍬
@@ -3497,6 +3687,11 @@ scopeInitAudioDevice ← 0
     'SetGamepadMappingsRetPtr errored' Assert ∨/1
     'SetGamepadMappingsRetPtr errored' Assert ∧/⍬
     r←SetGamepadMappingsRetPtrRAYLIB(⍬ mappings)
+∇
+∇SetGamepadVibration(gamepad leftMotor rightMotor duration)
+    'SetGamepadVibration errored' Assert ∨/1
+    'SetGamepadVibration errored' Assert ∧/⍬
+    SetGamepadVibrationRAYLIB(gamepad leftMotor rightMotor duration)
 ∇
 ∇SetGesturesEnabled flags
     'SetGesturesEnabled errored' Assert ∨/(scopeInitWindow)
@@ -3843,6 +4038,26 @@ scopeInitAudioDevice ← 0
     'TextSubtextRetPtr errored' Assert ∧/⍬
     r←TextSubtextRetPtrRAYLIB(⍬ text position length)
 ∇
+∇r←TextToCamel text
+    'TextToCamel errored' Assert ∨/1
+    'TextToCamel errored' Assert ∧/⍬
+    r←TextToCamelRAYLIB,⊂(text)
+∇
+∇r←TextToCamelRetPtr text
+    'TextToCamelRetPtr errored' Assert ∨/1
+    'TextToCamelRetPtr errored' Assert ∧/⍬
+    r←TextToCamelRetPtrRAYLIB(⍬ text)
+∇
+∇r←TextToFloat text
+    'TextToFloat errored' Assert ∨/1
+    'TextToFloat errored' Assert ∧/⍬
+    r←TextToFloatRAYLIB,⊂(text)
+∇
+∇r←TextToFloatRetPtr text
+    'TextToFloatRetPtr errored' Assert ∨/1
+    'TextToFloatRetPtr errored' Assert ∧/⍬
+    r←TextToFloatRetPtrRAYLIB(⍬ text)
+∇
 ∇r←TextToInteger text
     'TextToInteger errored' Assert ∨/1
     'TextToInteger errored' Assert ∧/⍬
@@ -3873,6 +4088,16 @@ scopeInitAudioDevice ← 0
     'TextToPascalRetPtr errored' Assert ∧/⍬
     r←TextToPascalRetPtrRAYLIB(⍬ text)
 ∇
+∇r←TextToSnake text
+    'TextToSnake errored' Assert ∨/1
+    'TextToSnake errored' Assert ∧/⍬
+    r←TextToSnakeRAYLIB,⊂(text)
+∇
+∇r←TextToSnakeRetPtr text
+    'TextToSnakeRetPtr errored' Assert ∨/1
+    'TextToSnakeRetPtr errored' Assert ∧/⍬
+    r←TextToSnakeRetPtrRAYLIB(⍬ text)
+∇
 ∇r←TextToUpper text
     'TextToUpper errored' Assert ∨/1
     'TextToUpper errored' Assert ∧/⍬
@@ -3898,10 +4123,10 @@ scopeInitAudioDevice ← 0
     'UnloadAudioStream errored' Assert ∧/⍬
     UnloadAudioStreamRAYLIB,⊂(stream)
 ∇
-∇r←UnloadAutomationEventList list
+∇UnloadAutomationEventList list
     'UnloadAutomationEventList errored' Assert ∨/1
     'UnloadAutomationEventList errored' Assert ∧/⍬
-    r←UnloadAutomationEventListRAYLIB,⊂(list)
+    UnloadAutomationEventListRAYLIB,⊂(list)
 ∇
 ∇r←UnloadCodepoints codepoints
     'UnloadCodepoints errored' Assert ∨/1
@@ -4058,6 +4283,11 @@ scopeInitAudioDevice ← 0
     'UpdateModelAnimation errored' Assert ∧/⍬
     UpdateModelAnimationRAYLIB(model anim frame)
 ∇
+∇UpdateModelAnimationBones(model anim frame)
+    'UpdateModelAnimationBones errored' Assert ∨/1
+    'UpdateModelAnimationBones errored' Assert ∧/⍬
+    UpdateModelAnimationBonesRAYLIB(model anim frame)
+∇
 ∇UpdateMusicStream music
     'UpdateMusicStream errored' Assert ∨/1
     'UpdateMusicStream errored' Assert ∧/⍬
@@ -4098,10 +4328,10 @@ scopeInitAudioDevice ← 0
     'WaveCopyRetPtr errored' Assert ∧/⍬
     r←WaveCopyRetPtrRAYLIB(⍬ wave)
 ∇
-∇r←WaveCrop(wave initSample finalSample)
+∇r←WaveCrop(wave initFrame finalFrame)
     'WaveCrop errored' Assert ∨/1
     'WaveCrop errored' Assert ∧/⍬
-    r←WaveCropRAYLIB(wave initSample finalSample)
+    r←WaveCropRAYLIB(wave initFrame finalFrame)
 ∇
 ∇r←WaveFormat(wave sampleRate sampleSize channels)
     'WaveFormat errored' Assert ∨/1

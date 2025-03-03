@@ -11,6 +11,7 @@ typedef struct rlVertexBuffer {
 
     float *vertices;            // Vertex position (XYZ - 3 components per vertex) (shader-location = 0)
     float *texcoords;           // Vertex texture coordinates (UV - 2 components per vertex) (shader-location = 1)
+    float *normals;             // Vertex normal (XYZ - 3 components per vertex) (shader-location = 2)
     unsigned char *colors;      // Vertex colors (RGBA - 4 components per vertex) (shader-location = 3)
 #if defined(GRAPHICS_API_OPENGL_11) || defined(GRAPHICS_API_OPENGL_33)
     unsigned int *indices;      // Vertex indices (in case vertex data comes indexed) (6 indices per quad)
@@ -19,7 +20,7 @@ typedef struct rlVertexBuffer {
     unsigned short *indices;    // Vertex indices (in case vertex data comes indexed) (6 indices per quad)
 #endif
     unsigned int vaoId;         // OpenGL Vertex Array Object id
-    unsigned int vboId[4];      // OpenGL Vertex Buffer Objects id (4 types of vertex data)
+    unsigned int vboId[5];      // OpenGL Vertex Buffer Objects id (5 types of vertex data)
 } rlVertexBuffer;"
 
 fix1_rlVertexBuffer ← 1↓"
@@ -54,9 +55,10 @@ Fix_rlVertexBuffer ← {
 
 broken_StatePointer←1↓"
 #if defined(GRAPHICS_API_OPENGL_11)
-RLAPI void rlEnableStatePointer(int vertexAttribType, void *buffer);    // Enable attribute state pointer
-RLAPI void rlDisableStatePointer(int vertexAttribType);                 // Disable attribute state pointer
-#endif"
+RLAPI void rlEnableStatePointer(int vertexAttribType, void *buffer); // Enable attribute state pointer
+RLAPI void rlDisableStatePointer(int vertexAttribType); // Disable attribute state pointer
+#endif
+"
 
 Fix_StatePointer ← {
   if ← ⊑/broken_StatePointer⍷𝕩
