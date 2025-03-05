@@ -1,0 +1,3 @@
+[submodule "imports/c-header-to-bqn-ffi"]
+	path = imports/c-header-to-bqn-ffi
+	url = https://github.com/Brian-ED/c-header-to-bqn-ffi

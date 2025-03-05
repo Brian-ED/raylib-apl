@@ -3968,6 +3968,16 @@ scopeInitAudioDevice ← 0
     'TextFindIndexRetPtr errored' Assert ∧/⍬
     r←TextFindIndexRetPtrRAYLIB(⍬ text find)
 ∇
+∇r←TextFormat(text args)
+    'TextFormat errored' Assert ∨/1
+    'TextFormat errored' Assert ∧/⍬
+    r←TextFormatRAYLIB(text args)
+∇
+∇r←TextFormatRetPtr(text args)
+    'TextFormatRetPtr errored' Assert ∨/1
+    'TextFormatRetPtr errored' Assert ∧/⍬
+    r←TextFormatRetPtrRAYLIB(⍬ text args)
+∇
 ∇r←TextInsert(text insert position)
     'TextInsert errored' Assert ∨/1
     'TextInsert errored' Assert ∧/⍬
@@ -4117,6 +4127,11 @@ scopeInitAudioDevice ← 0
     'ToggleFullscreen errored' Assert ∨/(scopeInitWindow)
     'ToggleFullscreen errored' Assert ∧/⍬
     ToggleFullscreenRAYLIB
+∇
+∇TraceLog(logLevel text args)
+    'TraceLog errored' Assert ∨/1
+    'TraceLog errored' Assert ∧/⍬
+    TraceLogRAYLIB(logLevel text args)
 ∇
 ∇UnloadAudioStream stream
     'UnloadAudioStream errored' Assert ∨/1
