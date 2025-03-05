@@ -101,7 +101,7 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
   MapStructTypes ← {
     [bqn,c] ← typeReplacements
     cleaned←constText⊸∾⁼¨⌾((constText⊸(⊣≡≠⊸↑)¨𝕩)⊸/)𝕩
-    mask ← ∨`∘∊⟜"[*<>"¨cleaned
+    mask ← ∨`∘∊⟜"[*<>"¨cleaned # TODO: I don't remember why "=" is missing
     [kept,removed] ← 2‿∘⥊⍉Remap˘> mask{⟨∨`⌾⌽∘≠⟜' '⊸/𝕩/˜¬𝕨 ⋄ SwitchOrder 𝕨/𝕩⟩}¨cleaned
     replaced ← kept MapNames⌾⋈∘⊣⍟(0⊸≡)¨(c⊐kept)⊏bqn∾0
     ({'='¨⌾((𝕩='*')⊸/)𝕩}¨ removed) AddRemoved¨ replaced
@@ -186,7 +186,7 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
 
     returnTypes ← {funcName‿description‿retType‿args: retType}¨functions
 
-    s2Lines ← "void"⊸≢¨returnTypes
+    s2Lines ← 1¨returnTypes
     !¬∨´s2Lines∧sLines # I don't want the lines to collide
 
     [names⋄desc⋄returns⋄argTypes⋄argNames] ← {
@@ -197,11 +197,12 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
     s1LinesExtended‿s2LinesExtended ← s2Lines{((+´+≠)𝕩+𝕨)↑𝕨⊸{(¬𝕩∊/𝕨)/𝕩+↕≠𝕩}⌾/𝕨+𝕩}{𝔽⋈𝔽˜}sLines
 
     <˘"'"‿"⎕NA "‿" R('"‿" ("‿")) ⍝"‿" ⍝ "⟨
-      ∾⟜"'"¨·∾⟜"RAYLIB"¨·∾⟜"RetPtr"¨⌾((»s2LinesExtended)⊸/)·∾⟜"Ref"¨⌾((»s1LinesExtended)⊸/)MapNames¨
+      ∾⟜"'"¨·∾⟜"RAYLIB"¨·∾⟜"RetPtr"¨⌾((»s2LinesExtended)⊸/)·∾⟜"Ref"¨⌾((0»s1LinesExtended)⊸/)MapNames¨
       ""¨⌾((»s2LinesExtended)⊸/) MapFuncReturnType # Returns
-      ∾⟜"'"¨·∾⟜"RetPtr"¨⌾((»s2LinesExtended)⊸/)·∾⟜"Ref"¨⌾((»s1LinesExtended)⊸/)MapNames¨ # Function Names
+      ∾⟜"'"¨·∾⟜"RetPtr"¨⌾((»s2LinesExtended)⊸/)·∾⟜"Ref"¨⌾((0»s1LinesExtended)⊸/)MapNames¨ # Function Names
       { # Argument types
-        a←(MapArgTypes returnTypes/˜1+s2Lines∨sLines) <∘{"('="≡3↑𝕩?"ptr"; "('>',"∾𝕩∾")"}⊸∾¨⌾((»s2LinesExtended)⊸/) MapArgTypes¨𝕩
+        returnTypes ← MapArgTypes returnTypes/˜1+s2Lines∨sLines
+        a←returnTypes <∘{"('="≡3↑𝕩?"ptr"; "('>',"∾𝕩∾")"}⊸∾¨⌾(((" "⊸≢¨returnTypes)∧0»s2LinesExtended)⊸/) MapArgTypes¨𝕩
         b← (2⌊≠)◶⟨⋈"⍬"⋄⟨",⊂"⟩∾⊢⋄⊢⟩¨a
         (1↓·∾' '⊸∾¨)¨b
       }

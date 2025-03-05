@@ -177,6 +177,7 @@ float16 ← ⍬ ⍝
 'Vector3RejectRAYLIB'                       ⎕NA v3         R('Vector3Reject'                        (v3 v3                                                         )) ⍝ v1 v2                                           ⍝
 'Vector3RejectRetPtrRAYLIB'                 ⎕NA            R('Vector3RejectRetPtr'                  (('>',v3) v3 v3                                                )) ⍝ v1 v2                                           ⍝
 'Vector3OrthoNormalizeRAYLIB'               ⎕NA            R('Vector3OrthoNormalize'                (('=',v3) ('=',v3)                                             )) ⍝ v1 v2                                           ⍝
+'Vector3OrthoNormalizeRetPtrRAYLIB'         ⎕NA            R('Vector3OrthoNormalizeRetPtr'          (('=',v3) ('=',v3)                                             )) ⍝ v1 v2                                           ⍝
 'Vector3TransformRAYLIB'                    ⎕NA v3         R('Vector3Transform'                     (v3 Matrix                                                     )) ⍝ v mat                                           ⍝
 'Vector3TransformRetPtrRAYLIB'              ⎕NA            R('Vector3TransformRetPtr'               (('>',v3) v3 Matrix                                            )) ⍝ v mat                                           ⍝
 'Vector3RotateByQuaternionRAYLIB'           ⎕NA v3         R('Vector3RotateByQuaternion'            (v3 Quaternion                                                 )) ⍝ v q                                             ⍝
@@ -336,6 +337,7 @@ float16 ← ⍬ ⍝
 'QuaternionFromAxisAngleRAYLIB'             ⎕NA Quaternion R('QuaternionFromAxisAngle'              (v3 f                                                          )) ⍝ axis angle                                      ⍝
 'QuaternionFromAxisAngleRetPtrRAYLIB'       ⎕NA            R('QuaternionFromAxisAngleRetPtr'        (('>',Quaternion) v3 f                                         )) ⍝ axis angle                                      ⍝
 'QuaternionToAxisAngleRAYLIB'               ⎕NA            R('QuaternionToAxisAngle'                (Quaternion ('=',v3) ('=',f)                                   )) ⍝ q outAxis outAngle                              ⍝
+'QuaternionToAxisAngleRetPtrRAYLIB'         ⎕NA            R('QuaternionToAxisAngleRetPtr'          (Quaternion ('=',v3) ('=',f)                                   )) ⍝ q outAxis outAngle                              ⍝
 'QuaternionFromEulerRAYLIB'                 ⎕NA Quaternion R('QuaternionFromEuler'                  (f f f                                                         )) ⍝ pitch yaw roll                                  ⍝
 'QuaternionFromEulerRetPtrRAYLIB'           ⎕NA            R('QuaternionFromEulerRetPtr'            (('>',Quaternion) f f f                                        )) ⍝ pitch yaw roll                                  ⍝
 'QuaternionToEulerRAYLIB'                   ⎕NA v3         R('QuaternionToEuler'                    (,⊂ Quaternion                                                 )) ⍝ q                                               ⍝
@@ -345,5 +347,6 @@ float16 ← ⍬ ⍝
 'QuaternionEqualsRAYLIB'                    ⎕NA i          R('QuaternionEquals'                     (Quaternion Quaternion                                         )) ⍝ p q                                             ⍝
 'QuaternionEqualsRetPtrRAYLIB'              ⎕NA            R('QuaternionEqualsRetPtr'               (('>',i) Quaternion Quaternion                                 )) ⍝ p q                                             ⍝
 'MatrixDecomposeRAYLIB'                     ⎕NA            R('MatrixDecompose'                      (Matrix ('=',v3) ('=',Quaternion) ('=',v3)                     )) ⍝ mat translation rotation scale                  ⍝
+'MatrixDecomposeRetPtrRAYLIB'               ⎕NA            R('MatrixDecomposeRetPtr'                (Matrix ('=',v3) ('=',Quaternion) ('=',v3)                     )) ⍝ mat translation rotation scale                  ⍝
 ∇
 :EndNamespace
