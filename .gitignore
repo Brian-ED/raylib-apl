@@ -4,6 +4,8 @@
 
 # built from https://github.com/Brian-ED/temp-c-raylib
 libtemp-c-raylib.so
+temp-c-raylib.dll
+temp-c-raylib.pdb
 
 # Incomplete examples
 examples/6_shaders

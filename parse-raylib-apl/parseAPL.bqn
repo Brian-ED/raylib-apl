@@ -53,7 +53,7 @@ typeReplacements ← ⍉shortendStructNames∾[
   " "  ‿"void"
 ]
 
-defaultPathDefinition ← "{⍵:'../libtemp-c-raylib.so'⋄'..\raylib.dll'}'Linux'≡'-64'~⍨⊃#⎕WG'APLVersion'"
+defaultPathDefinition ← "{⍵:'../libtemp-c-raylib.so'⋄'..\temp-c-raylib.dll'}'Linux'≡'-64'~⍨⊃#⎕WG'APLVersion'"
 
 SetPath ← {path𝕊ffi:
   def ← defaultPathDefinition

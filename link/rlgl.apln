@@ -284,7 +284,7 @@ __PLEASE_DO_NOT_REPLACE_EXISTING_VAR__ ← 0 ⎕FIX pathToMe,'../parse-raylib-ap
 ⎕EX '__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__' '__PLEASE_DO_NOT_REPLACE_EXISTING_VAR2__'
 
 :If ⍬≡pathToBinaryArg
-  pathToBinaryArg ← pathToMe,{⍵:'../libtemp-c-raylib.so'⋄'..\raylib.dll'}'Linux'≡'-64'~⍨⊃#⎕WG'APLVersion'
+  pathToBinaryArg ← pathToMe,{⍵:'../libtemp-c-raylib.so'⋄'..\temp-c-raylib.dll'}'Linux'≡'-64'~⍨⊃#⎕WG'APLVersion'
 :Endif
 pathToBinary ← pathToBinaryArg
 :If 0=⎕NC 'mode'

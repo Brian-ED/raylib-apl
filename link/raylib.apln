@@ -380,7 +380,7 @@ __PLEASE_DO_NOT_REPLACE_EXISTING_VAR__ ← 0 ⎕FIX pathToMe,'../parse-raylib-ap
 ⎕EX '__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__' '__PLEASE_DO_NOT_REPLACE_EXISTING_VAR2__'
 
 :If ⍬≡pathToBinaryArg
-  pathToBinaryArg ← pathToMe,{⍵:'../libtemp-c-raylib.so'⋄'..\raylib.dll'}'Linux'≡'-64'~⍨⊃#⎕WG'APLVersion'
+  pathToBinaryArg ← pathToMe,{⍵:'../libtemp-c-raylib.so'⋄'..\temp-c-raylib.dll'}'Linux'≡'-64'~⍨⊃#⎕WG'APLVersion'
 :Endif
 pathToBinary ← pathToBinaryArg
 :If 0=⎕NC 'mode'
@@ -739,7 +739,7 @@ AutomationEventList ← ⍬ ⍝ Automation event list
 'IsCursorOnScreenRAYLIB'                      ⎕NA bool                R('IsCursorOnScreen'                       (⍬                                                   )) ⍝                                                                   ⍝ Check if cursor is on the screen
 'IsCursorOnScreenRetPtrRAYLIB'                ⎕NA                     R('IsCursorOnScreenRetPtr'                 (,⊂ ('>',bool)                                       )) ⍝                                                                   ⍝ Check if cursor is on the screen
 'ClearBackgroundRAYLIB'                       ⎕NA                     R('ClearBackground'                        (,⊂ Color                                            )) ⍝ color                                                             ⍝ Set background color (framebuffer clear color)
-'ClearBackgroundRetPtrRAYLIB'                 ⎕NA                     R('ClearBackgroundRetPtr'                  (,⊂ Color                                            )) ⍝ color                                                             ⍝ Set background color (framebuffer clear color)
+'ClearBackgroundRetPtrRAYLIB'                 ⎕NA                     R('ClearBackgroundRetPtr'                  (,⊂ 'P'                                            )) ⍝ color                                                             ⍝ Set background color (framebuffer clear color)
 'BeginDrawingRAYLIB'                          ⎕NA                     R('BeginDrawing'                           (⍬                                                   )) ⍝                                                                   ⍝ Setup canvas (framebuffer) to start drawing
 'BeginDrawingRetPtrRAYLIB'                    ⎕NA                     R('BeginDrawingRetPtr'                     (⍬                                                   )) ⍝                                                                   ⍝ Setup canvas (framebuffer) to start drawing
 'EndDrawingRAYLIB'                            ⎕NA                     R('EndDrawing'                             (⍬                                                   )) ⍝                                                                   ⍝ End canvas drawing and swap buffers (double buffering)
