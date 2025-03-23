@@ -73,6 +73,7 @@ file ParseHeader˜↩ "RLAPI"
 file ToFFI˜↩ map
 file ∾˜↩ ":Namespace rlgl"∾@+10
 file ∾↩ ":EndNamespace"∾˜@+10
+file ∾↩ @+10
 destination ← "../link/rlgl.apln"
 destination •FChars file
 •Out destination∾" successfully generated"
