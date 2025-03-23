@@ -28,6 +28,7 @@ file ToFFI↩
 file ∾⟜("AfterDefaultDefinitions mode"∾@+10)⌾(∾⟜"∇"⁼)↩
 file ∾˜↩ ":Namespace raylib"∾@+10
 file ∾ ↩ ":EndNamespace"∾˜@+10
+file ∾↩ @+10
 destination ← "../link/raylib.apln"
 destination •FChars file
 •Out destination∾" successfully generated"
