@@ -1,0 +1,3 @@
+:Namespace do_not_link
+  ⎕←'Do not link this folder. Rather do this and that…'
+:EndNamespace
