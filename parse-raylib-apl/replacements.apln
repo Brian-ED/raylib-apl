@@ -222,13 +222,13 @@ scopeInitAudioDevice ← 0
     ClearWindowStateRAYLIB,⊂(flags)
 ∇
 ∇CloseAudioDevice
-    'CloseAudioDevice errored' Assert ∨/1
+    'CloseAudioDevice errored' Assert ∨/(scopeInitWindow ∧ scopeInitAudioDevice)
     'CloseAudioDevice errored' Assert ∧/⍬
     scopeInitAudioDevice ← 0
     CloseAudioDeviceRAYLIB
 ∇
 ∇CloseWindow
-    'CloseWindow errored' Assert ∨/1
+    'CloseWindow errored' Assert ∨/(scopeInitWindow)
     'CloseWindow errored' Assert ∧/⍬
     scopeInitWindow ← 0
     CloseWindowRAYLIB
@@ -934,49 +934,49 @@ scopeInitAudioDevice ← 0
     r←EncodeDataBase64RetPtrRAYLIB(⍬ data dataSize outputSize)
 ∇
 ∇EndBlendMode
-    'EndBlendMode errored' Assert ∨/1
+    'EndBlendMode errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing ∧ scopeBeginBlendMode)
     'EndBlendMode errored' Assert ∧/⍬
     scopeBeginBlendMode ← 0
     EndBlendModeRAYLIB
 ∇
 ∇EndDrawing
-    'EndDrawing errored' Assert ∨/1
+    'EndDrawing errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing)
     'EndDrawing errored' Assert ∧/⍬
     scopeBeginDrawing ← 0
     EndDrawingRAYLIB
 ∇
 ∇EndMode2D
-    'EndMode2D errored' Assert ∨/1
+    'EndMode2D errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing ∧ scopeBeginMode2D)
     'EndMode2D errored' Assert ∧/⍬
     scopeBeginMode2D ← 0
     EndMode2DRAYLIB
 ∇
 ∇EndMode3D
-    'EndMode3D errored' Assert ∨/1
+    'EndMode3D errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing ∧ scopeBeginMode3D)
     'EndMode3D errored' Assert ∧/⍬
     scopeBeginMode3D ← 0
     EndMode3DRAYLIB
 ∇
 ∇EndScissorMode
-    'EndScissorMode errored' Assert ∨/1
+    'EndScissorMode errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing ∧ scopeBeginScissorMode)
     'EndScissorMode errored' Assert ∧/⍬
     scopeBeginScissorMode ← 0
     EndScissorModeRAYLIB
 ∇
 ∇EndShaderMode
-    'EndShaderMode errored' Assert ∨/1
+    'EndShaderMode errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing ∧ scopeBeginShaderMode)
     'EndShaderMode errored' Assert ∧/⍬
     scopeBeginShaderMode ← 0
     EndShaderModeRAYLIB
 ∇
 ∇EndTextureMode
-    'EndTextureMode errored' Assert ∨/1
+    'EndTextureMode errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing ∧ scopeBeginTextureMode)
     'EndTextureMode errored' Assert ∧/⍬
     scopeBeginTextureMode ← 0
     EndTextureModeRAYLIB
 ∇
 ∇EndVrStereoMode
-    'EndVrStereoMode errored' Assert ∨/1
+    'EndVrStereoMode errored' Assert ∨/(scopeInitWindow ∧ scopeBeginTextureMode ∧ scopeBeginVrStereoMode)
     'EndVrStereoMode errored' Assert ∧/⍬
     scopeBeginVrStereoMode ← 0
     EndVrStereoModeRAYLIB
