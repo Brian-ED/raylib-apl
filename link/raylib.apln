@@ -372,7 +372,7 @@ RAYLIB_VERSION       ← '5.5' ⍝
 
 ⍝ Mode is either 3:All changes, 2:only manual changes 1:only automatic changes, or 0: no changes
 ∇{mode} Init (pathToMe pathToBinaryArg)
-__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__ ← 0 ⎕FIX pathToMe,'../parse-raylib-apl/setup.apln'
+__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__ ← 0 ⎕FIX pathToMe,'../parse-raylib-apl/setup.apln.hide'
 ⎕ ← __PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.R
 '' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯3
 '' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯2
@@ -739,7 +739,7 @@ AutomationEventList ← ⍬ ⍝ Automation event list
 'IsCursorOnScreenRAYLIB'                      ⎕NA bool                R('IsCursorOnScreen'                       (⍬                                                   )) ⍝                                                                   ⍝ Check if cursor is on the screen
 'IsCursorOnScreenRetPtrRAYLIB'                ⎕NA                     R('IsCursorOnScreenRetPtr'                 (,⊂ ('>',bool)                                       )) ⍝                                                                   ⍝ Check if cursor is on the screen
 'ClearBackgroundRAYLIB'                       ⎕NA                     R('ClearBackground'                        (,⊂ Color                                            )) ⍝ color                                                             ⍝ Set background color (framebuffer clear color)
-'ClearBackgroundRetPtrRAYLIB'                 ⎕NA                     R('ClearBackgroundRetPtr'                  (,⊂ 'P'                                            )) ⍝ color                                                             ⍝ Set background color (framebuffer clear color)
+'ClearBackgroundRetPtrRAYLIB'                 ⎕NA                     R('ClearBackgroundRetPtr'                  (,⊂ Color                                            )) ⍝ color                                                             ⍝ Set background color (framebuffer clear color)
 'BeginDrawingRAYLIB'                          ⎕NA                     R('BeginDrawing'                           (⍬                                                   )) ⍝                                                                   ⍝ Setup canvas (framebuffer) to start drawing
 'BeginDrawingRetPtrRAYLIB'                    ⎕NA                     R('BeginDrawingRetPtr'                     (⍬                                                   )) ⍝                                                                   ⍝ Setup canvas (framebuffer) to start drawing
 'EndDrawingRAYLIB'                            ⎕NA                     R('EndDrawing'                             (⍬                                                   )) ⍝                                                                   ⍝ End canvas drawing and swap buffers (double buffering)

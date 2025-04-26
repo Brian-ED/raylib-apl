@@ -113,16 +113,9 @@ All raylib-apl examples support using [dyalogscript](https://help.dyalog.com/19.
 
 # ⎕NA problems
 
-### Solved
-`⎕NA` can't return `F4`, it formats them incorrectly on Linux. Instead, give a struct in a pointer that C modifies.
+Functions that `⎕NA` outputs can't return `F4`, it formats them incorrectly on Linux. Instead, give a struct in a pointer that C modifies.
 
-### Unsolved
-argument of type `>U8` is ignored, but you still need to give ⎕NA the input type.
-
-# TODO
-Use `:require ../parse-raylib-apl/setup.apln` syntax for doing proper imports relative to the file rather than current directory.
-
-Auto pad stuff on APL side.
+argument of type `>U8` is ignored, but you still need to give ⎕NA the input type. Solved by just having a wrapper function in APL that passes `⍬`.
 
 ### Examples to make
 Sound visualization example.
