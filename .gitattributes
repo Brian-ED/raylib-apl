@@ -1,1 +1,2 @@
 *.apl? linguist-language=APL
+*.apl?.hide linguist-language=APL
