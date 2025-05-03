@@ -133,17 +133,16 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
   ⟩
   initTradFnHeader ← ⟨
     "⍝ Mode is either 3:All changes, 2:only manual changes 1:only automatic changes, or 0: no changes"
-    "∇{mode} Init (pathToMe pathToBinaryArg)"
-
-    "__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__ ← 0 ⎕FIX pathToMe,'../parse-raylib-apl/setup.apln.hide'"
-    "⎕ ← __PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.R"
+    "∇{mode} Init (pathToRaylibDotAPLN pathToBinaryArg)"
+    "pathToRaylibDotAPLN ← (⊢,'/'/⍨'/'≢⊃∘⌽),pathToRaylibDotAPLN"
+    "__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__ ← 0 ⎕FIX pathToRaylibDotAPLN,'../parse-raylib-apl/setup.apln.hide'"
     "'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯3"
     "'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯2"
     "'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯9"
     "⎕EX '__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__' '__PLEASE_DO_NOT_REPLACE_EXISTING_VAR2__'"
     ""
     ":If ⍬≡pathToBinaryArg"
-    "  pathToBinaryArg ← pathToMe,"∾defaultPathDefinition
+    "  pathToBinaryArg ← pathToRaylibDotAPLN,"∾defaultPathDefinition
     ":Endif"
     "pathToBinary ← pathToBinaryArg"
     ":If 0=⎕NC 'mode'"
