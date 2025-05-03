@@ -83,7 +83,7 @@ PadStruct ← {
 }
 
 ∇AfterDefaultDefinitions mode
-  replacements ⊢← 0 ⎕FIX pathToMe,'../parse-raylib-apl/replacements.apln.hide'
+  replacements ⊢← 0 ⎕FIX pathToRaylibDotAPLN,'../parse-raylib-apl/replacements.apln.hide'
 
   SetTraceLogLevelRAYLIB ,TraceLogLevel.LOG_WARNING
   SetTargetFPSRAYLIB 60
