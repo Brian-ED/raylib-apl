@@ -174,7 +174,7 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
   structsDone ← initTradFnHeader∾{
     [names,descriptions,fields]←⍉(↕0‿3)∾´structs
     headers ← (MapStructNames names) ∾⟜" ← ⍬ ⍝ "⊸∾¨ descriptions
-    bodys ← (MapStructNames names){<˘("  "∾𝕨∾",←⊂ ")‿" ⍝ "‿"  ⍝ "⟨MapStructTypes,⊢,⊢⟩_MetaParse ⟨"'"(⊣∾˜∾)'⋄'∾𝕨⋄""⋄""⟩∾ >𝕩}¨⊢˝¨¨fields
+    bodys ← names{<˘("  "∾(MapStructNames⌾⋈𝕨)∾",←⊂ ")‿" ⍝ "‿"  ⍝ "⟨MapStructTypes,⊢,⊢⟩_MetaParse ⟨"'"(⊣∾˜∾)'⋄'∾𝕨⋄""⋄""⟩∾ >𝕩}¨⊢˝¨¨fields
     assembled ← headers ""⊸⋈⊸∾¨ bodys
     aliasLines←»⊸∨∘≠⟜' '⊸/¨<˘""‿" ← "‿" ⍝ "⟨MapNames,MapArgTypes,⊢⟩_MetaParse ⌽⌾(2⊸↑)˘>⊢˝¨aliases
     p←⊑¨⊢˝¨aliases

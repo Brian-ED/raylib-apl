@@ -419,15 +419,15 @@ pathToBinary ← pathToBinaryArg
 
 
 v2 ← ⍬ ⍝ Vector2 type
-  v2,←⊂ '⋄v2' ⍝    ⍝
-  v2,←⊂ f     ⍝ x  ⍝
-  v2,←⊂ f     ⍝ y  ⍝
+  v2,←⊂ '⋄Vector2' ⍝    ⍝
+  v2,←⊂ f          ⍝ x  ⍝
+  v2,←⊂ f          ⍝ y  ⍝
 
 v3 ← ⍬ ⍝ Vector3 type                 // -- ConvertHSVtoRGB(), ConvertRGBtoHSV()
-  v3,←⊂ '⋄v3' ⍝    ⍝
-  v3,←⊂ f     ⍝ x  ⍝
-  v3,←⊂ f     ⍝ y  ⍝
-  v3,←⊂ f     ⍝ z  ⍝
+  v3,←⊂ '⋄Vector3' ⍝    ⍝
+  v3,←⊂ f          ⍝ x  ⍝
+  v3,←⊂ f          ⍝ y  ⍝
+  v3,←⊂ f          ⍝ z  ⍝
 
 Color ← ⍬ ⍝ Color type, RGBA (32bit)
   Color,←⊂ '⋄Color' ⍝    ⍝

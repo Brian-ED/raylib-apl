@@ -23,22 +23,22 @@ pathToBinary ← pathToBinaryArg
 
 
 v2 ← ⍬ ⍝ Vector2 type
-  v2,←⊂ '⋄v2' ⍝    ⍝
-  v2,←⊂ f     ⍝ x  ⍝
-  v2,←⊂ f     ⍝ y  ⍝
+  v2,←⊂ '⋄Vector2' ⍝    ⍝
+  v2,←⊂ f          ⍝ x  ⍝
+  v2,←⊂ f          ⍝ y  ⍝
 
 v3 ← ⍬ ⍝ Vector3 type
-  v3,←⊂ '⋄v3' ⍝    ⍝
-  v3,←⊂ f     ⍝ x  ⍝
-  v3,←⊂ f     ⍝ y  ⍝
-  v3,←⊂ f     ⍝ z  ⍝
+  v3,←⊂ '⋄Vector3' ⍝    ⍝
+  v3,←⊂ f          ⍝ x  ⍝
+  v3,←⊂ f          ⍝ y  ⍝
+  v3,←⊂ f          ⍝ z  ⍝
 
 v4 ← ⍬ ⍝ Vector4 type
-  v4,←⊂ '⋄v4' ⍝    ⍝
-  v4,←⊂ f     ⍝ x  ⍝
-  v4,←⊂ f     ⍝ y  ⍝
-  v4,←⊂ f     ⍝ z  ⍝
-  v4,←⊂ f     ⍝ w  ⍝
+  v4,←⊂ '⋄Vector4' ⍝    ⍝
+  v4,←⊂ f          ⍝ x  ⍝
+  v4,←⊂ f          ⍝ y  ⍝
+  v4,←⊂ f          ⍝ z  ⍝
+  v4,←⊂ f          ⍝ w  ⍝
 Quaternion ← v4 ⍝ Quaternion type
 
 Matrix ← ⍬ ⍝ Matrix type (OpenGL style 4x4 - right handed, column major)

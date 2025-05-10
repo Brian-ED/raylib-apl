@@ -62,7 +62,7 @@ str  ← '=0C1'
 rlDir ← '../link/',⍨⊃1⎕NPARTS''
 rl ← 0⎕Fix rlDir,'raylib.apln'
 rl.Init rlDir⍬
-structs ← ∪{('⋄'=⊃∘⊃¨⍵)/⍵}rl.(⍎¨⎕NL) ¯2
+structs ← ∪{⍵/⍨'⋄'=⊃∘⊃¨⍵}rl.(⍎¨⎕NL) ¯2
 ⎕NA 'I4 ',lib,'|GetStructSize I4'
 'tempAlloc' ⎕NA 'P ',lib,'|MemAlloc U4'
 BytesEachArg ← ⌈/ GetStructSize¨ ⎕IO-⍨⍳≢structs
@@ -101,6 +101,12 @@ Pop ← {
 }
 
 ⍝⎕← ('>',Ray) v2 Camera
+intoFrom←{
+  name←'⋄'∘,⍣¯1⊃⍵
+  args←' P'⍴⍨2×≢⍵   ⍝ Includes result
+  ⎕OR¨'AB'⎕NA¨ ⎕←(lib,'|',name,,∘args)¨'INTO' 'FROM'
+}¨structs
+
 ⎕NA lib,'|Vector2INTO P P P'
 ⎕NA lib,'|Vector2FROM P P P'
 ⎕NA lib,'|Vector3INTO P P P P'

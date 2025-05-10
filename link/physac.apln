@@ -30,9 +30,9 @@ pathToBinary ← pathToBinaryArg
 
 
 v2 ← ⍬ ⍝ Vector2 type
-  v2,←⊂ '⋄v2' ⍝    ⍝
-  v2,←⊂ f     ⍝ x  ⍝
-  v2,←⊂ f     ⍝ y  ⍝
+  v2,←⊂ '⋄Vector2' ⍝    ⍝
+  v2,←⊂ f          ⍝ x  ⍝
+  v2,←⊂ f          ⍝ y  ⍝
 
 Mat2 ← ⍬ ⍝ Mat2 type (used for polygon shape rotation matrix)
   Mat2,←⊂ '⋄Mat2' ⍝      ⍝

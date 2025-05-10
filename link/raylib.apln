@@ -389,22 +389,22 @@ pathToBinary ← pathToBinaryArg
 
 
 v2 ← ⍬ ⍝ Vector2, 2 components
-  v2,←⊂ '⋄v2' ⍝    ⍝
-  v2,←⊂ f     ⍝ x  ⍝ Vector x component
-  v2,←⊂ f     ⍝ y  ⍝ Vector y component
+  v2,←⊂ '⋄Vector2' ⍝    ⍝
+  v2,←⊂ f          ⍝ x  ⍝ Vector x component
+  v2,←⊂ f          ⍝ y  ⍝ Vector y component
 
 v3 ← ⍬ ⍝ Vector3, 3 components
-  v3,←⊂ '⋄v3' ⍝    ⍝
-  v3,←⊂ f     ⍝ x  ⍝ Vector x component
-  v3,←⊂ f     ⍝ y  ⍝ Vector y component
-  v3,←⊂ f     ⍝ z  ⍝ Vector z component
+  v3,←⊂ '⋄Vector3' ⍝    ⍝
+  v3,←⊂ f          ⍝ x  ⍝ Vector x component
+  v3,←⊂ f          ⍝ y  ⍝ Vector y component
+  v3,←⊂ f          ⍝ z  ⍝ Vector z component
 
 v4 ← ⍬ ⍝ Vector4, 4 components
-  v4,←⊂ '⋄v4' ⍝    ⍝
-  v4,←⊂ f     ⍝ x  ⍝ Vector x component
-  v4,←⊂ f     ⍝ y  ⍝ Vector y component
-  v4,←⊂ f     ⍝ z  ⍝ Vector z component
-  v4,←⊂ f     ⍝ w  ⍝ Vector w component
+  v4,←⊂ '⋄Vector4' ⍝    ⍝
+  v4,←⊂ f          ⍝ x  ⍝ Vector x component
+  v4,←⊂ f          ⍝ y  ⍝ Vector y component
+  v4,←⊂ f          ⍝ z  ⍝ Vector z component
+  v4,←⊂ f          ⍝ w  ⍝ Vector w component
 Quaternion ← v4 ⍝ Quaternion, 4 components (Vector4 alias)
 
 Matrix ← ⍬ ⍝ Matrix, 4x4 components, column major, OpenGL style, right-handed
