@@ -1,0 +1,188 @@
+#!cd $dir && /usr/bin/dyalogscript $fileName
+⎕io←1
+
+Assert ← {⍺←'assertion failure' ⋄ 0∊⍵:⍺ ⎕SIGNAL 8 ⋄ shy←0}
+
+
+
+⍝ Makes an importer that improves the ffi function creation syntax
+∇ OutputFunc ← R (funcName types)
+  (into from) ← ↓⍉↑Struct_to_INTO_FROM¨types
+  (,'O') ⎕NA pathToBinary,'|',funcName,' P'⍴⍨2×≢types
+  OutputFunc ← types∘{v←⍺⋄O {⎕←⎕se.Dyalog.Utils.display(⍴⍵)(≡⍵)v⋄⍵} funcs MapFuncs ⍵}
+∇
+⍝1: Outputting function tacitly is bad
+⍝2: Outputting function is bad
+⍝3: Why not on InitWindow? 0 arguments?
+
+⍝]Create # .
+⍝rl←link.raylib⋄rl.Init ('link/',⍨⊃1⎕NPARTS'')'./libtemp-c-raylib.so'
+
+⍝ predefined C types
+atomTypes ← ⍬
+atomTypes ,←⊂ bool ← 'I1'
+atomTypes ,←⊂ c    ← 'I1'
+atomTypes ,←⊂ i    ← 'I4'
+atomTypes ,←⊂ f    ← 'F4'
+atomTypes ,←⊂ u    ← 'U4'
+atomTypes ,←⊂ i1   ← 'I1'
+atomTypes ,←⊂ u1   ← 'U1'
+atomTypes ,←⊂ u8   ← 'U8'
+atomTypes ,←⊂ ptr  ← ,'P'
+atomTypes ,←⊂ f8   ← 'F8'
+atomTypes ,←⊂ i8   ← 'I8'
+atomTypes ,←⊂ u2   ← 'U2'
+atomTypes←∪atomTypes
+ustr ← '=C1'
+str  ← '=0C1'
+v2 ← ⍬ ⍝ Vector2, 2 components
+  v2,←⊂ '⋄v2' ⍝    ⍝
+  v2,←⊂ f     ⍝ x  ⍝ Vector x component
+  v2,←⊂ f     ⍝ y  ⍝ Vector y component
+
+v3 ← ⍬ ⍝ Vector3, 3 components
+  v3,←⊂ '⋄v3' ⍝    ⍝
+  v3,←⊂ f     ⍝ x  ⍝ Vector x component
+  v3,←⊂ f     ⍝ y  ⍝ Vector y component
+  v3,←⊂ f     ⍝ z  ⍝ Vector z component
+Ray ← ⍬ ⍝ Ray, ray for raycasting
+  Ray,←⊂ '⋄Ray' ⍝            ⍝
+  Ray,←⊂ v3     ⍝ position   ⍝ Ray position (origin)
+  Ray,←⊂ v3     ⍝ direction  ⍝ Ray direction (normalized)
+Camera3D ← ⍬ ⍝ Camera, defines position/orientation in 3d space
+  Camera3D,←⊂ '⋄Camera3D' ⍝             ⍝
+  Camera3D,←⊂ v3          ⍝ position    ⍝ Camera position
+  Camera3D,←⊂ v3          ⍝ target      ⍝ Camera target it looks-at
+  Camera3D,←⊂ v3          ⍝ up          ⍝ Camera up vector (rotation over its axis)
+  Camera3D,←⊂ f           ⍝ fovy        ⍝ Camera field-of-view aperture in Y (degrees) in perspective, used as near plane width in orthographic
+  Camera3D,←⊂ i           ⍝ projection  ⍝ Camera projection: CAMERA_PERSPECTIVE or CAMERA_ORTHOGRAPHIC
+Camera ← Camera3D ⍝ Camera type fallback, defaults to Camera3D
+
+lib ← '../libtemp-c-raylib.so'
+
+⎕NA 'I4 ',lib,'|StructCount'
+⎕NA 'I4 ',lib,'|GetStructSize I4'
+⎕NA 'I4 ',lib,'|GetStructNameLength I4'
+⎕NA       lib,'|GetStructName =0C1 I4 I4'
+'tempAlloc' ⎕NA 'P ',lib,'|MemAlloc U4'
+sizes ← GetStructSize¨ ¯1+⍳StructCount
+nameLengths ← GetStructNameLength¨¯1+⍳≢sizes
+names ← (¯1+⍳≢sizes) {GetStructName (⍵⍴' ') ⍵ ⍺}¨ nameLengths
+BytesEachArg ← ⌈/sizes
+maxArgs ← 127 ⍝ The C specification says the maximum arguments for a function is 127
+__arguments ← {tempAlloc BytesEachArg}¨⍳maxArgs
+__struct_conversion_arguments ← ⍬ ⍝ ⍬ is a default, will be mutated later
+
+
+_F ← {f←⍺⍺ ⋄ ⎕OR'f'}
+MapFuncs ← {⍺≡⊃⍺:⍺∘⊢⍵ ⋄ ⍺∇¨⍵}
+
+⍝ ---------------- ⍝
+⍝ Stack operations ⍝
+⍝ ---------------- ⍝
+stack ← ⍬
+topInit ← 0
+topRuntime ← 0
+
+INTOs FROMs ← ↓⍉↑{
+  ⎕OR¨'IF'⎕NA¨(lib,'|memcpy ')∘,¨('P <',⍵)('>',⍵,' P'),¨⊂' U8'
+}¨atomTypes
+
+_PushInit_ ← {
+  topRuntime+←1
+  (ptr l)←⍵⍵
+  _←⍺⍺ ptr (,⊂⍵) l
+  ptr
+}
+
+_PopInit_ ← {
+  topRuntime-←1
+  _←'Stack underflow' Assert 0≤topRuntime
+  (ptr l)←⍵⍵
+  (ptr) (⍺⍺ ⍬ ptr l)
+}
+IsString ← 1≡≢⍤⍴ ⍝ TODO test for characters
+∇(push pop)←MakePushAndPop a
+  'MakePushAndPop only takes a string'Assert IsString a
+  topInit+←1
+  stack ,← {0≡⍵:0⋄tempAlloc BytesEachArg}¨⍳0⌈topInit-≢stack ⍝ Make sure stack always has enough space
+  ptr←topInit⊃stack
+
+  push ← (INTOs⊃⍨atomTypes⍳⊂a)∘⊢ _PushInit_ (ptr ({'P'=⍵:8⋄⍎⍵}⊃⌽a)) _F ⍬
+  pop  ← (FROMs⊃⍨atomTypes⍳⊂a)∘⊢ _PopInit_  (ptr ({'P'=⍵:8⋄⍎⍵}⊃⌽a)) _F ⍬
+∇
+∇DropInit dc
+  ⍝ dc = drops count
+  'Drop only takes ints'Assert {2|⎕DR⍵:⍵=⌈⍵⋄0}dc
+  topInit-←dc
+  'Stack underflow' Assert 0≤topInit
+∇
+∇DropRuntime dc
+  ⍝ dc = drops count
+  'Drop only takes ints'Assert {2|⎕DR⍵:⍵=⌈⍵⋄0}dc
+  topRuntime-←dc
+  'Stack underflow' Assert 0≤topRuntime
+∇
+
+⍝⎕← ('>',Ray) v2 Camera
+(pushR1 popR1) ← ⎕←MakePushAndPop 'U8'
+((push1 pop1) (push2 pop2)) ← MakePushAndPop¨ 1↓v2
+DropInit 1
+((push3 pop3) (push4 pop4) (push5 pop5)) ← MakePushAndPop¨ 1↓v3
+DropInit 2
+((push6 pop6) (push7 pop7) (push8 pop8)) ← MakePushAndPop¨ 1↓v3
+DropInit 2
+
+
+⎕NA lib,'|Vector2INTO P P P'
+⎕NA lib,'|Vector2FROM P P P'
+⎕NA lib,'|Vector3INTO P P P P'
+⎕NA lib,'|Vector3FROM P P P P'
+
+R1 ← pushR1∘⊢0
+v2 ← (push2∘⊢ 1) ,⍥⊂⍨ (push1∘⊢ 0)
+output ← Vector2INTO R1,v2
+pop2∘⊢⍬
+pop1∘⊢⍬
+
+Vector2FROM
+⎕←2⊃popR1∘⊢⍬
+
+
+
+⎕off
+
+⍝ // -------------------- //
+⍝ // Stack operations end //
+⍝ // -------------------- //
+
+Struct_to_INTO_FROM ← {
+  '<=>'∊⍨⊂⊃⍵: MakePushAndPop ,'P'
+  (1≡≢⍴⍵)∧1≡≡⍵:  MakePushAndPop ⍵
+  '⋄'≢⊃⊃⍵: 'INTERNAL ERROR: unhandled argument type' Assert 0⊣⎕se.Dyalog.Utils.display⍵
+  types ← 1↓⍵
+  ⍝                                 ┌┬┬┬┬─────Skip fill case──────┬┐    ┌┬──extra return pointer argument
+  __struct_conversion_arguments ,← {0≡⍵:0⋄tempAlloc BytesEachArg}¨1+⍳0⌈(1+≢types)-≢__struct_conversion_arguments
+
+  ⍝ TODO add argument type checking here.
+  LALA ← { ⍝ PtrLeft, BracketsRight,⍨
+    ∨/0≠≡¨⍵:,'P' ⍝ If struct has scalers, it's bad kinda, handle later (lists are good, incase of ptrs delete info and make it just be ptr )
+    2>|≡⍵:⍵ ⍝ Don't affect strings.
+    ⎕←⍵
+    ,'P'
+  } types
+
+  fgi←⊃names⍳⊂ name←1↓⊃⍵ ⍝ Func Global Index
+
+  (into from) ← ↓⍉↑Struct_to_INTO_FROM¨types
+  ⍝TODO Into/From: _←'SET'⎕NA 'out ',pathToBinary,'|',name,'INTO P',⊃,/' ',¨strs ⍝ Make a GETer later
+  (LALA)(funcs,⍨⊂Into _F⍬)
+  (⊢_F⍬)(⊢_F⍬)
+}
+
+⍝TODO
+⍝ Please be smart enough to implement equal-length conversion
+D←{⎕←≡⍵⋄⍵}
+⎕←Struct_to_INTO_FROM '=',⊂u8
+⎕←Struct_to_INTO_FROM '=',u8 u8
+⎕←Struct_to_INTO_FROM 'U8'
