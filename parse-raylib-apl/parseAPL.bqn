@@ -174,7 +174,7 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
   structsDone ← initTradFnHeader∾{
     [names,descriptions,fields]←⍉(↕0‿3)∾´structs
     headers ← (MapStructNames names) ∾⟜" ← ⍬ ⍝ "⊸∾¨ descriptions
-    bodys ← (MapStructNames names){<˘("  "∾𝕨∾",←⊂ ")‿" ⍝ "‿"  ⍝ "⟨MapStructTypes,⊢,⊢⟩_MetaParse >𝕩}¨⊢˝¨¨fields
+    bodys ← (MapStructNames names){<˘("  "∾𝕨∾",←⊂ ")‿" ⍝ "‿"  ⍝ "⟨MapStructTypes,⊢,⊢⟩_MetaParse ⟨"'"(⊣∾˜∾)'⋄'∾𝕨⋄""⋄""⟩∾ >𝕩}¨⊢˝¨¨fields
     assembled ← headers ""⊸⋈⊸∾¨ bodys
     aliasLines←»⊸∨∘≠⟜' '⊸/¨<˘""‿" ← "‿" ⍝ "⟨MapNames,MapArgTypes,⊢⟩_MetaParse ⌽⌾(2⊸↑)˘>⊢˝¨aliases
     p←⊑¨⊢˝¨aliases
@@ -195,8 +195,8 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
     sAllLinesExtended ← (↕∘≠⊸+⌾/↑˜+´+≠)s2Lines∨sLines
     s1LinesExtended‿s2LinesExtended ← s2Lines{((+´+≠)𝕩+𝕨)↑𝕨⊸{(¬𝕩∊/𝕨)/𝕩+↕≠𝕩}⌾/𝕨+𝕩}{𝔽⋈𝔽˜}sLines
 
-    <˘"'"‿"⎕NA "‿" R('"‿" ("‿")) ⍝"‿" ⍝ "⟨
-      ∾⟜"'"¨·∾⟜"RAYLIB"¨·∾⟜"RetPtr"¨⌾((»s2LinesExtended)⊸/)·∾⟜"Ref"¨⌾((0»s1LinesExtended)⊸/)MapNames¨
+    (»s2LinesExtended)⊸/<˘""‿" ← "‿" R('"‿" ("‿")) ⍝"‿" ⍝ "⟨
+      ∾⟜"RAYLIB"¨·∾⟜"RetPtr"¨⌾((»s2LinesExtended)⊸/)·∾⟜"Ref"¨⌾((0»s1LinesExtended)⊸/)MapNames¨
       ""¨⌾((»s2LinesExtended)⊸/) MapFuncReturnType # Returns
       ∾⟜"'"¨·∾⟜"RetPtr"¨⌾((»s2LinesExtended)⊸/)·∾⟜"Ref"¨⌾((0»s1LinesExtended)⊸/)MapNames¨ # Function Names
       { # Argument types

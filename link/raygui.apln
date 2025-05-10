@@ -419,48 +419,56 @@ pathToBinary ← pathToBinaryArg
 
 
 v2 ← ⍬ ⍝ Vector2 type
-  v2,←⊂ f ⍝ x  ⍝
-  v2,←⊂ f ⍝ y  ⍝
+  v2,←⊂ '⋄v2' ⍝    ⍝
+  v2,←⊂ f     ⍝ x  ⍝
+  v2,←⊂ f     ⍝ y  ⍝
 
 v3 ← ⍬ ⍝ Vector3 type                 // -- ConvertHSVtoRGB(), ConvertRGBtoHSV()
-  v3,←⊂ f ⍝ x  ⍝
-  v3,←⊂ f ⍝ y  ⍝
-  v3,←⊂ f ⍝ z  ⍝
+  v3,←⊂ '⋄v3' ⍝    ⍝
+  v3,←⊂ f     ⍝ x  ⍝
+  v3,←⊂ f     ⍝ y  ⍝
+  v3,←⊂ f     ⍝ z  ⍝
 
 Color ← ⍬ ⍝ Color type, RGBA (32bit)
-  Color,←⊂ u1 ⍝ r  ⍝
-  Color,←⊂ u1 ⍝ g  ⍝
-  Color,←⊂ u1 ⍝ b  ⍝
-  Color,←⊂ u1 ⍝ a  ⍝
+  Color,←⊂ '⋄Color' ⍝    ⍝
+  Color,←⊂ u1       ⍝ r  ⍝
+  Color,←⊂ u1       ⍝ g  ⍝
+  Color,←⊂ u1       ⍝ b  ⍝
+  Color,←⊂ u1       ⍝ a  ⍝
 
 Rectangle ← ⍬ ⍝ Rectangle type
-  Rectangle,←⊂ f ⍝ x       ⍝
-  Rectangle,←⊂ f ⍝ y       ⍝
-  Rectangle,←⊂ f ⍝ width   ⍝
-  Rectangle,←⊂ f ⍝ height  ⍝
+  Rectangle,←⊂ '⋄Rectangle' ⍝         ⍝
+  Rectangle,←⊂ f            ⍝ x       ⍝
+  Rectangle,←⊂ f            ⍝ y       ⍝
+  Rectangle,←⊂ f            ⍝ width   ⍝
+  Rectangle,←⊂ f            ⍝ height  ⍝
 
 Texture2D ← ⍬ ⍝ It should be redesigned to be provided by user
-  Texture2D,←⊂ u ⍝ id       ⍝ OpenGL texture id
-  Texture2D,←⊂ i ⍝ width    ⍝ Texture base width
-  Texture2D,←⊂ i ⍝ height   ⍝ Texture base height
-  Texture2D,←⊂ i ⍝ mipmaps  ⍝ Mipmap levels, 1 by default
-  Texture2D,←⊂ i ⍝ format   ⍝ Data format (PixelFormat type)
+  Texture2D,←⊂ '⋄Texture2D' ⍝          ⍝
+  Texture2D,←⊂ u            ⍝ id       ⍝ OpenGL texture id
+  Texture2D,←⊂ i            ⍝ width    ⍝ Texture base width
+  Texture2D,←⊂ i            ⍝ height   ⍝ Texture base height
+  Texture2D,←⊂ i            ⍝ mipmaps  ⍝ Mipmap levels, 1 by default
+  Texture2D,←⊂ i            ⍝ format   ⍝ Data format (PixelFormat type)
 
 Image ← ⍬ ⍝ Image, pixel data stored in CPU memory (RAM)
-  Image,←⊂ ptr ⍝ data     ⍝ Image raw data
-  Image,←⊂ i   ⍝ width    ⍝ Image base width
-  Image,←⊂ i   ⍝ height   ⍝ Image base height
-  Image,←⊂ i   ⍝ mipmaps  ⍝ Mipmap levels, 1 by default
-  Image,←⊂ i   ⍝ format   ⍝ Data format (PixelFormat type)
+  Image,←⊂ '⋄Image' ⍝          ⍝
+  Image,←⊂ ptr      ⍝ data     ⍝ Image raw data
+  Image,←⊂ i        ⍝ width    ⍝ Image base width
+  Image,←⊂ i        ⍝ height   ⍝ Image base height
+  Image,←⊂ i        ⍝ mipmaps  ⍝ Mipmap levels, 1 by default
+  Image,←⊂ i        ⍝ format   ⍝ Data format (PixelFormat type)
 
 GlyphInfo ← ⍬ ⍝ GlyphInfo, font characters glyphs info
-  GlyphInfo,←⊂ i     ⍝ value     ⍝ Character value (Unicode)
-  GlyphInfo,←⊂ i     ⍝ offsetX   ⍝ Character offset X when drawing
-  GlyphInfo,←⊂ i     ⍝ offsetY   ⍝ Character offset Y when drawing
-  GlyphInfo,←⊂ i     ⍝ advanceX  ⍝ Character advance position X
-  GlyphInfo,←⊂ Image ⍝ image     ⍝ Character image data
+  GlyphInfo,←⊂ '⋄GlyphInfo' ⍝           ⍝
+  GlyphInfo,←⊂ i            ⍝ value     ⍝ Character value (Unicode)
+  GlyphInfo,←⊂ i            ⍝ offsetX   ⍝ Character offset X when drawing
+  GlyphInfo,←⊂ i            ⍝ offsetY   ⍝ Character offset Y when drawing
+  GlyphInfo,←⊂ i            ⍝ advanceX  ⍝ Character advance position X
+  GlyphInfo,←⊂ Image        ⍝ image     ⍝ Character image data
 
 Font ← ⍬ ⍝ It should be redesigned to be provided by user
+  Font,←⊂ '⋄Font'       ⍝               ⍝
   Font,←⊂ i             ⍝ baseSize      ⍝ Base size (default chars height)
   Font,←⊂ i             ⍝ glyphCount    ⍝ Number of glyph characters
   Font,←⊂ i             ⍝ glyphPadding  ⍝ Padding around the glyph characters
@@ -469,129 +477,75 @@ Font ← ⍬ ⍝ It should be redesigned to be provided by user
   Font,←⊂ '=',GlyphInfo ⍝ glyphs        ⍝ Glyphs info data
 
 GuiStyleProp ← ⍬ ⍝ NOTE: Used when exporting style as code for convenience
-  GuiStyleProp,←⊂ u2 ⍝ controlId      ⍝ Control identifier
-  GuiStyleProp,←⊂ u2 ⍝ propertyId     ⍝ Property identifier
-  GuiStyleProp,←⊂ i  ⍝ propertyValue  ⍝ Property value
+  GuiStyleProp,←⊂ '⋄GuiStyleProp' ⍝                ⍝
+  GuiStyleProp,←⊂ u2              ⍝ controlId      ⍝ Control identifier
+  GuiStyleProp,←⊂ u2              ⍝ propertyId     ⍝ Property identifier
+  GuiStyleProp,←⊂ i               ⍝ propertyValue  ⍝ Property value
 
 GuiTextStyle ← ⍬ ⍝ NOTE: Text style is defined by control
-  GuiTextStyle,←⊂ u ⍝ size         ⍝
-  GuiTextStyle,←⊂ i ⍝ charSpacing  ⍝
-  GuiTextStyle,←⊂ i ⍝ lineSpacing  ⍝
-  GuiTextStyle,←⊂ i ⍝ alignmentH   ⍝
-  GuiTextStyle,←⊂ i ⍝ alignmentV   ⍝
-  GuiTextStyle,←⊂ i ⍝ padding      ⍝
+  GuiTextStyle,←⊂ '⋄GuiTextStyle' ⍝              ⍝
+  GuiTextStyle,←⊂ u               ⍝ size         ⍝
+  GuiTextStyle,←⊂ i               ⍝ charSpacing  ⍝
+  GuiTextStyle,←⊂ i               ⍝ lineSpacing  ⍝
+  GuiTextStyle,←⊂ i               ⍝ alignmentH   ⍝
+  GuiTextStyle,←⊂ i               ⍝ alignmentV   ⍝
+  GuiTextStyle,←⊂ i               ⍝ padding      ⍝
 
-'GuiEnableRAYLIB'                ⎕NA           R('GuiEnable'                 (⍬                                                       )) ⍝                                                                ⍝ Enable gui controls (global state)
-'GuiEnableRetPtrRAYLIB'          ⎕NA           R('GuiEnableRetPtr'           (⍬                                                       )) ⍝                                                                ⍝ Enable gui controls (global state)
-'GuiDisableRAYLIB'               ⎕NA           R('GuiDisable'                (⍬                                                       )) ⍝                                                                ⍝ Disable gui controls (global state)
-'GuiDisableRetPtrRAYLIB'         ⎕NA           R('GuiDisableRetPtr'          (⍬                                                       )) ⍝                                                                ⍝ Disable gui controls (global state)
-'GuiLockRAYLIB'                  ⎕NA           R('GuiLock'                   (⍬                                                       )) ⍝                                                                ⍝ Lock gui controls (global state)
-'GuiLockRetPtrRAYLIB'            ⎕NA           R('GuiLockRetPtr'             (⍬                                                       )) ⍝                                                                ⍝ Lock gui controls (global state)
-'GuiUnlockRAYLIB'                ⎕NA           R('GuiUnlock'                 (⍬                                                       )) ⍝                                                                ⍝ Unlock gui controls (global state)
-'GuiUnlockRetPtrRAYLIB'          ⎕NA           R('GuiUnlockRetPtr'           (⍬                                                       )) ⍝                                                                ⍝ Unlock gui controls (global state)
-'GuiIsLockedRAYLIB'              ⎕NA bool      R('GuiIsLocked'               (⍬                                                       )) ⍝                                                                ⍝ Check if gui is locked (global state)
-'GuiIsLockedRetPtrRAYLIB'        ⎕NA           R('GuiIsLockedRetPtr'         (,⊂ ('>',bool)                                           )) ⍝                                                                ⍝ Check if gui is locked (global state)
-'GuiSetAlphaRAYLIB'              ⎕NA           R('GuiSetAlpha'               (,⊂ f                                                    )) ⍝ alpha                                                          ⍝ Set gui controls alpha (global state), alpha goes from 0.0f to 1.0f
-'GuiSetAlphaRetPtrRAYLIB'        ⎕NA           R('GuiSetAlphaRetPtr'         (,⊂ f                                                    )) ⍝ alpha                                                          ⍝ Set gui controls alpha (global state), alpha goes from 0.0f to 1.0f
-'GuiSetStateRAYLIB'              ⎕NA           R('GuiSetState'               (,⊂ i                                                    )) ⍝ state                                                          ⍝ Set gui state (global state)
-'GuiSetStateRetPtrRAYLIB'        ⎕NA           R('GuiSetStateRetPtr'         (,⊂ i                                                    )) ⍝ state                                                          ⍝ Set gui state (global state)
-'GuiGetStateRAYLIB'              ⎕NA i         R('GuiGetState'               (⍬                                                       )) ⍝                                                                ⍝ Get gui state (global state)
-'GuiGetStateRetPtrRAYLIB'        ⎕NA           R('GuiGetStateRetPtr'         (,⊂ ('>',i)                                              )) ⍝                                                                ⍝ Get gui state (global state)
-'GuiSetFontRAYLIB'               ⎕NA           R('GuiSetFont'                (,⊂ Font                                                 )) ⍝ font                                                           ⍝ Set gui custom font (global state)
-'GuiSetFontRetPtrRAYLIB'         ⎕NA           R('GuiSetFontRetPtr'          (,⊂ Font                                                 )) ⍝ font                                                           ⍝ Set gui custom font (global state)
-'GuiGetFontRAYLIB'               ⎕NA Font      R('GuiGetFont'                (⍬                                                       )) ⍝                                                                ⍝ Get gui custom font (global state)
-'GuiGetFontRetPtrRAYLIB'         ⎕NA           R('GuiGetFontRetPtr'          (,⊂ ('>',Font)                                           )) ⍝                                                                ⍝ Get gui custom font (global state)
-'GuiSetStyleRAYLIB'              ⎕NA           R('GuiSetStyle'               (i i i                                                   )) ⍝ control property value                                         ⍝ Set one style property
-'GuiSetStyleRetPtrRAYLIB'        ⎕NA           R('GuiSetStyleRetPtr'         (i i i                                                   )) ⍝ control property value                                         ⍝ Set one style property
-'GuiGetStyleRAYLIB'              ⎕NA i         R('GuiGetStyle'               (i i                                                     )) ⍝ control property                                               ⍝ Get one style property
-'GuiGetStyleRetPtrRAYLIB'        ⎕NA           R('GuiGetStyleRetPtr'         (('>',i) i i                                             )) ⍝ control property                                               ⍝ Get one style property
-'GuiLoadStyleRAYLIB'             ⎕NA           R('GuiLoadStyle'              (,⊂ str                                                  )) ⍝ fileName                                                       ⍝ Load style file over global style variable (.rgs)
-'GuiLoadStyleRetPtrRAYLIB'       ⎕NA           R('GuiLoadStyleRetPtr'        (,⊂ str                                                  )) ⍝ fileName                                                       ⍝ Load style file over global style variable (.rgs)
-'GuiLoadStyleDefaultRAYLIB'      ⎕NA           R('GuiLoadStyleDefault'       (⍬                                                       )) ⍝                                                                ⍝ Load style default over global style
-'GuiLoadStyleDefaultRetPtrRAYLIB'⎕NA           R('GuiLoadStyleDefaultRetPtr' (⍬                                                       )) ⍝                                                                ⍝ Load style default over global style
-'GuiEnableTooltipRAYLIB'         ⎕NA           R('GuiEnableTooltip'          (⍬                                                       )) ⍝                                                                ⍝ Enable gui tooltips (global state)
-'GuiEnableTooltipRetPtrRAYLIB'   ⎕NA           R('GuiEnableTooltipRetPtr'    (⍬                                                       )) ⍝                                                                ⍝ Enable gui tooltips (global state)
-'GuiDisableTooltipRAYLIB'        ⎕NA           R('GuiDisableTooltip'         (⍬                                                       )) ⍝                                                                ⍝ Disable gui tooltips (global state)
-'GuiDisableTooltipRetPtrRAYLIB'  ⎕NA           R('GuiDisableTooltipRetPtr'   (⍬                                                       )) ⍝                                                                ⍝ Disable gui tooltips (global state)
-'GuiSetTooltipRAYLIB'            ⎕NA           R('GuiSetTooltip'             (,⊂ str                                                  )) ⍝ tooltip                                                        ⍝ Set tooltip string
-'GuiSetTooltipRetPtrRAYLIB'      ⎕NA           R('GuiSetTooltipRetPtr'       (,⊂ str                                                  )) ⍝ tooltip                                                        ⍝ Set tooltip string
-'GuiIconTextRAYLIB'              ⎕NA (ptr⊣str) R('GuiIconText'               (i str                                                   )) ⍝ iconId text                                                    ⍝ Get text with icon id prepended (if supported)
-'GuiIconTextRetPtrRAYLIB'        ⎕NA           R('GuiIconTextRetPtr'         (('>',str) i str                                         )) ⍝ iconId text                                                    ⍝ Get text with icon id prepended (if supported)
-'GuiSetIconScaleRAYLIB'          ⎕NA           R('GuiSetIconScale'           (,⊂ i                                                    )) ⍝ scale                                                          ⍝ Set default icon drawing size
-'GuiSetIconScaleRetPtrRAYLIB'    ⎕NA           R('GuiSetIconScaleRetPtr'     (,⊂ i                                                    )) ⍝ scale                                                          ⍝ Set default icon drawing size
-'GuiGetIconsRAYLIB'              ⎕NA ptr       R('GuiGetIcons'               (⍬                                                       )) ⍝                                                                ⍝ Get raygui icons data pointer
-'GuiGetIconsRetPtrRAYLIB'        ⎕NA           R('GuiGetIconsRetPtr'         (,⊂ ptr                                                  )) ⍝                                                                ⍝ Get raygui icons data pointer
-'GuiLoadIconsRAYLIB'             ⎕NA ptr       R('GuiLoadIcons'              (str bool                                                )) ⍝ fileName loadIconsName                                         ⍝ Load raygui icons file (.rgi) into internal icons data
-'GuiLoadIconsRetPtrRAYLIB'       ⎕NA           R('GuiLoadIconsRetPtr'        (ptr str bool                                            )) ⍝ fileName loadIconsName                                         ⍝ Load raygui icons file (.rgi) into internal icons data
-'GuiDrawIconRAYLIB'              ⎕NA           R('GuiDrawIcon'               (i i i i Color                                           )) ⍝ iconId posX posY pixelSize color                               ⍝ Draw icon using pixel size at specified position
-'GuiDrawIconRetPtrRAYLIB'        ⎕NA           R('GuiDrawIconRetPtr'         (i i i i Color                                           )) ⍝ iconId posX posY pixelSize color                               ⍝ Draw icon using pixel size at specified position
-'GuiWindowBoxRAYLIB'             ⎕NA i         R('GuiWindowBox'              (Rectangle str                                           )) ⍝ bounds title                                                   ⍝ Window Box control, shows a window that can be closed
-'GuiWindowBoxRetPtrRAYLIB'       ⎕NA           R('GuiWindowBoxRetPtr'        (('>',i) Rectangle str                                   )) ⍝ bounds title                                                   ⍝ Window Box control, shows a window that can be closed
-'GuiGroupBoxRAYLIB'              ⎕NA i         R('GuiGroupBox'               (Rectangle str                                           )) ⍝ bounds text                                                    ⍝ Group Box control with text name
-'GuiGroupBoxRetPtrRAYLIB'        ⎕NA           R('GuiGroupBoxRetPtr'         (('>',i) Rectangle str                                   )) ⍝ bounds text                                                    ⍝ Group Box control with text name
-'GuiLineRAYLIB'                  ⎕NA i         R('GuiLine'                   (Rectangle str                                           )) ⍝ bounds text                                                    ⍝ Line separator control, could contain text
-'GuiLineRetPtrRAYLIB'            ⎕NA           R('GuiLineRetPtr'             (('>',i) Rectangle str                                   )) ⍝ bounds text                                                    ⍝ Line separator control, could contain text
-'GuiPanelRAYLIB'                 ⎕NA i         R('GuiPanel'                  (Rectangle str                                           )) ⍝ bounds text                                                    ⍝ Panel control, useful to group controls
-'GuiPanelRetPtrRAYLIB'           ⎕NA           R('GuiPanelRetPtr'            (('>',i) Rectangle str                                   )) ⍝ bounds text                                                    ⍝ Panel control, useful to group controls
-'GuiTabBarRAYLIB'                ⎕NA i         R('GuiTabBar'                 (Rectangle ('=',str) i ('=',i)                           )) ⍝ bounds text count active                                       ⍝ Tab Bar control, returns TAB to be closed or -1
-'GuiTabBarRetPtrRAYLIB'          ⎕NA           R('GuiTabBarRetPtr'           (('>',i) Rectangle ('=',str) i ('=',i)                   )) ⍝ bounds text count active                                       ⍝ Tab Bar control, returns TAB to be closed or -1
-'GuiScrollPanelRAYLIB'           ⎕NA i         R('GuiScrollPanel'            (Rectangle str Rectangle ('=',v2) ('=',Rectangle)        )) ⍝ bounds text content scroll view                                ⍝ Scroll Panel control
-'GuiScrollPanelRetPtrRAYLIB'     ⎕NA           R('GuiScrollPanelRetPtr'      (('>',i) Rectangle str Rectangle ('=',v2) ('=',Rectangle))) ⍝ bounds text content scroll view                                ⍝ Scroll Panel control
-'GuiLabelRAYLIB'                 ⎕NA i         R('GuiLabel'                  (Rectangle str                                           )) ⍝ bounds text                                                    ⍝ Label control, shows text
-'GuiLabelRetPtrRAYLIB'           ⎕NA           R('GuiLabelRetPtr'            (('>',i) Rectangle str                                   )) ⍝ bounds text                                                    ⍝ Label control, shows text
-'GuiButtonRAYLIB'                ⎕NA i         R('GuiButton'                 (Rectangle str                                           )) ⍝ bounds text                                                    ⍝ Button control, returns true when clicked
-'GuiButtonRetPtrRAYLIB'          ⎕NA           R('GuiButtonRetPtr'           (('>',i) Rectangle str                                   )) ⍝ bounds text                                                    ⍝ Button control, returns true when clicked
-'GuiLabelButtonRAYLIB'           ⎕NA i         R('GuiLabelButton'            (Rectangle str                                           )) ⍝ bounds text                                                    ⍝ Label button control, show true when clicked
-'GuiLabelButtonRetPtrRAYLIB'     ⎕NA           R('GuiLabelButtonRetPtr'      (('>',i) Rectangle str                                   )) ⍝ bounds text                                                    ⍝ Label button control, show true when clicked
-'GuiToggleRAYLIB'                ⎕NA i         R('GuiToggle'                 (Rectangle str ('=',bool)                                )) ⍝ bounds text active                                             ⍝ Toggle Button control, returns true when active
-'GuiToggleRetPtrRAYLIB'          ⎕NA           R('GuiToggleRetPtr'           (('>',i) Rectangle str ('=',bool)                        )) ⍝ bounds text active                                             ⍝ Toggle Button control, returns true when active
-'GuiToggleGroupRAYLIB'           ⎕NA i         R('GuiToggleGroup'            (Rectangle str ('=',i)                                   )) ⍝ bounds text active                                             ⍝ Toggle Group control, returns active toggle index
-'GuiToggleGroupRetPtrRAYLIB'     ⎕NA           R('GuiToggleGroupRetPtr'      (('>',i) Rectangle str ('=',i)                           )) ⍝ bounds text active                                             ⍝ Toggle Group control, returns active toggle index
-'GuiToggleSliderRAYLIB'          ⎕NA i         R('GuiToggleSlider'           (Rectangle str ('=',i)                                   )) ⍝ bounds text active                                             ⍝ Toggle Slider control, returns true when clicked
-'GuiToggleSliderRetPtrRAYLIB'    ⎕NA           R('GuiToggleSliderRetPtr'     (('>',i) Rectangle str ('=',i)                           )) ⍝ bounds text active                                             ⍝ Toggle Slider control, returns true when clicked
-'GuiCheckBoxRAYLIB'              ⎕NA i         R('GuiCheckBox'               (Rectangle str ('=',bool)                                )) ⍝ bounds text checked                                            ⍝ Check Box control, returns true when active
-'GuiCheckBoxRetPtrRAYLIB'        ⎕NA           R('GuiCheckBoxRetPtr'         (('>',i) Rectangle str ('=',bool)                        )) ⍝ bounds text checked                                            ⍝ Check Box control, returns true when active
-'GuiComboBoxRAYLIB'              ⎕NA i         R('GuiComboBox'               (Rectangle str ('=',i)                                   )) ⍝ bounds text active                                             ⍝ Combo Box control, returns selected item index
-'GuiComboBoxRetPtrRAYLIB'        ⎕NA           R('GuiComboBoxRetPtr'         (('>',i) Rectangle str ('=',i)                           )) ⍝ bounds text active                                             ⍝ Combo Box control, returns selected item index
-'GuiDropdownBoxRAYLIB'           ⎕NA i         R('GuiDropdownBox'            (Rectangle str ('=',i) bool                              )) ⍝ bounds text active editMode                                    ⍝ Dropdown Box control, returns selected item
-'GuiDropdownBoxRetPtrRAYLIB'     ⎕NA           R('GuiDropdownBoxRetPtr'      (('>',i) Rectangle str ('=',i) bool                      )) ⍝ bounds text active editMode                                    ⍝ Dropdown Box control, returns selected item
-'GuiSpinnerRAYLIB'               ⎕NA i         R('GuiSpinner'                (Rectangle str ('=',i) i i bool                          )) ⍝ bounds text value minValue maxValue editMode                   ⍝ Spinner control, returns selected value
-'GuiSpinnerRetPtrRAYLIB'         ⎕NA           R('GuiSpinnerRetPtr'          (('>',i) Rectangle str ('=',i) i i bool                  )) ⍝ bounds text value minValue maxValue editMode                   ⍝ Spinner control, returns selected value
-'GuiValueBoxRAYLIB'              ⎕NA i         R('GuiValueBox'               (Rectangle str ('=',i) i i bool                          )) ⍝ bounds text value minValue maxValue editMode                   ⍝ Value Box control, updates input text with numbers
-'GuiValueBoxRetPtrRAYLIB'        ⎕NA           R('GuiValueBoxRetPtr'         (('>',i) Rectangle str ('=',i) i i bool                  )) ⍝ bounds text value minValue maxValue editMode                   ⍝ Value Box control, updates input text with numbers
-'GuiTextBoxRAYLIB'               ⎕NA i         R('GuiTextBox'                (Rectangle str i bool                                    )) ⍝ bounds text textSize editMode                                  ⍝ Text Box control, updates input text
-'GuiTextBoxRetPtrRAYLIB'         ⎕NA           R('GuiTextBoxRetPtr'          (('>',i) Rectangle str i bool                            )) ⍝ bounds text textSize editMode                                  ⍝ Text Box control, updates input text
-'GuiSliderRAYLIB'                ⎕NA i         R('GuiSlider'                 (Rectangle str str ('=',f) f f                           )) ⍝ bounds textLeft textRight value minValue maxValue              ⍝ Slider control, returns selected value
-'GuiSliderRetPtrRAYLIB'          ⎕NA           R('GuiSliderRetPtr'           (('>',i) Rectangle str str ('=',f) f f                   )) ⍝ bounds textLeft textRight value minValue maxValue              ⍝ Slider control, returns selected value
-'GuiSliderBarRAYLIB'             ⎕NA i         R('GuiSliderBar'              (Rectangle str str ('=',f) f f                           )) ⍝ bounds textLeft textRight value minValue maxValue              ⍝ Slider Bar control, returns selected value
-'GuiSliderBarRetPtrRAYLIB'       ⎕NA           R('GuiSliderBarRetPtr'        (('>',i) Rectangle str str ('=',f) f f                   )) ⍝ bounds textLeft textRight value minValue maxValue              ⍝ Slider Bar control, returns selected value
-'GuiProgressBarRAYLIB'           ⎕NA i         R('GuiProgressBar'            (Rectangle str str ('=',f) f f                           )) ⍝ bounds textLeft textRight value minValue maxValue              ⍝ Progress Bar control, shows current progress value
-'GuiProgressBarRetPtrRAYLIB'     ⎕NA           R('GuiProgressBarRetPtr'      (('>',i) Rectangle str str ('=',f) f f                   )) ⍝ bounds textLeft textRight value minValue maxValue              ⍝ Progress Bar control, shows current progress value
-'GuiStatusBarRAYLIB'             ⎕NA i         R('GuiStatusBar'              (Rectangle str                                           )) ⍝ bounds text                                                    ⍝ Status Bar control, shows info text
-'GuiStatusBarRetPtrRAYLIB'       ⎕NA           R('GuiStatusBarRetPtr'        (('>',i) Rectangle str                                   )) ⍝ bounds text                                                    ⍝ Status Bar control, shows info text
-'GuiDummyRecRAYLIB'              ⎕NA i         R('GuiDummyRec'               (Rectangle str                                           )) ⍝ bounds text                                                    ⍝ Dummy control for placeholders
-'GuiDummyRecRetPtrRAYLIB'        ⎕NA           R('GuiDummyRecRetPtr'         (('>',i) Rectangle str                                   )) ⍝ bounds text                                                    ⍝ Dummy control for placeholders
-'GuiGridRAYLIB'                  ⎕NA i         R('GuiGrid'                   (Rectangle str f i ('=',v2)                              )) ⍝ bounds text spacing subdivs mouseCell                          ⍝ Grid control, returns mouse cell position
-'GuiGridRetPtrRAYLIB'            ⎕NA           R('GuiGridRetPtr'             (('>',i) Rectangle str f i ('=',v2)                      )) ⍝ bounds text spacing subdivs mouseCell                          ⍝ Grid control, returns mouse cell position
-'GuiListViewRAYLIB'              ⎕NA i         R('GuiListView'               (Rectangle str ('=',i) ('=',i)                           )) ⍝ bounds text scrollIndex active                                 ⍝ List View control, returns selected list item index
-'GuiListViewRetPtrRAYLIB'        ⎕NA           R('GuiListViewRetPtr'         (('>',i) Rectangle str ('=',i) ('=',i)                   )) ⍝ bounds text scrollIndex active                                 ⍝ List View control, returns selected list item index
-'GuiListViewExRAYLIB'            ⎕NA i         R('GuiListViewEx'             (Rectangle ('=',str) i ('=',i) ('=',i) ('=',i)           )) ⍝ bounds text count scrollIndex active focus                     ⍝ List View with extended parameters
-'GuiListViewExRetPtrRAYLIB'      ⎕NA           R('GuiListViewExRetPtr'       (('>',i) Rectangle ('=',str) i ('=',i) ('=',i) ('=',i)   )) ⍝ bounds text count scrollIndex active focus                     ⍝ List View with extended parameters
-'GuiMessageBoxRAYLIB'            ⎕NA i         R('GuiMessageBox'             (Rectangle str str str                                   )) ⍝ bounds title message buttons                                   ⍝ Message Box control, displays a message
-'GuiMessageBoxRetPtrRAYLIB'      ⎕NA           R('GuiMessageBoxRetPtr'       (('>',i) Rectangle str str str                           )) ⍝ bounds title message buttons                                   ⍝ Message Box control, displays a message
-'GuiTextInputBoxRAYLIB'          ⎕NA i         R('GuiTextInputBox'           (Rectangle str str str str i ('=',bool)                  )) ⍝ bounds title message buttons text textMaxSize secretViewActive ⍝ Text Input Box control, ask for text, supports secret
-'GuiTextInputBoxRetPtrRAYLIB'    ⎕NA           R('GuiTextInputBoxRetPtr'     (('>',i) Rectangle str str str str i ('=',bool)          )) ⍝ bounds title message buttons text textMaxSize secretViewActive ⍝ Text Input Box control, ask for text, supports secret
-'GuiColorPickerRAYLIB'           ⎕NA i         R('GuiColorPicker'            (Rectangle str ('=',Color)                               )) ⍝ bounds text color                                              ⍝ Color Picker control (multiple color controls)
-'GuiColorPickerRetPtrRAYLIB'     ⎕NA           R('GuiColorPickerRetPtr'      (('>',i) Rectangle str ('=',Color)                       )) ⍝ bounds text color                                              ⍝ Color Picker control (multiple color controls)
-'GuiColorPanelRAYLIB'            ⎕NA i         R('GuiColorPanel'             (Rectangle str ('=',Color)                               )) ⍝ bounds text color                                              ⍝ Color Panel control
-'GuiColorPanelRetPtrRAYLIB'      ⎕NA           R('GuiColorPanelRetPtr'       (('>',i) Rectangle str ('=',Color)                       )) ⍝ bounds text color                                              ⍝ Color Panel control
-'GuiColorBarAlphaRAYLIB'         ⎕NA i         R('GuiColorBarAlpha'          (Rectangle str ('=',f)                                   )) ⍝ bounds text alpha                                              ⍝ Color Bar Alpha control
-'GuiColorBarAlphaRetPtrRAYLIB'   ⎕NA           R('GuiColorBarAlphaRetPtr'    (('>',i) Rectangle str ('=',f)                           )) ⍝ bounds text alpha                                              ⍝ Color Bar Alpha control
-'GuiColorBarHueRAYLIB'           ⎕NA i         R('GuiColorBarHue'            (Rectangle str ('=',f)                                   )) ⍝ bounds text value                                              ⍝ Color Bar Hue control
-'GuiColorBarHueRetPtrRAYLIB'     ⎕NA           R('GuiColorBarHueRetPtr'      (('>',i) Rectangle str ('=',f)                           )) ⍝ bounds text value                                              ⍝ Color Bar Hue control
-'GuiColorPickerHSVRAYLIB'        ⎕NA i         R('GuiColorPickerHSV'         (Rectangle str ('=',v3)                                  )) ⍝ bounds text colorHsv                                           ⍝ Color Picker control that avoids conversion to RGB on each call (multiple color controls)
-'GuiColorPickerHSVRetPtrRAYLIB'  ⎕NA           R('GuiColorPickerHSVRetPtr'   (('>',i) Rectangle str ('=',v3)                          )) ⍝ bounds text colorHsv                                           ⍝ Color Picker control that avoids conversion to RGB on each call (multiple color controls)
-'GuiColorPanelHSVRAYLIB'         ⎕NA i         R('GuiColorPanelHSV'          (Rectangle str ('=',v3)                                  )) ⍝ bounds text colorHsv                                           ⍝ Color Panel control that returns HSV color value, used by GuiColorPickerHSV()
-'GuiColorPanelHSVRetPtrRAYLIB'   ⎕NA           R('GuiColorPanelHSVRetPtr'    (('>',i) Rectangle str ('=',v3)                          )) ⍝ bounds text colorHsv                                           ⍝ Color Panel control that returns HSV color value, used by GuiColorPickerHSV()
+GuiEnableRetPtrRAYLIB           ←           R('GuiEnableRetPtr'           (⍬                                                       )) ⍝                                                                ⍝ Enable gui controls (global state)
+GuiDisableRetPtrRAYLIB          ←           R('GuiDisableRetPtr'          (⍬                                                       )) ⍝                                                                ⍝ Disable gui controls (global state)
+GuiLockRetPtrRAYLIB             ←           R('GuiLockRetPtr'             (⍬                                                       )) ⍝                                                                ⍝ Lock gui controls (global state)
+GuiUnlockRetPtrRAYLIB           ←           R('GuiUnlockRetPtr'           (⍬                                                       )) ⍝                                                                ⍝ Unlock gui controls (global state)
+GuiIsLockedRetPtrRAYLIB         ←           R('GuiIsLockedRetPtr'         (,⊂ ('>',bool)                                           )) ⍝                                                                ⍝ Check if gui is locked (global state)
+GuiSetAlphaRetPtrRAYLIB         ←           R('GuiSetAlphaRetPtr'         (,⊂ f                                                    )) ⍝ alpha                                                          ⍝ Set gui controls alpha (global state), alpha goes from 0.0f to 1.0f
+GuiSetStateRetPtrRAYLIB         ←           R('GuiSetStateRetPtr'         (,⊂ i                                                    )) ⍝ state                                                          ⍝ Set gui state (global state)
+GuiGetStateRetPtrRAYLIB         ←           R('GuiGetStateRetPtr'         (,⊂ ('>',i)                                              )) ⍝                                                                ⍝ Get gui state (global state)
+GuiSetFontRetPtrRAYLIB          ←           R('GuiSetFontRetPtr'          (,⊂ Font                                                 )) ⍝ font                                                           ⍝ Set gui custom font (global state)
+GuiGetFontRetPtrRAYLIB          ←           R('GuiGetFontRetPtr'          (,⊂ ('>',Font)                                           )) ⍝                                                                ⍝ Get gui custom font (global state)
+GuiSetStyleRetPtrRAYLIB         ←           R('GuiSetStyleRetPtr'         (i i i                                                   )) ⍝ control property value                                         ⍝ Set one style property
+GuiGetStyleRetPtrRAYLIB         ←           R('GuiGetStyleRetPtr'         (('>',i) i i                                             )) ⍝ control property                                               ⍝ Get one style property
+GuiLoadStyleRetPtrRAYLIB        ←           R('GuiLoadStyleRetPtr'        (,⊂ str                                                  )) ⍝ fileName                                                       ⍝ Load style file over global style variable (.rgs)
+GuiLoadStyleDefaultRetPtrRAYLIB ←           R('GuiLoadStyleDefaultRetPtr' (⍬                                                       )) ⍝                                                                ⍝ Load style default over global style
+GuiEnableTooltipRetPtrRAYLIB    ←           R('GuiEnableTooltipRetPtr'    (⍬                                                       )) ⍝                                                                ⍝ Enable gui tooltips (global state)
+GuiDisableTooltipRetPtrRAYLIB   ←           R('GuiDisableTooltipRetPtr'   (⍬                                                       )) ⍝                                                                ⍝ Disable gui tooltips (global state)
+GuiSetTooltipRetPtrRAYLIB       ←           R('GuiSetTooltipRetPtr'       (,⊂ str                                                  )) ⍝ tooltip                                                        ⍝ Set tooltip string
+GuiIconTextRetPtrRAYLIB         ←           R('GuiIconTextRetPtr'         (('>',str) i str                                         )) ⍝ iconId text                                                    ⍝ Get text with icon id prepended (if supported)
+GuiSetIconScaleRetPtrRAYLIB     ←           R('GuiSetIconScaleRetPtr'     (,⊂ i                                                    )) ⍝ scale                                                          ⍝ Set default icon drawing size
+GuiGetIconsRetPtrRAYLIB         ←           R('GuiGetIconsRetPtr'         (,⊂ ptr                                                  )) ⍝                                                                ⍝ Get raygui icons data pointer
+GuiLoadIconsRetPtrRAYLIB        ←           R('GuiLoadIconsRetPtr'        (ptr str bool                                            )) ⍝ fileName loadIconsName                                         ⍝ Load raygui icons file (.rgi) into internal icons data
+GuiDrawIconRetPtrRAYLIB         ←           R('GuiDrawIconRetPtr'         (i i i i Color                                           )) ⍝ iconId posX posY pixelSize color                               ⍝ Draw icon using pixel size at specified position
+GuiWindowBoxRetPtrRAYLIB        ←           R('GuiWindowBoxRetPtr'        (('>',i) Rectangle str                                   )) ⍝ bounds title                                                   ⍝ Window Box control, shows a window that can be closed
+GuiGroupBoxRetPtrRAYLIB         ←           R('GuiGroupBoxRetPtr'         (('>',i) Rectangle str                                   )) ⍝ bounds text                                                    ⍝ Group Box control with text name
+GuiLineRetPtrRAYLIB             ←           R('GuiLineRetPtr'             (('>',i) Rectangle str                                   )) ⍝ bounds text                                                    ⍝ Line separator control, could contain text
+GuiPanelRetPtrRAYLIB            ←           R('GuiPanelRetPtr'            (('>',i) Rectangle str                                   )) ⍝ bounds text                                                    ⍝ Panel control, useful to group controls
+GuiTabBarRetPtrRAYLIB           ←           R('GuiTabBarRetPtr'           (('>',i) Rectangle ('=',str) i ('=',i)                   )) ⍝ bounds text count active                                       ⍝ Tab Bar control, returns TAB to be closed or -1
+GuiScrollPanelRetPtrRAYLIB      ←           R('GuiScrollPanelRetPtr'      (('>',i) Rectangle str Rectangle ('=',v2) ('=',Rectangle))) ⍝ bounds text content scroll view                                ⍝ Scroll Panel control
+GuiLabelRetPtrRAYLIB            ←           R('GuiLabelRetPtr'            (('>',i) Rectangle str                                   )) ⍝ bounds text                                                    ⍝ Label control, shows text
+GuiButtonRetPtrRAYLIB           ←           R('GuiButtonRetPtr'           (('>',i) Rectangle str                                   )) ⍝ bounds text                                                    ⍝ Button control, returns true when clicked
+GuiLabelButtonRetPtrRAYLIB      ←           R('GuiLabelButtonRetPtr'      (('>',i) Rectangle str                                   )) ⍝ bounds text                                                    ⍝ Label button control, show true when clicked
+GuiToggleRetPtrRAYLIB           ←           R('GuiToggleRetPtr'           (('>',i) Rectangle str ('=',bool)                        )) ⍝ bounds text active                                             ⍝ Toggle Button control, returns true when active
+GuiToggleGroupRetPtrRAYLIB      ←           R('GuiToggleGroupRetPtr'      (('>',i) Rectangle str ('=',i)                           )) ⍝ bounds text active                                             ⍝ Toggle Group control, returns active toggle index
+GuiToggleSliderRetPtrRAYLIB     ←           R('GuiToggleSliderRetPtr'     (('>',i) Rectangle str ('=',i)                           )) ⍝ bounds text active                                             ⍝ Toggle Slider control, returns true when clicked
+GuiCheckBoxRetPtrRAYLIB         ←           R('GuiCheckBoxRetPtr'         (('>',i) Rectangle str ('=',bool)                        )) ⍝ bounds text checked                                            ⍝ Check Box control, returns true when active
+GuiComboBoxRetPtrRAYLIB         ←           R('GuiComboBoxRetPtr'         (('>',i) Rectangle str ('=',i)                           )) ⍝ bounds text active                                             ⍝ Combo Box control, returns selected item index
+GuiDropdownBoxRetPtrRAYLIB      ←           R('GuiDropdownBoxRetPtr'      (('>',i) Rectangle str ('=',i) bool                      )) ⍝ bounds text active editMode                                    ⍝ Dropdown Box control, returns selected item
+GuiSpinnerRetPtrRAYLIB          ←           R('GuiSpinnerRetPtr'          (('>',i) Rectangle str ('=',i) i i bool                  )) ⍝ bounds text value minValue maxValue editMode                   ⍝ Spinner control, returns selected value
+GuiValueBoxRetPtrRAYLIB         ←           R('GuiValueBoxRetPtr'         (('>',i) Rectangle str ('=',i) i i bool                  )) ⍝ bounds text value minValue maxValue editMode                   ⍝ Value Box control, updates input text with numbers
+GuiTextBoxRetPtrRAYLIB          ←           R('GuiTextBoxRetPtr'          (('>',i) Rectangle str i bool                            )) ⍝ bounds text textSize editMode                                  ⍝ Text Box control, updates input text
+GuiSliderRetPtrRAYLIB           ←           R('GuiSliderRetPtr'           (('>',i) Rectangle str str ('=',f) f f                   )) ⍝ bounds textLeft textRight value minValue maxValue              ⍝ Slider control, returns selected value
+GuiSliderBarRetPtrRAYLIB        ←           R('GuiSliderBarRetPtr'        (('>',i) Rectangle str str ('=',f) f f                   )) ⍝ bounds textLeft textRight value minValue maxValue              ⍝ Slider Bar control, returns selected value
+GuiProgressBarRetPtrRAYLIB      ←           R('GuiProgressBarRetPtr'      (('>',i) Rectangle str str ('=',f) f f                   )) ⍝ bounds textLeft textRight value minValue maxValue              ⍝ Progress Bar control, shows current progress value
+GuiStatusBarRetPtrRAYLIB        ←           R('GuiStatusBarRetPtr'        (('>',i) Rectangle str                                   )) ⍝ bounds text                                                    ⍝ Status Bar control, shows info text
+GuiDummyRecRetPtrRAYLIB         ←           R('GuiDummyRecRetPtr'         (('>',i) Rectangle str                                   )) ⍝ bounds text                                                    ⍝ Dummy control for placeholders
+GuiGridRetPtrRAYLIB             ←           R('GuiGridRetPtr'             (('>',i) Rectangle str f i ('=',v2)                      )) ⍝ bounds text spacing subdivs mouseCell                          ⍝ Grid control, returns mouse cell position
+GuiListViewRetPtrRAYLIB         ←           R('GuiListViewRetPtr'         (('>',i) Rectangle str ('=',i) ('=',i)                   )) ⍝ bounds text scrollIndex active                                 ⍝ List View control, returns selected list item index
+GuiListViewExRetPtrRAYLIB       ←           R('GuiListViewExRetPtr'       (('>',i) Rectangle ('=',str) i ('=',i) ('=',i) ('=',i)   )) ⍝ bounds text count scrollIndex active focus                     ⍝ List View with extended parameters
+GuiMessageBoxRetPtrRAYLIB       ←           R('GuiMessageBoxRetPtr'       (('>',i) Rectangle str str str                           )) ⍝ bounds title message buttons                                   ⍝ Message Box control, displays a message
+GuiTextInputBoxRetPtrRAYLIB     ←           R('GuiTextInputBoxRetPtr'     (('>',i) Rectangle str str str str i ('=',bool)          )) ⍝ bounds title message buttons text textMaxSize secretViewActive ⍝ Text Input Box control, ask for text, supports secret
+GuiColorPickerRetPtrRAYLIB      ←           R('GuiColorPickerRetPtr'      (('>',i) Rectangle str ('=',Color)                       )) ⍝ bounds text color                                              ⍝ Color Picker control (multiple color controls)
+GuiColorPanelRetPtrRAYLIB       ←           R('GuiColorPanelRetPtr'       (('>',i) Rectangle str ('=',Color)                       )) ⍝ bounds text color                                              ⍝ Color Panel control
+GuiColorBarAlphaRetPtrRAYLIB    ←           R('GuiColorBarAlphaRetPtr'    (('>',i) Rectangle str ('=',f)                           )) ⍝ bounds text alpha                                              ⍝ Color Bar Alpha control
+GuiColorBarHueRetPtrRAYLIB      ←           R('GuiColorBarHueRetPtr'      (('>',i) Rectangle str ('=',f)                           )) ⍝ bounds text value                                              ⍝ Color Bar Hue control
+GuiColorPickerHSVRetPtrRAYLIB   ←           R('GuiColorPickerHSVRetPtr'   (('>',i) Rectangle str ('=',v3)                          )) ⍝ bounds text colorHsv                                           ⍝ Color Picker control that avoids conversion to RGB on each call (multiple color controls)
+GuiColorPanelHSVRetPtrRAYLIB    ←           R('GuiColorPanelHSVRetPtr'    (('>',i) Rectangle str ('=',v3)                          )) ⍝ bounds text colorHsv                                           ⍝ Color Panel control that returns HSV color value, used by GuiColorPickerHSV()
 ∇
 :EndNamespace

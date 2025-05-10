@@ -33,42 +33,40 @@ atomTypes ,←⊂ f8   ← 'F8'
 atomTypes ,←⊂ i8   ← 'I8'
 atomTypes ,←⊂ u2   ← 'U2'
 atomTypes←∪atomTypes
-ustr ← '=C1'
-str  ← '=0C1'
-v2 ← ⍬ ⍝ Vector2, 2 components
-  v2,←⊂ '⋄v2' ⍝    ⍝
-  v2,←⊂ f     ⍝ x  ⍝ Vector x component
-  v2,←⊂ f     ⍝ y  ⍝ Vector y component
-
-v3 ← ⍬ ⍝ Vector3, 3 components
-  v3,←⊂ '⋄v3' ⍝    ⍝
-  v3,←⊂ f     ⍝ x  ⍝ Vector x component
-  v3,←⊂ f     ⍝ y  ⍝ Vector y component
-  v3,←⊂ f     ⍝ z  ⍝ Vector z component
-Ray ← ⍬ ⍝ Ray, ray for raycasting
-  Ray,←⊂ '⋄Ray' ⍝            ⍝
-  Ray,←⊂ v3     ⍝ position   ⍝ Ray position (origin)
-  Ray,←⊂ v3     ⍝ direction  ⍝ Ray direction (normalized)
-Camera3D ← ⍬ ⍝ Camera, defines position/orientation in 3d space
-  Camera3D,←⊂ '⋄Camera3D' ⍝             ⍝
-  Camera3D,←⊂ v3          ⍝ position    ⍝ Camera position
-  Camera3D,←⊂ v3          ⍝ target      ⍝ Camera target it looks-at
-  Camera3D,←⊂ v3          ⍝ up          ⍝ Camera up vector (rotation over its axis)
-  Camera3D,←⊂ f           ⍝ fovy        ⍝ Camera field-of-view aperture in Y (degrees) in perspective, used as near plane width in orthographic
-  Camera3D,←⊂ i           ⍝ projection  ⍝ Camera projection: CAMERA_PERSPECTIVE or CAMERA_ORTHOGRAPHIC
-Camera ← Camera3D ⍝ Camera type fallback, defaults to Camera3D
+typeBL ← {'P'=⍵:8⋄⍎⍵}¨⊃¨⌽¨atomTypes ⍝ BL = bytes length
 
 lib ← '../libtemp-c-raylib.so'
+pop push ← ↓⍉↑typeBL{
+  _←'IF'⎕NA¨(lib,'|memcpy ')∘,¨('P <',⍵)('>',⍵,' P'),¨⊂' U8'
 
-⎕NA 'I4 ',lib,'|StructCount'
+  H←F{ ⍝ pop value
+    topRuntime-←1
+    _←'Stack underflow' Assert 0≤topRuntime
+    ptr←(topRuntime+1)⊃stack
+    ⍺⍺ (⍬ ptr ⍵⍵)
+  }⍺
+  G←I{ ⍝ push value
+    topRuntime+←1
+    stack ,← {0≡⍵:0⋄tempAlloc BytesEachArg}¨⍳0⌈topRuntime-≢stack ⍝ Make sure stack always has enough space
+    ptr←topRuntime⊃stack
+    _←⍺⍺ (ptr (,⊂⍵) ⍵⍵)
+    ptr
+  }⍺
+
+  ⎕OR¨'HG'
+}¨atomTypes
+
+ustr ← '=C1'
+str  ← '=0C1'
+
+rlDir ← '../link/',⍨⊃1⎕NPARTS''
+rl ← 0⎕Fix rlDir,'raylib.apln'
+rl.Init rlDir⍬
+structs ← ∪{('⋄'=⊃∘⊃¨⍵)/⍵}rl.(⍎¨⎕NL) ¯2
 ⎕NA 'I4 ',lib,'|GetStructSize I4'
-⎕NA 'I4 ',lib,'|GetStructNameLength I4'
-⎕NA       lib,'|GetStructName =0C1 I4 I4'
 'tempAlloc' ⎕NA 'P ',lib,'|MemAlloc U4'
-sizes ← GetStructSize¨ ¯1+⍳StructCount
-nameLengths ← GetStructNameLength¨¯1+⍳≢sizes
-names ← (¯1+⍳≢sizes) {GetStructName (⍵⍴' ') ⍵ ⍺}¨ nameLengths
-BytesEachArg ← ⌈/sizes
+BytesEachArg ← ⌈/ GetStructSize¨ ⎕IO-⍨⍳≢structs
+names ← 1↓¨⊃¨structs
 maxArgs ← 127 ⍝ The C specification says the maximum arguments for a function is 127
 __arguments ← {tempAlloc BytesEachArg}¨⍳maxArgs
 __struct_conversion_arguments ← ⍬ ⍝ ⍬ is a default, will be mutated later
@@ -77,6 +75,11 @@ __struct_conversion_arguments ← ⍬ ⍝ ⍬ is a default, will be mutated late
 _F ← {f←⍺⍺ ⋄ ⎕OR'f'}
 MapFuncs ← {⍺≡⊃⍺:⍺∘⊢⍵ ⋄ ⍺∇¨⍵}
 
+PtrToBytes ← {
+  _←'fromU1'⎕NA lib,'|memcpy =U1[','] P U8',⍨⍕⍵
+  fromU1(⍵⍴0)⍺⍵
+}
+
 ⍝ ---------------- ⍝
 ⍝ Stack operations ⍝
 ⍝ ---------------- ⍝
@@ -84,60 +87,59 @@ stack ← ⍬
 topInit ← 0
 topRuntime ← 0
 
-INTOs FROMs ← ↓⍉↑{
-  ⎕OR¨'IF'⎕NA¨(lib,'|memcpy ')∘,¨('P <',⍵)('>',⍵,' P'),¨⊂' U8'
-}¨atomTypes
+IsString ← 1≡≢⍤⍴ ⍝ TODO test for characters
 
-_PushInit_ ← {
+Push ← {
   topRuntime+←1
-  (ptr l)←⍵⍵
-  _←⍺⍺ ptr (,⊂⍵) l
-  ptr
+  stack ,← {0≡⍵:0⋄tempAlloc BytesEachArg}¨⍳0⌈topRuntime-≢stack ⍝ Make sure stack always has enough space
+  topRuntime⊃stack
 }
-
-_PopInit_ ← {
+Pop ← {
   topRuntime-←1
   _←'Stack underflow' Assert 0≤topRuntime
-  (ptr l)←⍵⍵
-  (ptr) (⍺⍺ ⍬ ptr l)
+  (topRuntime+1)⊃stack
 }
-IsString ← 1≡≢⍤⍴ ⍝ TODO test for characters
-∇(push pop)←MakePushAndPop a
-  'MakePushAndPop only takes a string'Assert IsString a
-  topInit+←1
-  stack ,← {0≡⍵:0⋄tempAlloc BytesEachArg}¨⍳0⌈topInit-≢stack ⍝ Make sure stack always has enough space
-  ptr←topInit⊃stack
-
-  push ← (INTOs⊃⍨atomTypes⍳⊂a)∘⊢ _PushInit_ (ptr ({'P'=⍵:8⋄⍎⍵}⊃⌽a)) _F ⍬
-  pop  ← (FROMs⊃⍨atomTypes⍳⊂a)∘⊢ _PopInit_  (ptr ({'P'=⍵:8⋄⍎⍵}⊃⌽a)) _F ⍬
-∇
 
 ⍝⎕← ('>',Ray) v2 Camera
-(pushR1 popR1) ← ⎕←MakePushAndPop 'U8'
-((push1 pop1) (push2 pop2)) ← MakePushAndPop¨ 1↓v2
-DropInit 1
-((push3 pop3) (push4 pop4) (push5 pop5)) ← MakePushAndPop¨ 1↓v3
-DropInit 2
-((push6 pop6) (push7 pop7) (push8 pop8)) ← MakePushAndPop¨ 1↓v3
-DropInit 2
-
-
 ⎕NA lib,'|Vector2INTO P P P'
 ⎕NA lib,'|Vector2FROM P P P'
 ⎕NA lib,'|Vector3INTO P P P P'
 ⎕NA lib,'|Vector3FROM P P P P'
+⎕NA lib,'|RayINTO P P P'
+⎕NA lib,'|RayFROM P P P'
+⎕NA lib,'|ColorINTO P P P P P'
+⎕NA lib,'|ColorFROM P P P P P'
+⎕NA lib,'|GenImageColorRetPtr P I4 I4 P'
+⎕NA lib,'|ImageINTO',' P'⍴⍨2×6
+⎕NA lib,'|ImageFROM',' P'⍴⍨2×6
 
-R1 ← pushR1∘⊢0
-v2 ← (push2∘⊢ 1) ,⍥⊂⍨ (push1∘⊢ 0)
-output ← Vector2INTO R1,v2
-pop2∘⊢⍬
-pop1∘⊢⍬
+PushVector3 ← {
+  _←'⍵≢≢3' Assert 3≡≢⍵
+  _←pushF4∘⊢¨⍵
+  Vector3INTO (Push⍬),pop¨⍵
+}
+PushColor ← {
+  i←atomTypes⍳1↓rl.Color
+  i≢⍥≢⍵:0 Assert⍨'⍵≢≢',⍕≢i
+  _←push[i] {⍺∘⊢⍵}¨⍵
+  ColorINTO (Push⍬),⌽Pop¨i
+}
+PushRay ← {
+  _←'⍵≢≢2' Assert 2≡≢⍵
+  PushVector3¨⍵
+  RayINTO (Push⍬),pop¨⍵
+}
 
-Vector2FROM
-⎕←2⊃popR1∘⊢⍬
+PopImage ← {
+  i←atomTypes⍳1↓rl.Image
+  _←ImageFROM (Push¨i),⍨Pop⍬
+  ⌽{⍵∘⊢⍬}¨⌽pop[i]
+}
 
+PushColor 0 0 0 255
+GenImageColorRetPtr (Push⍬) 5 5 (Pop⍬)
 
-
+⎕←(5×5×4) PtrToBytes⍨ ⊃⎕←PopImage⍬
 ⎕off
 
 ⍝ // -------------------- //
