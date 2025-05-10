@@ -39,13 +39,13 @@ lib ← '../libtemp-c-raylib.so'
 pop push ← ↓⍉↑typeBL{
   _←'IF'⎕NA¨(lib,'|memcpy ')∘,¨('P <',⍵)('>',⍵,' P'),¨⊂' U8'
 
-  H←F{ ⍝ pop value
+  O←F{ ⍝ pop value
     topRuntime-←1
     _←'Stack underflow' Assert 0≤topRuntime
     ptr←(topRuntime+1)⊃stack
     ⍺⍺ (⍬ ptr ⍵⍵)
   }⍺
-  G←I{ ⍝ push value
+  U←I{ ⍝ push value
     topRuntime+←1
     stack ,← {0≡⍵:0⋄tempAlloc BytesEachArg}¨⍳0⌈topRuntime-≢stack ⍝ Make sure stack always has enough space
     ptr←topRuntime⊃stack
@@ -53,7 +53,7 @@ pop push ← ↓⍉↑typeBL{
     ptr
   }⍺
 
-  ⎕OR¨'HG'
+  ⎕OR¨'OU' ⍝ pOp pUsh
 }¨atomTypes
 
 ustr ← '=C1'
@@ -101,51 +101,42 @@ Pop ← {
 }
 
 ⍝⎕← ('>',Ray) v2 Camera
-intoFrom←{
+atomTypes,←names
+
+
+({pop,←1⊃⍵}⊣{push,←2⊃⍵}) ↓⍉↑{
   name←'⋄'∘,⍣¯1⊃⍵
-  args←' P'⍴⍨2×≢⍵   ⍝ Includes result
-  ⎕OR¨'AB'⎕NA¨ ⎕←(lib,'|',name,,∘args)¨'INTO' 'FROM'
+  cleaned ← {2≤≡⍵:'⋄'∘,⍣¯1⊃⍵⋄⍵}¨ 1↓⍵
+  _←('Struct',name,' not cleaned properly') Assert ∧/2>≡¨cleaned
+  args←' P'⍴⍨2×1+≢cleaned   ⍝ Includes result
+  _←'IF'⎕NA¨(lib,'|',name,,∘args)¨'INTO' 'FROM'
+
+  O←F{ ⍝ pop value
+    i←atomTypes⍳⍵⍵
+    _←⍺⍺ (Push¨i),⍨Pop⍬
+    ⌽{⍵∘⊢⍬}¨⌽pop[i]
+  }cleaned
+  U←I{ ⍝ push value
+    i←atomTypes⍳⍵⍵
+    i≢⍥≢⍵:0 Assert⍨'⍵≢≢',⍕≢i
+    _←push[i] {⍺∘⊢⍵}¨⍵
+    _←⍺⍺ (ptr←Push⍬),⌽Pop¨i
+    ptr
+  }cleaned
+
+  ⎕OR¨'OU'
 }¨structs
 
-⎕NA lib,'|Vector2INTO P P P'
-⎕NA lib,'|Vector2FROM P P P'
-⎕NA lib,'|Vector3INTO P P P P'
-⎕NA lib,'|Vector3FROM P P P P'
-⎕NA lib,'|RayINTO P P P'
-⎕NA lib,'|RayFROM P P P'
-⎕NA lib,'|ColorINTO P P P P P'
-⎕NA lib,'|ColorFROM P P P P P'
-⎕NA lib,'|GenImageColorRetPtr P I4 I4 P'
-⎕NA lib,'|ImageINTO',' P'⍴⍨2×6
-⎕NA lib,'|ImageFROM',' P'⍴⍨2×6
+⎕NA lib,'|GenImageColorRetPtr P P P P'
 
-PushVector3 ← {
-  _←'⍵≢≢3' Assert 3≡≢⍵
-  _←pushF4∘⊢¨⍵
-  Vector3INTO (Push⍬),pop¨⍵
-}
-PushColor ← {
-  i←atomTypes⍳1↓rl.Color
-  i≢⍥≢⍵:0 Assert⍨'⍵≢≢',⍕≢i
-  _←push[i] {⍺∘⊢⍵}¨⍵
-  ColorINTO (Push⍬),⌽Pop¨i
-}
-PushRay ← {
-  _←'⍵≢≢2' Assert 2≡≢⍵
-  PushVector3¨⍵
-  RayINTO (Push⍬),pop¨⍵
-}
+(push⊃⍨atomTypes⍳⊂'Color')∘⊢ 0 0 0 255
+(push⊃⍨atomTypes⍳⊂'I4')∘⊢5
+(push⊃⍨atomTypes⍳⊂'I4')∘⊢5
 
-PopImage ← {
-  i←atomTypes⍳1↓rl.Image
-  _←ImageFROM (Push¨i),⍨Pop⍬
-  ⌽{⍵∘⊢⍬}¨⌽pop[i]
-}
+GenImageColorRetPtr (Push⍬),Pop¨⍳3  ⍝(('>',Image) i i Color)
 
-PushColor 0 0 0 255
-GenImageColorRetPtr (Push⍬) 5 5 (Pop⍬)
-
-⎕←(5×5×4) PtrToBytes⍨ ⊃⎕←PopImage⍬
+⎕←(5×5×4) PtrToBytes⍨ ⊃⎕← (pop⊃⍨atomTypes⍳⊂'Image')∘⊢⍬
+'Stack leaking' Assert 0=topRuntime
 ⎕off
 
 ⍝ // -------------------- //
