@@ -111,18 +111,6 @@ IsString ← 1≡≢⍤⍴ ⍝ TODO test for characters
   push ← (INTOs⊃⍨atomTypes⍳⊂a)∘⊢ _PushInit_ (ptr ({'P'=⍵:8⋄⍎⍵}⊃⌽a)) _F ⍬
   pop  ← (FROMs⊃⍨atomTypes⍳⊂a)∘⊢ _PopInit_  (ptr ({'P'=⍵:8⋄⍎⍵}⊃⌽a)) _F ⍬
 ∇
-∇DropInit dc
-  ⍝ dc = drops count
-  'Drop only takes ints'Assert {2|⎕DR⍵:⍵=⌈⍵⋄0}dc
-  topInit-←dc
-  'Stack underflow' Assert 0≤topInit
-∇
-∇DropRuntime dc
-  ⍝ dc = drops count
-  'Drop only takes ints'Assert {2|⎕DR⍵:⍵=⌈⍵⋄0}dc
-  topRuntime-←dc
-  'Stack underflow' Assert 0≤topRuntime
-∇
 
 ⍝⎕← ('>',Ray) v2 Camera
 (pushR1 popR1) ← ⎕←MakePushAndPop 'U8'
