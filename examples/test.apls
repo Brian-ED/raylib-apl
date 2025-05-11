@@ -37,7 +37,7 @@ typeBL ← {⍵≡,'P':8 ⋄ ⍎⊃⌽⍵}¨atomTypes ⍝ BL = bytes length
 
 lib ← '../libtemp-c-raylib.so'
 pop push ← ↓⍉↑typeBL{
-  _←'IF'⎕NA¨(lib,'|memcpy ')∘,¨('P <',⍵)('>',⍵,' P'),¨⊂' U8'
+  _←'IF'⎕NA¨(lib,'|memcpy2 ')∘,¨('P <',⍵)('>',⍵,' P'),¨⊂' U8'
 
   O←F{ ⍝ pop value
     topRuntime-←1
@@ -75,7 +75,7 @@ _F ← {f←⍺⍺ ⋄ ⎕OR'f'}
 MapFuncs ← {⍺≡⊃⍺:⍺∘⊢⍵ ⋄ ⍺∇¨⍵}
 
 PtrToBytes ← {
-  _←'fromU1'⎕NA lib,'|memcpy =U1[','] P U8',⍨⍕⍵
+  _←'fromU1'⎕NA lib,'|memcpy2 =U1[','] P U8',⍨⍕⍵
   fromU1(⍵⍴0)⍺⍵
 }
 
@@ -85,9 +85,9 @@ PtrToBytes ← {
 atomTypes ,←⊂ str ← '=0C1'
 ({pop,←,⊂1⊃⍵}⊣{push,←,⊂2⊃⍵}) {
   ⍝ O1 I1
-  _←'FI'⎕NA¨(lib,'|memcpy ')∘,¨,∘' U8'¨'>P P' 'P <P' ⍝ MA = Mid After. Means these convert to/from pointer. IF = Into From
-  ⍝ O2 I2  ⍝ strcpy( char* dest, const char* src );
-  _←'AM'⎕NA¨(lib,'|strcpy ')∘,¨'>0C1 P' 'P <0C1' ⍝ MA = Mid After. Means these convert to/from pointer. IF = Into From
+  _←'FI'⎕NA¨(lib,'|memcpy2 ')∘,¨,∘' U8'¨'>P P' 'P <P' ⍝ MA = Mid After. Means these convert to/from pointer. IF = Into From
+  ⍝ O2 I2
+  _←'AM'⎕NA¨(lib,'|strcpy2 ')∘,¨'>0C1 P' 'P <0C1' ⍝ MA = Mid After. Means these convert to/from pointer. IF = Into From
 
   O←F{ ⍝ pop value
     topRuntime-←1
