@@ -127,15 +127,30 @@ atomTypes,←names
   ⎕OR¨'OU'
 }¨structs
 
-⎕NA lib,'|GenImageColorRetPtr P P P P'
+Image i Color←rl.(Image i Color)
 
-(push⊃⍨atomTypes⍳⊂'Color')∘⊢ 0 0 0 255
-(push⊃⍨atomTypes⍳⊂'I4')∘⊢5
-(push⊃⍨atomTypes⍳⊂'I4')∘⊢5
 
-GenImageColorRetPtr (Push⍬),Pop¨⍳3  ⍝(('>',Image) i i Color)
+Clean ← {2≤≡⍵:'⋄'∘,⍣¯1⊃⍵⋄⍵}¨
+∇F←R (name t);bm;in;out
+  'Func'⎕NA lib,'|',name,' P'⍴⍨2×≢t
+  bm ← '>'≢¨⊃¨t
+  in ← Clean t/⍨bm
+  out ← Clean 1↓¨t/⍨~bm
+  F←(bm in out){(bm in out)←⍺⍺
+    in≢⍥≢⍵:0 Assert⍨'Wrong amount of arguments given: ','≢≢⍵',⍨⍕≢in
+    _←push[atomTypes⍳in] {⍺∘⊢⍵}¨⍥⌽⍵
 
-⎕←(5×5×4) PtrToBytes⍨ ⊃⎕← (pop⊃⍨atomTypes⍳⊂'Image')∘⊢⍬
+    args ← bm
+    (( bm)/args) ← Pop¨in
+    ((~bm)/args) ← Push¨out
+    _←⍵⍵ args
+    {1≡≢⍵:⊃⍵⋄⍵} {⍵∘⊢⍬}¨pop[atomTypes⍳out]
+  }Func
+∇
+GenImageColor ← R 'GenImageColorRetPtr' (('>',Image) i i Color)
+⍝ExportImageAsCode ← R('ExportImageAsCodeRetPtr' (('>',bool) Image str)) ⍝ image fileName ⍝ Export image as code file defining an array of bytes, returns true on success
+⎕←(5×5×4) PtrToBytes⍨ ⊃⎕←img← GenImageColor 5 5 (0 0 0 255)
+⍝⎕← ExportImageAsCode img 'SomeString.h'
 'Stack leaking' Assert 0=topRuntime
 ⎕off
 
