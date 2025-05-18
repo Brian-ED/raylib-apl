@@ -1,0 +1,1 @@
+- To improve performance instead of giving the nested structs as arguments to the ⎕NA functions you can just give the struct name functions which are resolved by the new stack system.
