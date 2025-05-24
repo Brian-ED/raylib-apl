@@ -1,38 +1,14 @@
 #!cd $dir && /usr/bin/dyalogscript $fileName
 ⎕io←1
 
-Assert ← {⍺←'assertion failure' ⋄ 0∊⍵:⍺ ⎕SIGNAL 8 ⋄ shy←0}
-
-
-
-⍝ Makes an importer that improves the ffi function creation syntax
-∇ OutputFunc ← R (funcName types)
-  (into from) ← ↓⍉↑Struct_to_INTO_FROM¨types
-  (,'O') ⎕NA pathToBinary,'|',funcName,' P'⍴⍨2×≢types
-  OutputFunc ← types∘{v←⍺⋄O {⎕←⎕se.Dyalog.Utils.display(⍴⍵)(≡⍵)v⋄⍵} funcs MapFuncs ⍵}
-∇
-⍝1: Outputting function tacitly is bad
-⍝2: Outputting function is bad
-⍝3: Why not on InitWindow? 0 arguments?
-
 ⍝]Create # .
 ⍝rl←link.raylib⋄rl.Init ('link/',⍨⊃1⎕NPARTS'')'./libtemp-c-raylib.so'
 
+Assert ← {⍺←'assertion failure' ⋄ 0∊⍵:⍺ ⎕SIGNAL 8 ⋄ shy←0}
+
 ⍝ predefined C types
-atomTypes ← ⍬
-atomTypes ,←⊂ bool ← 'I1'
-atomTypes ,←⊂ c    ← 'I1'
-atomTypes ,←⊂ i    ← 'I4'
-atomTypes ,←⊂ f    ← 'F4'
-atomTypes ,←⊂ u    ← 'U4'
-atomTypes ,←⊂ i1   ← 'I1'
-atomTypes ,←⊂ u1   ← 'U1'
-atomTypes ,←⊂ u8   ← 'U8'
-atomTypes ,←⊂ ptr  ← ,'P'
-atomTypes ,←⊂ f8   ← 'F8'
-atomTypes ,←⊂ i8   ← 'I8'
-atomTypes ,←⊂ u2   ← 'U2'
-atomTypes←∪atomTypes
+atomTypes ← 'F8' 'F4' (,'P'),,'IU'∘.,'1248'
+
 typeBL ← {⍵≡,'P':8 ⋄ ⍎⊃⌽⍵}¨atomTypes ⍝ BL = bytes length
 
 lib ← '../libtemp-c-raylib.so'
@@ -131,7 +107,7 @@ atomTypes,←names
 ({pop,←1⊃⍵}⊣{push,←2⊃⍵}) ↓⍉↑{
   name←'⋄'∘,⍣¯1⊃⍵
   cleaned ← {2≤≡⍵:'⋄'∘,⍣¯1⊃⍵⋄⍵}¨ 1↓⍵
-  _←('Struct',name,' not cleaned properly') Assert ∧/2>≡¨cleaned
+  _←('Struct ',name,' not cleaned properly') Assert ∧/2>≡¨cleaned
   args←' P'⍴⍨2×1+≢cleaned   ⍝ Includes result
   _←'IF'⎕NA¨(lib,'|',name,,∘args)¨'INTO' 'FROM'
 
