@@ -219,12 +219,6 @@ FFFF←{
   :If mode∊1 3 ⍝ Automatic replacements
     replacements {r←⍵ ⋄ r←r⊣'r'⎕NS⍺} ⎕THIS
   :EndIf
-
-  :If mode∊2 3 ⍝ Custom replacements
-    ⍝ ⎕NA somehow doesn't need padding at {F4 F4 F4}. Using {F4 F4 F4 U1 U1 U1 U1} makes the model dissapear.
-    ⎕NA pathToBinary,'|DrawModel {{F4 F4 F4 F4 F4 F4 F4 F4 F4 F4 F4 F4 F4 F4 F4 F4} I4 I4 P P P I4 U1 U1 U1 U1 P P} {F4 F4 F4} F4 {U1 U1 U1 U1 U1 U1 U1 U1}'
-    customReplacements {r←⍵ ⋄ r←r⊣'r'⎕NS⍺} ⎕THIS
-  :EndIf
 ∇
 replacements ← ⎕NS''
 
