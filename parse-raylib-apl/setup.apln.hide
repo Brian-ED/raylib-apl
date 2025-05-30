@@ -219,6 +219,10 @@ FFFF←{
   :If mode∊1 3 ⍝ Automatic replacements
     replacements {r←⍵ ⋄ r←r⊣'r'⎕NS⍺} ⎕THIS
   :EndIf
+
+  :If mode∊2 3 ⍝ Custom replacements
+    customReplacements {r←⍵ ⋄ r←r⊣'r'⎕NS⍺} ⎕THIS
+  :EndIf
 ∇
 replacements ← ⎕NS''
 
