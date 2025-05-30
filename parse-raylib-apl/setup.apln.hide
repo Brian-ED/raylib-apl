@@ -113,20 +113,21 @@ F5←{
 ⍝ --------------------------- ⍝
 ⍝ Handling all =type versions ⍝
 ⍝ --------------------------- ⍝
-equalPtr←{
-  ⍝ O1 I1
-  FS IS←⍵
-  O←FS{ ⍝ pop value
-    ⍺⍺ ⍬⊣pop[atomTypes⍳⊂,'P']{⍺⍺ ⍵}⍬
-  }
-  U←IS{ ⍝ push value
-    _←'Internal error: Tried pushing more or less than 1 amount of reference pointer' Assert 1≡≢⍵
-    (⊃push[atomTypes⍳⊂,'P']){⍺⍺ ⍵}⍺⍺⊃⍵
-  }
-  ⎕OR¨'OU' ⍝ pOp pUsh
+equalPtrPopGen←{
+  O←⍵{ ⍺⍺ ⍬⊣⍵⍵{⍺⍺ ⍵}⍬ } (pop[atomTypes⍳⊂,'P'])
+  ⎕OR'O'
 }
-({pop,←1⊃⍵}⊣{push,←2⊃⍵}) ↓⍉↑equalPtr¨pop,⍥⊂¨push
+equalPtrPushGen←{
+  O←⍵{
+    _←'Internal error: Tried pushing more or less than 1 amount of reference pointer' Assert 1≡≢⍵
+    ⍵⍵{⍺⍺ ⍵}⍺⍺⊃⍵
+  }(⊃push[atomTypes⍳⊂,'P'])
+  ⎕OR'O'
+}
+pop ,← equalPtrPopGen ¨ pop
+push,← equalPtrPushGen¨ push
 atomTypes,←'=',¨atomTypes
+⍝ --------------------------- ⍝
 
 
 Read←{
