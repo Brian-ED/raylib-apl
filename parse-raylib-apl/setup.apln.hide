@@ -3,7 +3,12 @@
 
 ⎕io←1
 
-debug ← {0:⎕←⍵⋄_←⍬}
+debug ← {
+  0:_←⍬
+  ⎕←'StackSize',topRuntime
+  ⎕←⍵
+  ⍵
+}
 
 Assert ← {⍺←'assertion failure' ⋄ 0∊⍵:⍺{(⎕←⍺) ⎕SIGNAL 8}⍵ ⋄ shy←0}
 
@@ -22,29 +27,21 @@ atomTypes ,←⊂ f8   ← 'F8'
 atomTypes ,←⊂ i8   ← 'I8'
 atomTypes ,←⊂ u2   ← 'U2'
 atomTypes←∪atomTypes
-typeBL ← {⍵≡,'P':8 ⋄ ⍎⊃⌽⍵}¨atomTypes ⍝ BL = bytes length
 
 lib ← '../libtemp-c-raylib.so'
-FFF ← {
-  _←'IF'⎕NA¨(lib,'|memcpy2 ')∘,¨('P <',⍵)('>',⍵,' P'),¨⊂' U8'
-
-  O←F{ ⍝ pop value
-    topRuntime-←1
-    _←'Stack underflow' Assert 0≤topRuntime
-    ptr←(topRuntime+1)⊃stack
-    ⍺⍺ (⍬ ptr ⍵⍵)
-  }⍺
-  U←I{ ⍝ push value
-    topRuntime+←1
-    stack ,← {0≡⍵:0⋄tempAlloc BytesEachArg}¨⍳0⌈topRuntime-≢stack ⍝ Make sure stack always has enough space
-    ptr←topRuntime⊃stack
-    _←⍺⍺(ptr(,⊂⍵) ⍵⍵)
-    ptr
-  }⍺
-
-  ⎕OR¨'OU' ⍝ pOp pUsh
+unitPopGen ← {
+  _←'CpyPop'⎕NA lib,'|memcpy2 >',⍵,' P U8'
+  o ← CpyPop{ ⍺⍺ (⍬ (Pop⍬) ⍵⍵) }⍺
+  ⎕OR'o'
 }
-(pop push) ← ↓⍉↑typeBL FFF¨ atomTypes
+unitPushGen ← {
+  _←'CpyPush'⎕NA lib,'|memcpy2 P <',⍵,' U8'
+  o ← CpyPush{ ptr⊣⍺⍺((ptr←Push⍬)(,⊂⍵) ⍵⍵) }⍺
+  ⎕OR'o'
+}
+typeByteSize ← {⍵≡,'P':8 ⋄ ⍎⊃⌽⍵}¨atomTypes
+pop  ← typeByteSize unitPopGen¨ atomTypes
+push ← typeByteSize unitPushGen¨ atomTypes
 
 structs ← ∪{⍵/⍨'⋄'∘≡¨⊃∘⊃¨⍵}##.(⍎¨⎕NL) ¯2
 'No structs found' Assert 0≢≢structs
@@ -52,11 +49,7 @@ structs ← ∪{⍵/⍨'⋄'∘≡¨⊃∘⊃¨⍵}##.(⍎¨⎕NL) ¯2
 'tempAlloc' ⎕NA 'P ',lib,'|MemAlloc U4'
 'tempFree'  ⎕NA      lib,'|MemFree P'
 BytesEachArg ← ⌈/ GetStructSize¨ ⎕IO-⍨⍳≢structs
-names ← 1↓¨⊃¨structs
-maxArgs ← 127 ⍝ The C specification says the maximum arguments for a function is 127
-__arguments ← {tempAlloc BytesEachArg}¨⍳maxArgs
-__struct_conversion_arguments ← ⍬ ⍝ ⍬ is a default, will be mutated later
-
+atomTypes ,← 1↓¨⊃¨structs
 
 _F ← {f←⍺⍺ ⋄ ⎕OR'f'}
 MapFuncs ← {⍺≡⊃⍺:⍺∘⊢⍵ ⋄ ⍺∇¨⍵}
@@ -73,19 +66,18 @@ stack ← ⍬
 topRuntime ← 0
 
 Push ← {
-    _←debug 'in7'
   topRuntime+←1
   stack ,← {0≡⍵:0⋄tempAlloc BytesEachArg}¨⍳0⌈topRuntime-≢stack ⍝ Make sure stack always has enough space
-    _←debug 'out7'
   topRuntime⊃stack
 }
+Push⍬ ⍝ TODO: This fixes a stack underflow bug in the 3d-duck example and I sadly currently don't know why
+
 Pop ← {
   topRuntime-←1
   _←'Stack underflow' Assert 0≤topRuntime
   (topRuntime+1)⊃stack
 }
 
-atomTypes,←names
 NameOfStruct ← {
   2>|≡⍵:⍵
   _← 'NameCheck applied to a non-atomic pointer type, this should be impossible.' Assert ∧/'<=>'≢¨⊂⊃⍵
@@ -101,30 +93,22 @@ F5←{
   _←'IF'⎕NA¨(lib,'|',name,,∘args)¨'INTO' 'FROM'
 
   O←F{ ⍝ pop value
-    _←debug 'in5'
     i←atomTypes⍳⍵⍵
     _←⍺⍺ (Push¨i),⍨Pop⍬
-    a←⌽{⍵∘⊢⍬}¨⌽pop[i]
-    _←debug 'out5'
-    a
+    ⌽{⍵∘⊢⍬}¨⌽pop[i]
   }cleaned
   U←I{ ⍝ push value
     (name cleaned)←⍵⍵
-    _←debug 'in4'
     i←atomTypes⍳cleaned
-    _←debug ⍵
     i≢⍥≢⍵:0 Assert⍨name,' (≢⍵)≢',⍕≢i
     _←push[i] {⍺∘⊢⍵}¨⍵
     _←⍺⍺ (ptr←Push⍬),⌽Pop¨i
-    _←debug 'out4'
     ptr
   }(name cleaned)
 
   ⎕OR¨'OU'
 }
-_←debug 'in10'
 ({pop,←1⊃⍵}⊣{push,←2⊃⍵}) ↓⍉↑F5¨structs
-_←debug 'out10'
 
 ⍝ --------------------------- ⍝
 ⍝ Handling all =type versions ⍝
@@ -133,22 +117,22 @@ equalPtr←{
   ⍝ O1 I1
   FS IS←⍵
   O←FS{ ⍝ pop value
-    _←debug 'in3'
-    a←⍺⍺ ⍬⊣pop[atomTypes⍳⊂,'P']{⍺⍺ ⍵}⍬
-    _←debug 'out3'
-    a
+    ⍺⍺ ⍬⊣pop[atomTypes⍳⊂,'P']{⍺⍺ ⍵}⍬
   }
   U←IS{ ⍝ push value
-    _←'LL' Assert 1≡≢⍵
-    _←debug 'in2'
-    g←(⊃push[atomTypes⍳⊂,'P']){⍺⍺ ⍵}⍺⍺⊃⍵
-    _←debug 'out2'
-    g
+    _←'Internal error: Tried pushing more or less than 1 amount of reference pointer' Assert 1≡≢⍵
+    (⊃push[atomTypes⍳⊂,'P']){⍺⍺ ⍵}⍺⍺⊃⍵
   }
   ⎕OR¨'OU' ⍝ pOp pUsh
 }
 ({pop,←1⊃⍵}⊣{push,←2⊃⍵}) ↓⍉↑equalPtr¨pop,⍥⊂¨push
 atomTypes,←'=',¨atomTypes
+
+
+Read←{
+  _←'R'⎕NA lib,'|memcpy2 =U1[',(⍕⍺),'] P U8' ⍝ MA = Mid After. Means these convert to/from pointer. IF = Into From
+  R (⍺⍴0) ⍵ ⍺
+}
 
 ⍝ --------------------------- ⍝
 ⍝ Handling signed string type ⍝
@@ -160,25 +144,18 @@ FFFF←{
   ⍝ O2 I2
   _←'AM'⎕NA¨(lib,'|strcpy2 ')∘,¨'>0C1 P' 'P <0C1' ⍝ MA = Mid After. Means these convert to/from pointer. IF = Into From
   pop←F{ ⍝ pop value
-    topRuntime-←1
-        _←debug 'in1'
-
-    _←'Stack underflow' Assert 0≤topRuntime
-    ptr←(topRuntime+1)⊃stack
-    strPtr ← ⍺⍺ (⍬ ptr 8)
-    _←debug 'out1'
-    ⍵⍵ (⍬ strPtr) ⍝ TODO memory leak here. Fix: (tempFree strPtr)⊢
+    ptr←Pop⍬
+    _←strPtr ← ⍺⍺ (⍬ ptr 8)
+    r←⍵⍵ (⍬ ptr)
+    _←tempFree strPtr
+    r
   }A
   push←I{ ⍝ push value
-    topRuntime+←1
-    _←debug 'in0'
-    stack ,← {0≡⍵:0⋄tempAlloc BytesEachArg}¨⍳0⌈topRuntime-≢stack ⍝ Make sure stack always has enough space
-    ptr←topRuntime⊃stack
+    ptr←Push⍬
     (⍕≢⊢)⍵:0 Assert⍨'Expected string, got: ',⍎⍵
     strPtr ← tempAlloc 1+≢⍵
     _←⍵⍵ (strPtr ⍵)
-    _←⍺⍺ (ptr strPtr 8)
-    _←debug 'out0'
+    _←⍺⍺{⍺⍺ ⍵} (ptr strPtr 8)
     ptr
   }M
   ⎕OR¨'pop' 'push' ⍝ pOp pUsh
@@ -200,8 +177,8 @@ FFFF←{
     (( bm)/args) ← Pop¨in
     ((~bm)/args) ← Push¨out
     maybeNilFunc ← ⍵⍵ ⍝ I tried simplifying out this assignment but was unsuccessful. ⎕OR with niladic functions is no joke.
-    r←{1≡≢⍵:⊃⍵⋄⍵} {⍵∘⊢⍬}¨pop[atomTypes⍳out,in/⍨'='=⊃¨in]⊣{⍬≡⍵:maybeNilFunc ⋄ maybeNilFunc⍵} args
-    _←debug '!out'
+    i←atomTypes⍳out,in/⍨'='=⊃¨in
+    r←{1≡≢⍵:⊃⍵⋄⍵} {⍵∘⊢⍬}¨pop[i]⊣{⍬≡⍵:maybeNilFunc ⋄ maybeNilFunc⍵} args
     r
   }(⎕OR'Func')
 ∇

@@ -14,7 +14,7 @@ camera ,←⊂  0  1  0 ⍝ Camera up vector (rotation towards target)
 camera ,←⊂ 45       ⍝ Camera field-of-view Y
 camera ,←⊂ rl.CameraProjection.CAMERA_PERSPECTIVE ⍝ Camera type
 
-model _ ← rl.LoadModelRAYLIB 'OBJ/RubberDuck_LOD0.obj'
+model _ ← rl.LoadModelRAYLIB ,⊂'OBJ/RubberDuck_LOD0.obj'
 
 frame←0
 ⍝ For every frame till user closes the window
