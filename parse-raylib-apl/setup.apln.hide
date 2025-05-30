@@ -210,8 +210,8 @@ FFFF←{
 ∇AfterDefaultDefinitions mode
   replacements ⊢← 0 ⎕FIX pathToRaylibDotAPLN,'../parse-raylib-apl/replacements.apln.hide'
 
-  SetTraceLogLevelRetPtrRAYLIB TraceLogLevel.LOG_WARNING
-  SetTargetFPSRetPtrRAYLIB 60
+  SetTraceLogLevelRAYLIB TraceLogLevel.LOG_WARNING
+  SetTargetFPSRAYLIB 60
 
   ⍝ Replace all names of ⍺ that are in ⍵ with the ⍵ counterpart
   ReplaceNames ← {⍵.(⍎'⍺.',⊢,'←',⊢)¨⍣(×≢a)⊢a←⊃∩/(⍺⍵).⎕NL¯3}

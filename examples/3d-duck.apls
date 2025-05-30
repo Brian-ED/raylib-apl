@@ -3,8 +3,8 @@ rlDir ← '../link/',⍨⊃1⎕NPARTS''
 rl ← 0⎕Fix rlDir,'raylib.apln'
 0 rl.Init rlDir⍬
 
-rl.InitWindowRetPtrRAYLIB 800 800 'Hello!!!'
-rl.DisableCursorRetPtrRAYLIB
+rl.InitWindowRAYLIB 800 800 'Hello!!!'
+rl.DisableCursorRAYLIB
 
 ⍝ Define the camera to look into our 3d world
 camera ← ⍬
@@ -14,38 +14,38 @@ camera ,←⊂  0  1  0 ⍝ Camera up vector (rotation towards target)
 camera ,←⊂ 45       ⍝ Camera field-of-view Y
 camera ,←⊂ rl.CameraProjection.CAMERA_PERSPECTIVE ⍝ Camera type
 
-model _ ← rl.LoadModelRetPtrRAYLIB 'OBJ/RubberDuck_LOD0.obj'
+model _ ← rl.LoadModelRAYLIB 'OBJ/RubberDuck_LOD0.obj'
 
 frame←0
 ⍝ For every frame till user closes the window
-:While ~rl.WindowShouldCloseRetPtrRAYLIB ⍬
+:While ~rl.WindowShouldCloseRAYLIB ⍬
     frame+←1
     ⍝ Look for keystrokes from user, move the camera
-    camera ← rl.UpdateCameraRetPtrRAYLIB ((,⊂camera) rl.CameraMode.CAMERA_THIRD_PERSON)
+    camera ← rl.UpdateCameraRAYLIB ((,⊂camera) rl.CameraMode.CAMERA_THIRD_PERSON)
     ⍝ Preparing another buffer to draw the new frame, with white background
-    rl.BeginDrawingRetPtrRAYLIB⍬
-        rl.ClearBackgroundRetPtrRAYLIB ⊂rl.color.white
+    rl.BeginDrawingRAYLIB⍬
+        rl.ClearBackgroundRAYLIB ⊂rl.color.white
 
         ⍝ Draws FPS at x=40 y=40
-        rl.DrawFPSRetPtrRAYLIB 40 40
+        rl.DrawFPSRAYLIB 40 40
 
         ⍝ Draw 3d stuff relative to the camera
-        rl.BeginMode3DRetPtrRAYLIB ⊂camera
+        rl.BeginMode3DRAYLIB ⊂camera
 
             ⍝ draws grid
-            rl.DrawGridRetPtrRAYLIB 20 10
+            rl.DrawGridRAYLIB 20 10
 
             ⍝ Draw the duck model at position
             position ← 0 0 0  ⋄  scale ← 1
-            rl.DrawModelRetPtrRAYLIB (model position scale (rl.color.white))
+            rl.DrawModelRAYLIB (model position scale (rl.color.white))
 
         ⍝ Stop drawing 3d
-        rl.EndMode3DRetPtrRAYLIB⍬
+        rl.EndMode3DRAYLIB⍬
 
     ⍝ wait till next frame is needed, then switch to this new buffer we've drawn
-    rl.EndDrawingRetPtrRAYLIB⍬
+    rl.EndDrawingRAYLIB⍬
 :EndWhile
 
 ⍝ Unloading model, freeing it's memory.
-rl.UnloadModelRetPtrRAYLIB ,⊂model
-rl.CloseWindowRetPtrRAYLIB⍬
+rl.UnloadModelRAYLIB ,⊂model
+rl.CloseWindowRAYLIB⍬

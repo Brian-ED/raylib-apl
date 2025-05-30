@@ -214,7 +214,7 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
     s1LinesExtended‿s2LinesExtended ← s2Lines{((+´+≠)𝕩+𝕨)↑𝕨⊸{(¬𝕩∊/𝕨)/𝕩+↕≠𝕩}⌾/𝕨+𝕩}{𝔽⋈𝔽˜}sLines
 
     (»s2LinesExtended)⊸/<˘""‿" ← "‿" R('"‿" ("‿")) ⍝"‿" ⍝ "⟨
-      ∾⟜"RAYLIB"¨·∾⟜"RetPtr"¨⌾((»s2LinesExtended)⊸/)·∾⟜"Ref"¨⌾((0»s1LinesExtended)⊸/)MapNames¨
+      ∾⟜"RAYLIB"¨⌾((»s2LinesExtended)⊸/)·∾⟜"Ref"¨⌾((0»s1LinesExtended)⊸/)MapNames¨
       ""¨⌾((»s2LinesExtended)⊸/) MapFuncReturnType # Returns
       ∾⟜"'"¨·∾⟜"RetPtr"¨⌾((»s2LinesExtended)⊸/)·∾⟜"Ref"¨⌾((0»s1LinesExtended)⊸/)MapNames¨ # Function Names
       { # Argument types
