@@ -8,7 +8,7 @@ rl.DisableCursorRetPtrRAYLIB
 
 ⍝ Define the camera to look into our 3d world
 camera ← ⍬
-camera  ←⊂ 50 50 50 ⍝ Camera position
+camera ,←⊂ 50 50 50 ⍝ Camera position
 camera ,←⊂  0 10  0 ⍝ Camera looking at point
 camera ,←⊂  0  1  0 ⍝ Camera up vector (rotation towards target)
 camera ,←⊂ 45       ⍝ Camera field-of-view Y
