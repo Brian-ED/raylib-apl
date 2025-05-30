@@ -334,53 +334,6 @@ rlRenderBatch ← ⍬ ⍝ rlRenderBatch type
   rlRenderBatch,←⊂ i                  ⍝ drawCounter    ⍝ Draw calls counter
   rlRenderBatch,←⊂ f                  ⍝ currentDepth   ⍝ Current depth value for next draw
 
-rlglData ← ⍬ ⍝
-  rlglData,←⊂ '⋄rlglData'                              ⍝                            ⍝
-  rlglData,←⊂ '=',rlRenderBatch                        ⍝ currentBatch               ⍝ Current render batch
-  rlglData,←⊂ rlRenderBatch                            ⍝ defaultBatch               ⍝ Default internal render batch
-  rlglData,←⊂ i                                        ⍝ vertexCounter              ⍝ Current active render batch vertex counter (generic, used for all batches)
-  rlglData,←⊂ f                                        ⍝ texcoordx                  ⍝ Current active texture coordinate (added on glVertex*())
-  rlglData,←⊂ f                                        ⍝ texcoordy                  ⍝ Current active texture coordinate (added on glVertex*())
-  rlglData,←⊂ f                                        ⍝ normalx                    ⍝ Current active normal (added on glVertex*())
-  rlglData,←⊂ f                                        ⍝ normaly                    ⍝ Current active normal (added on glVertex*())
-  rlglData,←⊂ f                                        ⍝ normalz                    ⍝ Current active normal (added on glVertex*())
-  rlglData,←⊂ u1                                       ⍝ colorr                     ⍝ Current active color (added on glVertex*())
-  rlglData,←⊂ u1                                       ⍝ colorg                     ⍝ Current active color (added on glVertex*())
-  rlglData,←⊂ u1                                       ⍝ colorb                     ⍝ Current active color (added on glVertex*())
-  rlglData,←⊂ u1                                       ⍝ colora                     ⍝ Current active color (added on glVertex*())
-  rlglData,←⊂ i                                        ⍝ currentMatrixMode          ⍝ Current matrix mode
-  rlglData,←⊂ '=',Matrix                               ⍝ currentMatrix              ⍝ Current matrix pointer
-  rlglData,←⊂ Matrix                                   ⍝ modelview                  ⍝ Default modelview matrix
-  rlglData,←⊂ Matrix                                   ⍝ projection                 ⍝ Default projection matrix
-  rlglData,←⊂ Matrix                                   ⍝ transform                  ⍝ Transform matrix to be used with rlTranslate, rlRotate, rlScale
-  rlglData,←⊂ bool                                     ⍝ transformRequired          ⍝ Require transform matrix application to current draw-call vertex (if required)
-  rlglData,←⊂ Matrix,'[EZIS_KCATS_XIRTAM_XAM_LR]'      ⍝ stack                      ⍝ Matrix stack for push/pop
-  rlglData,←⊂ i                                        ⍝ stackCounter               ⍝ Matrix stack counter
-  rlglData,←⊂ u                                        ⍝ defaultTextureId           ⍝ Default texture used on shapes/poly drawing (required by shader)
-  rlglData,←⊂ u,'[STINU_ERUTXET_XAM_HCTAB_TLUAFED_LR]' ⍝ activeTextureId            ⍝ Active texture ids to be enabled on batch drawing (0 active by default)
-  rlglData,←⊂ u                                        ⍝ defaultVShaderId           ⍝ Default vertex shader id (used by default shader program)
-  rlglData,←⊂ u                                        ⍝ defaultFShaderId           ⍝ Default fragment shader id (used by default shader program)
-  rlglData,←⊂ u                                        ⍝ defaultShaderId            ⍝ Default shader program id, supports vertex color and diffuse texture
-  rlglData,←⊂ '=',i                                    ⍝ defaultShaderLocs          ⍝ Default shader locations pointer to be used on rendering
-  rlglData,←⊂ u                                        ⍝ currentShaderId            ⍝ Current shader id to be used on rendering (by default, defaultShaderId)
-  rlglData,←⊂ '=',i                                    ⍝ currentShaderLocs          ⍝ Current shader locations pointer to be used on rendering (by default, defaultShaderLocs)
-  rlglData,←⊂ bool                                     ⍝ stereoRender               ⍝ Stereo rendering flag
-  rlglData,←⊂ Matrix,'[2]'                             ⍝ projectionStereo           ⍝ VR stereo rendering eyes projection matrices
-  rlglData,←⊂ Matrix,'[2]'                             ⍝ viewOffsetStereo           ⍝ VR stereo rendering eyes view offset matrices
-  rlglData,←⊂ i                                        ⍝ currentBlendMode           ⍝ Blending mode active
-  rlglData,←⊂ i                                        ⍝ glBlendSrcFactor           ⍝ Blending source factor
-  rlglData,←⊂ i                                        ⍝ glBlendDstFactor           ⍝ Blending destination factor
-  rlglData,←⊂ i                                        ⍝ glBlendEquation            ⍝ Blending equation
-  rlglData,←⊂ i                                        ⍝ glBlendSrcFactorRGB        ⍝ Blending source RGB factor
-  rlglData,←⊂ i                                        ⍝ glBlendDestFactorRGB       ⍝ Blending destination RGB factor
-  rlglData,←⊂ i                                        ⍝ glBlendSrcFactorAlpha      ⍝ Blending source alpha factor
-  rlglData,←⊂ i                                        ⍝ glBlendDestFactorAlpha     ⍝ Blending destination alpha factor
-  rlglData,←⊂ i                                        ⍝ glBlendEquationRGB         ⍝ Blending equation for RGB
-  rlglData,←⊂ i                                        ⍝ glBlendEquationAlpha       ⍝ Blending equation for alpha
-  rlglData,←⊂ bool                                     ⍝ glCustomBlendModeModified  ⍝ Custom blending factor and equation modification status
-  rlglData,←⊂ i                                        ⍝ framebufferWidth           ⍝ Current framebuffer width
-  rlglData,←⊂ i                                        ⍝ framebufferHeight          ⍝ Current framebuffer height
-
 rl_float16 ← ⍬ ⍝ Auxiliar matrix math functions
   rl_float16,←⊂ '⋄rl_float16' ⍝    ⍝
   rl_float16,←⊂ f,'[16]'      ⍝ v  ⍝
