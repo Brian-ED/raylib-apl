@@ -14,7 +14,7 @@ camera ,←⊂  0  1  0 ⍝ Camera up vector (rotation towards target)
 camera ,←⊂ 45       ⍝ Camera field-of-view Y
 camera ,←⊂ rl.CameraProjection.CAMERA_PERSPECTIVE ⍝ Camera type
 
-model ← rl.LoadModelRetPtrRAYLIB 'OBJ/RubberDuck_LOD0.obj'
+model _ ← rl.LoadModelRetPtrRAYLIB 'OBJ/RubberDuck_LOD0.obj'
 
 frame←0
 ⍝ For every frame till user closes the window
@@ -37,7 +37,7 @@ frame←0
 
             ⍝ Draw the duck model at position
             position ← 0 0 0  ⋄  scale ← 1
-            rl.DrawModelRetPtrRAYLIB ((⊃model) position scale (rl.color.white))
+            rl.DrawModelRetPtrRAYLIB (model position scale (rl.color.white))
 
         ⍝ Stop drawing 3d
         rl.EndMode3DRetPtrRAYLIB⍬
@@ -47,5 +47,5 @@ frame←0
 :EndWhile
 
 ⍝ Unloading model, freeing it's memory.
-rl.UnloadModelRetPtrRAYLIB model
+rl.UnloadModelRetPtrRAYLIB ,⊂model
 rl.CloseWindowRetPtrRAYLIB⍬
