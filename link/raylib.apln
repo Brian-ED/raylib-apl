@@ -370,23 +370,20 @@ RAYLIB_VERSION       ← '5.5' ⍝
 :EndNamespace
 
 
-⍝ Mode is either 3:All changes, 2:only manual changes 1:only automatic changes, or 0: no changes
-∇{mode} Init (pathToRaylibDotAPLN pathToBinaryArg)
-pathToRaylibDotAPLN ← (⊢,'/'/⍨'/'≢⊃∘⌽),pathToRaylibDotAPLN
-__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__ ← 0 ⎕FIX pathToRaylibDotAPLN,'../parse-raylib-apl/setup.apln.hide'
-'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯3
-'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯2
-'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯9
-⎕EX '__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__' '__PLEASE_DO_NOT_REPLACE_EXISTING_VAR2__'
-
-:If ⍬≡pathToBinaryArg
-  pathToBinaryArg ← pathToRaylibDotAPLN,{⍵:'../libtemp-c-raylib.so'⋄'..\temp-c-raylib.dll'}'Linux'≡'-64'~⍨⊃#⎕WG'APLVersion'
-:Endif
-pathToBinary ← pathToBinaryArg
-:If 0=⎕NC 'mode'
-  mode ← 3 ⍝ Default is All changes
-:EndIf
-
+bool ← 'I1'
+c    ← 'I1'
+i    ← 'I4'
+f    ← 'F4'
+u    ← 'U4'
+i1   ← 'I1'
+u1   ← 'U1'
+u8   ← 'U8'
+ptr  ← ,'P'
+f8   ← 'F8'
+i8   ← 'I8'
+u2   ← 'U2'
+ustr ← '=C1'
+str  ← '=0C1'
 
 v2 ← ⍬ ⍝ Vector2, 2 components
   v2,←⊂ '⋄Vector2' ⍝    ⍝
@@ -661,7 +658,26 @@ AutomationEventList ← ⍬ ⍝ Automation event list
   AutomationEventList,←⊂ u                      ⍝ capacity  ⍝ Events max entries (MAX_AUTOMATION_EVENTS)
   AutomationEventList,←⊂ u                      ⍝ count     ⍝ Events entries count
   AutomationEventList,←⊂ '=',AutomationEvent    ⍝ events    ⍝ Events entries
-R←0⍨
+⍝ Mode is either 3:All changes, 2:only manual changes 1:only automatic changes, or 0: no changes
+∇{mode} Init (pathToRaylibDotAPLN pathToBinaryArg)
+
+pathToRaylibDotAPLN ← (⊢,'/'/⍨'/'≢⊃∘⌽),pathToRaylibDotAPLN
+:If ⍬≡pathToBinaryArg
+  pathToBinaryArg ← pathToRaylibDotAPLN,{⍵:'../libtemp-c-raylib.so'⋄'..\temp-c-raylib.dll'}'Linux'≡'-64'~⍨⊃#⎕WG'APLVersion'
+:Endif
+
+__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__ ← 0 ⎕FIX pathToRaylibDotAPLN,'../parse-raylib-apl/setup.apln.hide'
+'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯3
+'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯2
+'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯9
+⎕EX '__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__'
+
+pathToBinary ← pathToBinaryArg
+:If 0=⎕NC 'mode'
+  mode ← 3 ⍝ Default is All changes
+:EndIf
+
+
 InitWindowRetPtrRAYLIB                       ←                     R('InitWindowRetPtr'                       (i i str                                             )) ⍝ width height title                                                ⍝ Initialize window and OpenGL context
 CloseWindowRetPtrRAYLIB                      ←                     R('CloseWindowRetPtr'                      (⍬                                                   )) ⍝                                                                   ⍝ Close window and unload OpenGL context
 WindowShouldCloseRetPtrRAYLIB                ←                     R('WindowShouldCloseRetPtr'                (,⊂ ('>',bool)                                       )) ⍝                                                                   ⍝ Check if application should close (KEY_ESCAPE pressed or windows close icon clicked)
@@ -1243,5 +1259,6 @@ AttachAudioStreamProcessorRetPtrRAYLIB       ←                     R('AttachAu
 DetachAudioStreamProcessorRetPtrRAYLIB       ←                     R('DetachAudioStreamProcessorRetPtr'       (AudioStream ptr                                     )) ⍝ stream processor                                                  ⍝ Detach audio stream processor from stream
 AttachAudioMixedProcessorRetPtrRAYLIB        ←                     R('AttachAudioMixedProcessorRetPtr'        (,⊂ ptr                                              )) ⍝ processor                                                         ⍝ Attach audio stream processor to the entire audio pipeline, receives the samples as 'float'
 DetachAudioMixedProcessorRetPtrRAYLIB        ←                     R('DetachAudioMixedProcessorRetPtr'        (,⊂ ptr                                              )) ⍝ processor                                                         ⍝ Detach audio stream processor from the entire audio pipeline
+AfterDefaultDefinitions mode
 ∇
 :EndNamespace

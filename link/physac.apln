@@ -11,23 +11,20 @@ PHYSAC_PENETRATION_CORRECTION ← 0.4               ⍝
 PHYSAC_PI                     ← 3.141592653589793 ⍝
 
 
-⍝ Mode is either 3:All changes, 2:only manual changes 1:only automatic changes, or 0: no changes
-∇{mode} Init (pathToRaylibDotAPLN pathToBinaryArg)
-pathToRaylibDotAPLN ← (⊢,'/'/⍨'/'≢⊃∘⌽),pathToRaylibDotAPLN
-__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__ ← 0 ⎕FIX pathToRaylibDotAPLN,'../parse-raylib-apl/setup.apln.hide'
-'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯3
-'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯2
-'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯9
-⎕EX '__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__' '__PLEASE_DO_NOT_REPLACE_EXISTING_VAR2__'
-
-:If ⍬≡pathToBinaryArg
-  pathToBinaryArg ← pathToRaylibDotAPLN,{⍵:'../libtemp-c-raylib.so'⋄'..\temp-c-raylib.dll'}'Linux'≡'-64'~⍨⊃#⎕WG'APLVersion'
-:Endif
-pathToBinary ← pathToBinaryArg
-:If 0=⎕NC 'mode'
-  mode ← 3 ⍝ Default is All changes
-:EndIf
-
+bool ← 'I1'
+c    ← 'I1'
+i    ← 'I4'
+f    ← 'F4'
+u    ← 'U4'
+i1   ← 'I1'
+u1   ← 'U1'
+u8   ← 'U8'
+ptr  ← ,'P'
+f8   ← 'F8'
+i8   ← 'I8'
+u2   ← 'U2'
+ustr ← '=C1'
+str  ← '=0C1'
 
 v2 ← ⍬ ⍝ Vector2 type
   v2,←⊂ '⋄Vector2' ⍝    ⍝
@@ -89,6 +86,25 @@ PhysicsManifoldData ← ⍬ ⍝
   PhysicsManifoldData,←⊂ f                      ⍝ restitution      ⍝ Mixed restitution during collision
   PhysicsManifoldData,←⊂ f                      ⍝ dynamicFriction  ⍝ Mixed dynamic friction during collision
   PhysicsManifoldData,←⊂ f                      ⍝ staticFriction   ⍝ Mixed static friction during collision
+⍝ Mode is either 3:All changes, 2:only manual changes 1:only automatic changes, or 0: no changes
+∇{mode} Init (pathToRaylibDotAPLN pathToBinaryArg)
+
+pathToRaylibDotAPLN ← (⊢,'/'/⍨'/'≢⊃∘⌽),pathToRaylibDotAPLN
+:If ⍬≡pathToBinaryArg
+  pathToBinaryArg ← pathToRaylibDotAPLN,{⍵:'../libtemp-c-raylib.so'⋄'..\temp-c-raylib.dll'}'Linux'≡'-64'~⍨⊃#⎕WG'APLVersion'
+:Endif
+
+__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__ ← 0 ⎕FIX pathToRaylibDotAPLN,'../parse-raylib-apl/setup.apln.hide'
+'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯3
+'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯2
+'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯9
+⎕EX '__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__'
+
+pathToBinary ← pathToBinaryArg
+:If 0=⎕NC 'mode'
+  mode ← 3 ⍝ Default is All changes
+:EndIf
+
 
 InitPhysicsRetPtrRAYLIB                  ←             R('InitPhysicsRetPtr'                  (⍬                         )) ⍝                          ⍝ Initializes physics values, pointers and creates physics loop thread
 RunPhysicsStepRetPtrRAYLIB               ←             R('RunPhysicsStepRetPtr'               (⍬                         )) ⍝                          ⍝ Run physics step, to be used if PHYSICS_NO_THREADS is set in your main loop
