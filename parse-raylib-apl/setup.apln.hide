@@ -114,7 +114,7 @@ F5←{
 ⍝ Handling all =type versions ⍝
 ⍝ --------------------------- ⍝
 equalPtrPopGen←{
-  O←⍵{ ⍺⍺ ⍬⊣⍵⍵⍬ } (pop[atomTypes⍳⊂,'P'])
+  O←⍵{ ⍺⍺⍬⊣⍵⍵⍬ } (pop[atomTypes⍳⊂,'P'])
   ⎕OR'O'
 }
 equalPtrPushGen←{

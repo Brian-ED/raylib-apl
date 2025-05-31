@@ -4,7 +4,7 @@ rl ← 0⎕Fix rlDir,'raylib.apln'
 0 rl.Init rlDir⍬
 
 rl.InitWindowRAYLIB 800 800 'Hello!!!'
-rl.DisableCursorRAYLIB
+rl.DisableCursorRAYLIB⍬
 
 ⍝ Define the camera to look into our 3d world
 camera ← ⍬
