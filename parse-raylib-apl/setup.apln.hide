@@ -40,7 +40,7 @@ unitPushGen ← {
   ⎕OR'o'
 }
 typeByteSize ← {⍵≡,'P':8 ⋄ ⍎⊃⌽⍵}¨atomTypes
-pop  ← typeByteSize unitPopGen¨ atomTypes
+pop  ← typeByteSize unitPopGen ¨ atomTypes
 push ← typeByteSize unitPushGen¨ atomTypes
 
 structs ← ∪{⍵/⍨'⋄'∘≡¨⊃∘⊃¨⍵}##.(⍎¨⎕NL) ¯2
@@ -114,13 +114,13 @@ F5←{
 ⍝ Handling all =type versions ⍝
 ⍝ --------------------------- ⍝
 equalPtrPopGen←{
-  O←⍵{ ⍺⍺ ⍬⊣⍵⍵{⍺⍺ ⍵}⍬ } (⊃pop[atomTypes⍳⊂,'P'])
+  O←⍵{ ⍺⍺ ⍬⊣⍵⍵⍬ } (pop[atomTypes⍳⊂,'P'])
   ⎕OR'O'
 }
 equalPtrPushGen←{
   O←⍵{
     _←'Internal error: Tried pushing more or less than 1 amount of reference pointer' Assert 1≡≢⍵
-    ⍵⍵{⍺⍺ ⍵}⍺⍺⊃⍵
+    ⍵⍵ ⍺⍺⊃⍵
   }(⊃push[atomTypes⍳⊂,'P'])
   ⎕OR'O'
 }
@@ -130,28 +130,26 @@ atomTypes,←'=',¨atomTypes
 ⍝ --------------------------- ⍝
 
 
-Read←{
-  _←'R'⎕NA lib,'|memcpy2 =U1[',(⍕⍺),'] P U8' ⍝ MA = Mid After. Means these convert to/from pointer. IF = Into From
-  R (⍺⍴0) ⍵ ⍺
-}
-
 ⍝ --------------------------- ⍝
 ⍝ Handling signed string type ⍝
 ⍝ --------------------------- ⍝
 atomTypes ,←⊂ str ← '=0C1'
-FFFF←{
-  ⍝ O1 I1
-  _←'FI'⎕NA¨(lib,'|memcpy2 ')∘,¨,∘' U8'¨'>P P' 'P <P' ⍝ MA = Mid After. Means these convert to/from pointer. IF = Into From
-  ⍝ O2 I2
-  _←'AM'⎕NA¨(lib,'|strcpy2 ')∘,¨'>0C1 P' 'P <0C1' ⍝ MA = Mid After. Means these convert to/from pointer. IF = Into From
-  pop←F{ ⍝ pop value
+StringPopGen←{
+  _←'F'⎕NA lib,'|memcpy2 >P P U8'
+  _←'A'⎕NA lib,'|strcpy2 >0C1 P'
+  pop←F{
     ptr←Pop⍬
     _←strPtr ← ⍺⍺ (⍬ ptr 8)
     r←⍵⍵ (⍬ ptr)
     _←tempFree strPtr
     r
   }A
-  push←I{ ⍝ push value
+  ⎕OR 'pop'
+}
+StringPushGen←{
+  _←'I'⎕NA lib,'|memcpy2 P <P U8'
+  _←'M'⎕NA lib,'|strcpy2 P <0C1'
+  push←I{
     ptr←Push⍬
     (⍕≢⊢)⍵:0 Assert⍨'Expected string, got: ',⍎⍵
     strPtr ← tempAlloc 1+≢⍵
@@ -159,9 +157,11 @@ FFFF←{
     _←⍺⍺{⍺⍺ ⍵} (ptr strPtr 8)
     ptr
   }M
-  ⎕OR¨'pop' 'push' ⍝ pOp pUsh
+  ⎕OR 'push'
 }
-({pop,←,⊂1⊃⍵}⊣{push,←,⊂2⊃⍵})FFFF ⍬
+pop ,←⊂ StringPopGen  ⍬
+push,←⊂ StringPushGen ⍬
+⍝ --------------------------- ⍝
 
 
 ∇F←R (name t);bm;in;out;io
