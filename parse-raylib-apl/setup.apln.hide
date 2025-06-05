@@ -43,13 +43,12 @@ typeByteSize ← {⍵≡,'P':8 ⋄ ⍎⊃⌽⍵}¨atomTypes
 pop  ← typeByteSize unitPopGen ¨ atomTypes
 push ← typeByteSize unitPushGen¨ atomTypes
 
-structs ← ∪{⍵/⍨'⋄'∘≡¨⊃∘⊃¨⍵}##.(⍎¨⎕NL) ¯2
-'No structs found' Assert 0≢≢structs
-⎕NA 'I4 ',lib,'|GetStructSize I4'
-'tempAlloc' ⎕NA 'P ',lib,'|MemAlloc U4'
-'tempFree'  ⎕NA      lib,'|MemFree P'
-BytesEachArg ← ⌈/ GetStructSize¨ ⎕IO-⍨⍳≢structs
-atomTypes ,← 1↓¨⊃¨structs
+⍝ Fixing prototypes by defining first item to ~reasonable defaults
+idF←⊢
+pop       ,⍨← ⊂⎕OR'idF'
+push      ,⍨← ⊂⎕OR'idF'
+atomTypes ,⍨← ,⊂''
+
 
 _F ← {f←⍺⍺ ⋄ ⎕OR'f'}
 MapFuncs ← {⍺≡⊃⍺:⍺∘⊢⍵ ⋄ ⍺∇¨⍵}
@@ -70,8 +69,6 @@ Push ← {
   stack ,← {0≡⍵:0⋄tempAlloc BytesEachArg}¨⍳0⌈topRuntime-≢stack ⍝ Make sure stack always has enough space
   topRuntime⊃stack
 }
-Push⍬ ⍝ TODO: This fixes a stack underflow bug in the 3d-duck example and I sadly currently don't know why
-
 Pop ← {
   topRuntime-←1
   _←'Stack underflow' Assert 0≤topRuntime
@@ -85,19 +82,40 @@ NameOfStruct ← {
 }
 remPtrInfo ← {⍵/⍨~ (~atomTypes∊⍨⊂⍵)∧ ∧\'<=>'∊⍨⍵}
 
-F5←{
+
+⍝ -------------------------------- ⍝
+⍝ Handling pop and pushing structs ⍝
+⍝ -------------------------------- ⍝
+structs ← ∪{⍵/⍨'⋄'∘≡¨⊃∘⊃¨⍵}##.(⍎¨⎕NL) ¯2
+'No structs found' Assert 0≢≢structs
+⎕NA 'I4 ',lib,'|GetStructSize I4'
+'tempAlloc' ⎕NA 'P ',lib,'|MemAlloc U4'
+'tempFree'  ⎕NA      lib,'|MemFree P'
+BytesEachArg ← ⌈/ GetStructSize¨ ⎕IO-⍨⍳≢structs
+atomTypes ,← 1↓¨⊃¨structs
+
+PopStructGen←{
   name←NameOfStruct ⍵
   cleaned ← {0=≢⍵: ⍵ ⋄ NameOfStruct¨⍵} {'='≡⊃⍵:,'P'⋄⍵}¨ 1↓⍵
   _←('Struct ',name,' not cleaned properly') Assert ∧/2>≡¨cleaned
   args←' P'⍴⍨2×1+≢cleaned   ⍝ Includes result
-  _←'IF'⎕NA¨(lib,'|',name,,∘args)¨'INTO' 'FROM'
+  _←'F'⎕NA lib,'|',name,'FROM',args
 
   O←F{ ⍝ pop value
     i←atomTypes⍳⍵⍵
     _←⍺⍺ (Push¨i),⍨Pop⍬
     ⌽{⍵∘⊢⍬}¨⌽pop[i]
   }cleaned
-  U←I{ ⍝ push value
+  ⎕OR 'O'
+}
+PushStructGen ← {
+  name←NameOfStruct ⍵
+  cleaned ← {0=≢⍵: ⍵ ⋄ NameOfStruct¨⍵} {'='≡⊃⍵:,'P'⋄⍵}¨ 1↓⍵
+  _←('Struct ',name,' not cleaned properly') Assert ∧/2>≡¨cleaned
+  args←' P'⍴⍨2×1+≢cleaned   ⍝ Includes result
+  _←'I'⎕NA lib,'|',name,'INTO',args
+
+  O←I{ ⍝ push value
     (name cleaned)←⍵⍵
     i←atomTypes⍳cleaned
     i≢⍥≢⍵:0 Assert⍨name,' (≢⍵)≢',⍕≢i
@@ -105,16 +123,18 @@ F5←{
     _←⍺⍺ (ptr←Push⍬),⌽Pop¨i
     ptr
   }(name cleaned)
-
-  ⎕OR¨'OU'
+  ⎕OR'O'
 }
-({pop,←1⊃⍵}⊣{push,←2⊃⍵}) ↓⍉↑F5¨structs
+
+pop ,← PopStructGen¨structs
+push,← PushStructGen¨structs
+⍝ -------------------------------- ⍝
 
 ⍝ --------------------------- ⍝
 ⍝ Handling all =type versions ⍝
 ⍝ --------------------------- ⍝
 equalPtrPopGen←{
-  O←⍵{ ⍺⍺⍬⊣⍵⍵⍬ } (pop[atomTypes⍳⊂,'P'])
+  O←⍵{ ⍺⍺⍬⊣⍵⍵⍬ } (⊃pop[atomTypes⍳⊂,'P'])
   ⎕OR'O'
 }
 equalPtrPushGen←{
@@ -134,27 +154,30 @@ atomTypes,←'=',¨atomTypes
 ⍝ Handling signed string type ⍝
 ⍝ --------------------------- ⍝
 atomTypes ,←⊂ str ← '=0C1'
+Read←{
+  _←'R'⎕NA lib,'|memcpy2 =U1[',(⍕⍺),'] P U8' ⍝ MA = Mid After. Means these convert to/from pointer. IF = Into From
+  R (⍺⍴0) ⍵ ⍺
+}
+
 StringPopGen←{
-  _←'F'⎕NA lib,'|memcpy2 >P P U8'
   _←'A'⎕NA lib,'|strcpy2 >0C1 P'
-  pop←F{
-    ptr←Pop⍬
-    _←strPtr ← ⍺⍺ (⍬ ptr 8)
-    r←⍵⍵ (⍬ ptr)
+  O←(⊃pop[atomTypes⍳⊂,'P']){
+    strPtr ← ⍺⍺⍬
+    _←'Internal error, the string pointer popped was Null' Assert 0≢strPtr
+    r←⍵⍵ (⍬ strPtr)
     _←tempFree strPtr
     r
   }A
-  ⎕OR 'pop'
+  ⎕OR 'O'
 }
 StringPushGen←{
-  _←'I'⎕NA lib,'|memcpy2 P <P U8'
   _←'M'⎕NA lib,'|strcpy2 P <0C1'
-  push←I{
-    ptr←Push⍬
+  push←(⊃push[atomTypes⍳⊂,'P']){
     (⍕≢⊢)⍵:0 Assert⍨'Expected string, got: ',⍎⍵
     strPtr ← tempAlloc 1+≢⍵
+    _←'Internal error, string pointer allocated for string to push was Null'Assert 0≢strPtr
     _←⍵⍵ (strPtr ⍵)
-    _←⍺⍺{⍺⍺ ⍵} (ptr strPtr 8)
+    ptr←⍺⍺ strPtr
     ptr
   }M
   ⎕OR 'push'
@@ -173,14 +196,24 @@ push,←⊂ StringPushGen ⍬
   F←(io bm in out name){(io bm in out name)←⍺⍺
     inArgsList ← {1≡≢in:,⊂⍵⋄⍵}⍵
     in≢⍥≢inArgsList:0 Assert⍨'Wrong amount of arguments given to ',name,': ','≢≢⍵',⍨⍕≢in
-    _←push[atomTypes⍳in] {⍺∘⊢⍵}¨⍥⌽⍵
+
+    ⍝ all elements in args will be replaced by pointers
+    ⍝ which will be arguments given to the called function
     args ← bm
-    (( bm)/args) ← Pop¨in
-    ((~bm)/args) ← Push¨out
+
+    ⍝ Push all outputs, pop them last with the typed-pop
+    ((~bm)/args)←Push{⍺⍺⍬}¨out
+
+    ⍝ Push inputs, first references since those will be in the output too
+    ref←'='=⊃¨in
+    (( ref)/bm/args) ← push[atomTypes⍳in/⍨ ref] {⍺∘⊢⍵}¨ inArgsList/⍨ ref ⍝ References allocated
+    ((~ref)/bm/args) ← push[atomTypes⍳in/⍨~ref] {⍺∘⊢⍵}¨ inArgsList/⍨~ref ⍝ Non references allocated
+
     maybeNilFunc ← ⍵⍵ ⍝ I tried simplifying out this assignment but was unsuccessful. ⎕OR with niladic functions is no joke.
-    i←atomTypes⍳out,in/⍨'='=⊃¨in
-    r←{1≡≢⍵:⊃⍵⋄⍵} {⍵∘⊢⍬}¨pop[i]⊣{⍬≡⍵:maybeNilFunc ⋄ maybeNilFunc⍵} args
-    r
+    _←{⍬≡⍵:maybeNilFunc ⋄ maybeNilFunc⍵} args
+    _←{0≡≢⍵:⍵⋄Pop¨⍵}(/⍨)~ref ⍝ First popping non reference inputs
+    refOuts ← {⍵∘⊢⍬}¨⌽pop[atomTypes⍳in/⍨ref]
+    {1≡≢⍵:⊃⍵⋄⍵} refOuts,⍨{⍵∘⊢⍬}¨⌽pop[atomTypes⍳out]
   }(⎕OR'Func')
 ∇
 
