@@ -1,10 +1,10 @@
 #!cd $dir && /usr/bin/dyalogscript $fileName
 rlDir ← '../link/',⍨⊃1⎕NPARTS''
 rl ← 0⎕Fix rlDir,'raylib.apln'
-0 rl.Init rlDir⍬
+rl.Init rlDir⍬
 
-rl.InitWindowRAYLIB 800 800 'Hello!!!'
-rl.DisableCursorRAYLIB⍬
+rl.InitWindow 800 800 'Hello!!!'
+rl.DisableCursor⍬
 
 ⍝ Define the camera to look into our 3d world
 camera ← ⍬
@@ -14,38 +14,38 @@ camera ,←⊂  0  1  0 ⍝ Camera up vector (rotation towards target)
 camera ,←⊂ 45       ⍝ Camera field-of-view Y
 camera ,←⊂ rl.CameraProjection.CAMERA_PERSPECTIVE ⍝ Camera type
 
-model _ ← rl.LoadModelRAYLIB 'OBJ/RubberDuck_LOD0.obj'
+model _ ← rl.LoadModel 'OBJ/RubberDuck_LOD0.obj'
 
 frame←0
 ⍝ For every frame till user closes the window
-:While ~rl.WindowShouldCloseRAYLIB ⍬
+:While ~rl.WindowShouldClose⍬
     frame+←1
     ⍝ Look for keystrokes from user, move the camera
-    camera ← rl.UpdateCameraRAYLIB ((,⊂camera) rl.CameraMode.CAMERA_THIRD_PERSON)
+    camera ← rl.UpdateCamera ((,⊂camera) rl.CameraMode.CAMERA_THIRD_PERSON)
     ⍝ Preparing another buffer to draw the new frame, with white background
-    rl.BeginDrawingRAYLIB⍬
-        rl.ClearBackgroundRAYLIB rl.color.white
+    rl.BeginDrawing⍬
+        rl.ClearBackground rl.color.white
 
         ⍝ Draws FPS at x=40 y=40
-        rl.DrawFPSRAYLIB 40 40
+        rl.DrawFPS 40 40
 
         ⍝ Draw 3d stuff relative to the camera
-        rl.BeginMode3DRAYLIB camera
+        rl.BeginMode3D camera
 
             ⍝ draws grid
-            rl.DrawGridRAYLIB 20 10
+            rl.DrawGrid 20 10
 
             ⍝ Draw the duck model at position
             position ← 0 0 0  ⋄  scale ← 1
-            rl.DrawModelRAYLIB (model position scale rl.color.white)
+            rl.DrawModel (model position scale rl.color.white)
 
         ⍝ Stop drawing 3d
-        rl.EndMode3DRAYLIB⍬
+        rl.EndMode3D⍬
 
     ⍝ wait till next frame is needed, then switch to this new buffer we've drawn
-    rl.EndDrawingRAYLIB⍬
+    rl.EndDrawing⍬
 :EndWhile
 
 ⍝ Unloading model, freeing it's memory.
-rl.UnloadModelRAYLIB model
-rl.CloseWindowRAYLIB⍬
+rl.UnloadModel model
+rl.CloseWindow⍬

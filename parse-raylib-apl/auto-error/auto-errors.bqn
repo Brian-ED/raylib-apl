@@ -1,5 +1,4 @@
-replic‿[
-  s2LinesExtended⋄s1LinesExtended
+[
   names⋄argNames⋄outType⋄argTypes
 ] ← •args
 
@@ -9,9 +8,10 @@ out←⟨⟩
 fmt←"scopes"‿"functions"
 scopes‿functions ← ⊐⟜fmt⊸⊏˝json.Parse •FChars "auto-error.json"
 
-[begin⋄end⋄scopeDoc] ⇐ {
+[begin⋄end⋄nested⋄scopeDoc] ⇐ {
   ⍉>⊐⟜𝕩⊸⊏˝¨scopes
-}"begin"‿"end"‿"doc"
+}"begin"‿"end"‿"nested"‿"doc"
+nested ⊐˜↩ "false"⋈○<"true" # Turn json booleans into binary
 
 [name⋄allow⋄disallow⋄funcDoc] ⇐ {⍋∘⊏⊸(⊏⎉1)𝕩} {
   ⍉>⊐⟜𝕩⊸⊏˝¨functions
@@ -33,22 +33,22 @@ out∾↩""‿""
 returnViaRef ← '*'={⊢´⊑𝕩∾<" "}¨argTypes
 
 # Adding tradfns with assertions
-@∘{𝕊⟨n,aw,daw,an,r,retPtrF⟩:
-  arg ← 1↓∾' '∾¨an # TODO arg names here can be simplified
+@∘{𝕊⟨n,aw,daw,an,r⟩:
+  arg ← "_"⍟(0=≠)1↓∾' '∾¨an
   out∾↩<'∇'∾"r←"⊸∾⍟r n∾(' '⊸∾"("∾⁼∾⟜")"⁼)⍟(×∘≠∧∧´∘≠⟜' ') ('('∾∾⟜')')⍟(×≠) arg
-  out∾↩<"    '"∾n∾" errored' Assert ∨/"∾"1"⍟("()"⊸≡)"("∾")"∾˜3↓∾{") ("∾3↓∾" ∧ scope"⊸∾¨𝕩}¨aw
-  out∾↩<"    '"∾n∾" errored' Assert ∧/"∾"⍬"⍟("()"⊸≡)"("∾")"∾˜3↓∾{") ("∾3↓∾" ∨ scope"⊸∾¨𝕩}¨daw
-  {𝕊:out∾↩<"    scope"∾𝕩∾" ← 1"}∘⊑⍟(×≠) n⊸≡¨    ⊸/begin
-  {𝕊:out∾↩<"    scope"∾𝕩∾" ← 0"}∘⊑⍟(×≠) n⊸≡¨∘end⊸/begin
-  out∾↩"∇"⋈˜"    "∾"r←"⊸∾⍟r(n∾"RAYLIB")∾",⊂"⊸∾⍟(×∘≠∧∧´∘≠⟜' ') ('('∾∾⟜')')⍟(×≠) ("⍬"∾' '⊸∾⍟(×≠))⍟retPtrF arg
+  {𝕊:out∾↩<"    '"∾n∾" errored' Assert ∨/"∾𝕩}⍟(¬"()"⊸≡) "("∾")"∾˜3↓∾{") ("∾3↓∾" ∧ scope"⊸∾¨𝕩}¨aw
+  {𝕊:out∾↩<"    '"∾n∾" errored' Assert ∧/"∾𝕩}⍟(¬"()"⊸≡) "("∾")"∾˜3↓∾{") ("∾3↓∾" ∨ scope"⊸∾¨𝕩}¨daw
+  {𝕊:out∾↩<"    '"∾n∾" errored' Assert ~scope"∾⊑1⊑𝕩⋄!1≡≠1⊑𝕩}⍟(¬∧´∘⊑)(n⊸≡¨begin)⊸/¨nested‿begin
+  {𝕊:out∾↩<"    scope"∾𝕩∾" ← 1"}∘⊑⍟(×≠) begin/˜n⊸≡¨begin
+  {𝕊:out∾↩<"    scope"∾𝕩∾" ← 0"}∘⊑⍟(×≠) begin/˜n⊸≡¨end
+  out∾↩"∇"⋈˜"    "∾"r←"⊸∾⍟r(n∾"RAYLIB")∾ (¬×∘≠∧∧´∘≠⟜' ')◶⟨' '⊸∾⋄'('∾∾⟜')'⟩ arg
 
 }˘⍉ [
-  ∾⟜"RetPtr"¨⌾((0»s2LinesExtended)⊸/)∾⟜"Ref"¨⌾((0»s1LinesExtended)⊸/) replic/name
-  replic/allow
-  replic/disallow
+  name
+  allow
+  disallow
   argNames
   returnViaRef∨"void"⊸≢¨outtype
-  0»s2LinesExtended
 ]
 
 out∾˜↩":Namespace replacements"‿""
