@@ -62,7 +62,7 @@ rl.InitWindow (100×⌽⍴board),⊂'abc'
 cellSize ← 100
 frame ← 0
 
-:While ~rl.WindowShouldClose
+:While ~rl.WindowShouldClose⍬
     frame +← 1
     :if (20|frame) = 0
         :If (∨/1∘⌷,∘,board∘∧) ¯1⊖boardMoving
@@ -86,16 +86,16 @@ frame ← 0
     bottomRightRelative ← ,⍨⌈/bottomRight-topLeft
     (bottomRightRelative↑topLeft↓boardMoving)← (⌽⍉)⍣(rotLeftKey-rotRightKey)⊢bottomRightRelative↑topLeft↓boardMoving
 
-    rl.BeginDrawing
+    rl.BeginDrawing⍬
         {beginPos endPos←⍵
             size ← endPos-beginPos
-            rl.DrawRectangle beginPos,size,⊂8↑rl.color.yellow
+            rl.DrawRectangle beginPos,size,⊂rl.color.yellow
         }¨cellSize×(-∘1,⍥⊂¨⊢) ⍸⍉board
         {beginPos endPos←⍵
             size ← endPos-beginPos
-            rl.DrawRectangle beginPos,size,⊂8↑rl.color.yellow
+            rl.DrawRectangle beginPos,size,⊂rl.color.yellow
         }¨cellSize×(-∘1,⍥⊂¨⊢) ⍸⍉boardMoving
-        rl.ClearBackground ⊂8↑rl.color.gray
-    rl.EndDrawing
+        rl.ClearBackground rl.color.gray
+    rl.EndDrawing⍬
 :EndWhile
-rl.CloseWindow
+rl.CloseWindow⍬

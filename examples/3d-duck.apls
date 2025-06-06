@@ -1,5 +1,5 @@
 #!cd $dir && /usr/bin/dyalogscript $fileName
-rlDir ← '../link/',⍨⊃1⎕NPARTS''
+rlDir ← '../../raylib-apl/link/',⍨⊃1⎕NPARTS''
 rl ← 0⎕Fix rlDir,'raylib.apln'
 rl.Init rlDir⍬
 

@@ -139,7 +139,8 @@ equalPtrPopGen←{
 }
 equalPtrPushGen←{
   O←⍵{
-    _←'Internal error: Tried pushing more or less than 1 amount of reference pointer' Assert 1≡≢⍵
+    ⍝ TODO: Calling the following triggers this internal error: camera ← rl.UpdateCamera (camera rl.CameraMode.CAMERA_THIRD_PERSON)
+    _←'INTERNAL ERROR: Tried pushing more or less than 1 amount of reference pointer' Assert 1≡≢⍵
     ⍵⍵ ⍺⍺⊃⍵
   }(⊃push[atomTypes⍳⊂,'P'])
   ⎕OR'O'
@@ -192,7 +193,7 @@ push,←⊂ StringPushGen ⍬
   io←(~atomTypes∊⍨t)∧'='≡¨⊃¨t ⍝ In and out
   bm ← '>'≢¨⊃¨t ⍝ In or out mask, neither is impossible
   in  ← {(~atomTypes∊⍨⊂⍵)∧'='≡⊃⍵: ,'P' ⋄ ⍵}¨ {0=≢⍵: ⍵ ⋄ (b/¨⍵),¨ NameOfStruct¨ ⍵/⍨¨~b←∧\¨∊∘'<=>'¨⍵} t/⍨ bm ⍝ ~atomTypes∊⍨⊂⍵ is for mainly checking if something is a string
-  out ← {0=≢⍵:⍵⋄'>'∘,⍣¯1¨⍵} {(~atomTypes∊⍨⊂⍵)∧'='≡⊃⍵: ,'P' ⋄ ⍵}¨ {0=≢⍵: ⍵ ⋄ (b/¨⍵),¨ NameOfStruct¨ ⍵/⍨¨~b←∧\¨∊∘'<=>'¨⍵} t/⍨~bm ⍝ ~atomTypes∊⍨⊂⍵ is for mainly checking if something is a string
+  out ← {0=≢⍵:⍵⋄,¨'>'∘,⍣¯1¨⍵} {(~atomTypes∊⍨⊂⍵)∧'='≡⊃⍵: ,'P' ⋄ ⍵}¨ {0=≢⍵: ⍵ ⋄ (b/¨⍵),¨ NameOfStruct¨ ⍵/⍨¨~b←∧\¨∊∘'<=>'¨⍵} t/⍨~bm ⍝ ~atomTypes∊⍨⊂⍵ is for mainly checking if something is a string
   F←(io bm in out name){(io bm in out name)←⍺⍺
     inArgsList ← {1≡≢in:,⊂⍵⋄⍵}⍵
     in≢⍥≢inArgsList:0 Assert⍨'Wrong amount of arguments given to ',name,': ','≢≢⍵',⍨⍕≢in

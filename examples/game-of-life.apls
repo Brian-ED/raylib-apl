@@ -15,17 +15,17 @@ board ⍪← 0 0 0 0 0 0 0
 cellSize ← 100
 frame ← 0
 
-:While ~rl.WindowShouldClose
+:While ~rl.WindowShouldClose⍬
     frame (20|+)← 1
     :if frame = 0
         board ← ({≢⍸⍵}⌺3 3∊¨3+0,¨⊢)board
     :EndIf
-    rl.BeginDrawing
+    rl.BeginDrawing⍬
         {beginPos endPos←⍵
             size ← endPos-beginPos
-            rl.DrawRectangle beginPos,size,⊂8↑rl.color.yellow
+            rl.DrawRectangle beginPos,size,⊂rl.color.yellow
         }¨cellSize×(-∘1,⍥⊂¨⊢) ⍸board
-        rl.ClearBackground ⊂8↑rl.color.gray
-    rl.EndDrawing
+        rl.ClearBackground rl.color.gray
+    rl.EndDrawing⍬
 :EndWhile
-rl.CloseWindow
+rl.CloseWindow⍬
