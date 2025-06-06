@@ -1,5 +1,5 @@
 :Namespace setup
-⍝ Makes an importer that improves the ffi function creation syntax
+⍝ Makes an importer that improves the FFI function creation syntax
 
 ⎕io←1
 
