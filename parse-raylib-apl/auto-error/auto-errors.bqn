@@ -25,14 +25,14 @@ out ∾↩<"Assert ← {⍺←'assertion failure' ⋄ 0∊⍵:⍺ ⎕SIGNAL 8 �
   out∾↩<"scope"∾b∾" ← 0"
 }˘⍉[begin]
 
-# Spacing to seperate variable definitions section from tradfns definition
+# Spacing to separate variable definitions section from Tradfns definition
 out∾↩""‿""
 
 # When the first argument is a pointer, it's usually a reference as return value.
 # Useful since if first arg is a pointer, the function has a return value.
 returnViaRef ← '*'={⊢´⊑𝕩∾<" "}¨argTypes
 
-# Adding tradfns with assertions
+# Adding Tradfns with assertions
 @∘{𝕊⟨n,aw,daw,an,r⟩:
   arg ← "_"⍟(0=≠)1↓∾' '∾¨an
   out∾↩<'∇'∾"r←"⊸∾⍟r n∾(' '⊸∾"("∾⁼∾⟜")"⁼)⍟(×∘≠∧∧´∘≠⟜' ') ('('∾∾⟜')')⍟(×≠) arg

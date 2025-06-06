@@ -75,10 +75,10 @@ frame ← 0
 
     K ← rl.IsKeyPressed
     leftKey rightKey ← K¨ 263 262 ⍝ left and right movement ← → keys
-    leftKey rightKey ∨← K¨ 65 68  ⍝ left and right movement a c, for wasd movement
+    leftKey rightKey ∨← K¨ 65 68  ⍝ left and right movement a c, for WASD movement
 
     rotLeftKey rotRightKey ← K¨ 265 264 ⍝ rotation, ↑ ↓ keys
-    rotLeftKey rotRightKey ∨← K¨ 81 69  ⍝ rotation, q e, for wasd movement
+    rotLeftKey rotRightKey ∨← K¨ 81 69  ⍝ rotation, q e, for WASD movement
 
     boardMoving⌽⍨←leftKey-rightKey
     topLeft bottomRight ← (⌊/,⌈/)⍸boardMoving

@@ -21,7 +21,7 @@ frame ← 0
 'Memcpy' ⎕NA rl.pathToBinary,'|memcpy P <U4[] U8'
 
 :While ~rl.WindowShouldClose⍬
-    img ⊖⍨← 1 ⍝ Modified assignment improves performance from 55 fps to 170 fps
+    img ⊖⍨← 1 ⍝ Modified assignment improves performance from 55 FPS to 170 FPS
     rot (90|+)← rl.GetMouseWheelMove⍬
     mousePos ← rl.GetMousePosition⍬
 
