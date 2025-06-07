@@ -45,12 +45,12 @@ PolygonData ← ⍬ ⍝
   PolygonData,←⊂ v2,'[SECITREV_XAM_CASYHP]' ⍝ normals      ⍝ Polygon vertex normals vectors
 
 PhysicsShape ← ⍬ ⍝
-  PhysicsShape,←⊂ '⋄PhysicsShape'  ⍝             ⍝
-  PhysicsShape,←⊂ PhysicsShapeType ⍝ type        ⍝ Physics shape type (circle or polygon)
-  PhysicsShape,←⊂ PhysicsBody      ⍝ body        ⍝ Shape physics body reference
-  PhysicsShape,←⊂ f                ⍝ radius      ⍝ Circle shape radius (used for circle shapes)
-  PhysicsShape,←⊂ Mat2             ⍝ transform   ⍝ Vertices transform matrix 2x2
-  PhysicsShape,←⊂ PolygonData      ⍝ vertexData  ⍝ Polygon shape vertices position and normals data (just used for polygon shapes)
+  PhysicsShape,←⊂ '⋄PhysicsShape' ⍝             ⍝
+  PhysicsShape,←⊂ i               ⍝ type        ⍝ Physics shape type (circle or polygon)
+  PhysicsShape,←⊂ PhysicsBody     ⍝ body        ⍝ Shape physics body reference
+  PhysicsShape,←⊂ f               ⍝ radius      ⍝ Circle shape radius (used for circle shapes)
+  PhysicsShape,←⊂ Mat2            ⍝ transform   ⍝ Vertices transform matrix 2x2
+  PhysicsShape,←⊂ PolygonData     ⍝ vertexData  ⍝ Polygon shape vertices position and normals data (just used for polygon shapes)
 
 PhysicsBodyData ← ⍬ ⍝
   PhysicsBodyData,←⊂ '⋄PhysicsBodyData' ⍝                  ⍝
