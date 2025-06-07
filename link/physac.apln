@@ -47,7 +47,7 @@ PolygonData ← ⍬ ⍝
 PhysicsShape ← ⍬ ⍝
   PhysicsShape,←⊂ '⋄PhysicsShape' ⍝             ⍝
   PhysicsShape,←⊂ i               ⍝ type        ⍝ Physics shape type (circle or polygon)
-  PhysicsShape,←⊂ PhysicsBody     ⍝ body        ⍝ Shape physics body reference
+  PhysicsShape,←⊂ ptr             ⍝ body        ⍝ Shape physics body reference
   PhysicsShape,←⊂ f               ⍝ radius      ⍝ Circle shape radius (used for circle shapes)
   PhysicsShape,←⊂ Mat2            ⍝ transform   ⍝ Vertices transform matrix 2x2
   PhysicsShape,←⊂ PolygonData     ⍝ vertexData  ⍝ Polygon shape vertices position and normals data (just used for polygon shapes)
@@ -77,8 +77,8 @@ PhysicsBodyData ← ⍬ ⍝
 PhysicsManifoldData ← ⍬ ⍝
   PhysicsManifoldData,←⊂ '⋄PhysicsManifoldData' ⍝                  ⍝
   PhysicsManifoldData,←⊂ u                      ⍝ id               ⍝ Reference unique identifier
-  PhysicsManifoldData,←⊂ PhysicsBody            ⍝ bodyA            ⍝ Manifold first physics body reference
-  PhysicsManifoldData,←⊂ PhysicsBody            ⍝ bodyB            ⍝ Manifold second physics body reference
+  PhysicsManifoldData,←⊂ ptr                    ⍝ bodyA            ⍝ Manifold first physics body reference
+  PhysicsManifoldData,←⊂ ptr                    ⍝ bodyB            ⍝ Manifold second physics body reference
   PhysicsManifoldData,←⊂ f                      ⍝ penetration      ⍝ Depth of penetration from collision
   PhysicsManifoldData,←⊂ v2                     ⍝ normal           ⍝ Normal direction vector from 'a' to 'b'
   PhysicsManifoldData,←⊂ v2,'[2]'               ⍝ contacts         ⍝ Points of contact during collision
@@ -106,24 +106,24 @@ pathToBinary ← pathToBinaryArg
 :EndIf
 
 
-InitPhysicsRAYLIB                  ←             R('InitPhysicsRetPtr'                  (⍬                         )) ⍝                          ⍝ Initializes physics values, pointers and creates physics loop thread
-RunPhysicsStepRAYLIB               ←             R('RunPhysicsStepRetPtr'               (⍬                         )) ⍝                          ⍝ Run physics step, to be used if PHYSICS_NO_THREADS is set in your main loop
-SetPhysicsTimeStepRAYLIB           ←             R('SetPhysicsTimeStepRetPtr'           (,⊂ f8                     )) ⍝ delta                    ⍝ Sets physics fixed time step in milliseconds. 1.666666 by default
-IsPhysicsEnabledRAYLIB             ←             R('IsPhysicsEnabledRetPtr'             (,⊂ ('>',bool)             )) ⍝                          ⍝ Returns true if physics thread is currently enabled
-SetPhysicsGravityRAYLIB            ←             R('SetPhysicsGravityRetPtr'            (f f                       )) ⍝ x y                      ⍝ Sets physics global gravity force
-CreatePhysicsBodyCircleRAYLIB      ←             R('CreatePhysicsBodyCircleRetPtr'      (('>',PhysicsBody) v2 f f  )) ⍝ pos radius density       ⍝ Creates a new circle physics body with generic parameters
-CreatePhysicsBodyRectangleRAYLIB   ←             R('CreatePhysicsBodyRectangleRetPtr'   (('>',PhysicsBody) v2 f f f)) ⍝ pos width height density ⍝ Creates a new rectangle physics body with generic parameters
-CreatePhysicsBodyPolygonRAYLIB     ←             R('CreatePhysicsBodyPolygonRetPtr'     (('>',PhysicsBody) v2 f i f)) ⍝ pos radius sides density ⍝ Creates a new polygon physics body with generic parameters
-PhysicsAddForceRAYLIB              ←             R('PhysicsAddForceRetPtr'              (PhysicsBody v2            )) ⍝ body force               ⍝ Adds a force to a physics body
-PhysicsAddTorqueRAYLIB             ←             R('PhysicsAddTorqueRetPtr'             (PhysicsBody f             )) ⍝ body amount              ⍝ Adds an angular force to a physics body
-PhysicsShatterRAYLIB               ←             R('PhysicsShatterRetPtr'               (PhysicsBody v2 f          )) ⍝ body position force      ⍝ Shatters a polygon shape physics body to little physics bodies with explosion force
-GetPhysicsBodiesCountRAYLIB        ←             R('GetPhysicsBodiesCountRetPtr'        (,⊂ ('>',i)                )) ⍝                          ⍝ Returns the current amount of created physics bodies
-GetPhysicsBodyRAYLIB               ←             R('GetPhysicsBodyRetPtr'               (('>',PhysicsBody) i       )) ⍝ index                    ⍝ Returns a physics body of the bodies pool at a specific index
-GetPhysicsShapeTypeRAYLIB          ←             R('GetPhysicsShapeTypeRetPtr'          (('>',i) i                 )) ⍝ index                    ⍝ Returns the physics body shape type (PHYSICS_CIRCLE or PHYSICS_POLYGON)
-GetPhysicsShapeVerticesCountRAYLIB ←             R('GetPhysicsShapeVerticesCountRetPtr' (('>',i) i                 )) ⍝ index                    ⍝ Returns the amount of vertices of a physics body shape
-GetPhysicsShapeVertexRAYLIB        ←             R('GetPhysicsShapeVertexRetPtr'        (('>',v2) PhysicsBody i    )) ⍝ body vertex              ⍝ Returns transformed position of a body shape (body position + vertex transformed position)
-SetPhysicsBodyRotationRAYLIB       ←             R('SetPhysicsBodyRotationRetPtr'       (PhysicsBody f             )) ⍝ body radians             ⍝ Sets physics body shape transform based on radians parameter
-DestroyPhysicsBodyRAYLIB           ←             R('DestroyPhysicsBodyRetPtr'           (,⊂ PhysicsBody            )) ⍝ body                     ⍝ Unitializes and destroy a physics body
-ClosePhysicsRAYLIB                 ←             R('ClosePhysicsRetPtr'                 (⍬                         )) ⍝                          ⍝ Unitializes physics pointers and closes physics loop thread
+InitPhysicsRAYLIB                  ←      R('InitPhysicsRetPtr'                  (⍬                 )) ⍝                          ⍝ Initializes physics values, pointers and creates physics loop thread
+RunPhysicsStepRAYLIB               ←      R('RunPhysicsStepRetPtr'               (⍬                 )) ⍝                          ⍝ Run physics step, to be used if PHYSICS_NO_THREADS is set in your main loop
+SetPhysicsTimeStepRAYLIB           ←      R('SetPhysicsTimeStepRetPtr'           (,⊂ f8             )) ⍝ delta                    ⍝ Sets physics fixed time step in milliseconds. 1.666666 by default
+IsPhysicsEnabledRAYLIB             ←      R('IsPhysicsEnabledRetPtr'             (,⊂ ('>',bool)     )) ⍝                          ⍝ Returns true if physics thread is currently enabled
+SetPhysicsGravityRAYLIB            ←      R('SetPhysicsGravityRetPtr'            (f f               )) ⍝ x y                      ⍝ Sets physics global gravity force
+CreatePhysicsBodyCircleRAYLIB      ←      R('CreatePhysicsBodyCircleRetPtr'      (('>',ptr) v2 f f  )) ⍝ pos radius density       ⍝ Creates a new circle physics body with generic parameters
+CreatePhysicsBodyRectangleRAYLIB   ←      R('CreatePhysicsBodyRectangleRetPtr'   (('>',ptr) v2 f f f)) ⍝ pos width height density ⍝ Creates a new rectangle physics body with generic parameters
+CreatePhysicsBodyPolygonRAYLIB     ←      R('CreatePhysicsBodyPolygonRetPtr'     (('>',ptr) v2 f i f)) ⍝ pos radius sides density ⍝ Creates a new polygon physics body with generic parameters
+PhysicsAddForceRAYLIB              ←      R('PhysicsAddForceRetPtr'              (ptr v2            )) ⍝ body force               ⍝ Adds a force to a physics body
+PhysicsAddTorqueRAYLIB             ←      R('PhysicsAddTorqueRetPtr'             (ptr f             )) ⍝ body amount              ⍝ Adds an angular force to a physics body
+PhysicsShatterRAYLIB               ←      R('PhysicsShatterRetPtr'               (ptr v2 f          )) ⍝ body position force      ⍝ Shatters a polygon shape physics body to little physics bodies with explosion force
+GetPhysicsBodiesCountRAYLIB        ←      R('GetPhysicsBodiesCountRetPtr'        (,⊂ ('>',i)        )) ⍝                          ⍝ Returns the current amount of created physics bodies
+GetPhysicsBodyRAYLIB               ←      R('GetPhysicsBodyRetPtr'               (('>',ptr) i       )) ⍝ index                    ⍝ Returns a physics body of the bodies pool at a specific index
+GetPhysicsShapeTypeRAYLIB          ←      R('GetPhysicsShapeTypeRetPtr'          (('>',i) i         )) ⍝ index                    ⍝ Returns the physics body shape type (PHYSICS_CIRCLE or PHYSICS_POLYGON)
+GetPhysicsShapeVerticesCountRAYLIB ←      R('GetPhysicsShapeVerticesCountRetPtr' (('>',i) i         )) ⍝ index                    ⍝ Returns the amount of vertices of a physics body shape
+GetPhysicsShapeVertexRAYLIB        ←      R('GetPhysicsShapeVertexRetPtr'        (('>',v2) ptr i    )) ⍝ body vertex              ⍝ Returns transformed position of a body shape (body position + vertex transformed position)
+SetPhysicsBodyRotationRAYLIB       ←      R('SetPhysicsBodyRotationRetPtr'       (ptr f             )) ⍝ body radians             ⍝ Sets physics body shape transform based on radians parameter
+DestroyPhysicsBodyRAYLIB           ←      R('DestroyPhysicsBodyRetPtr'           (,⊂ ptr            )) ⍝ body                     ⍝ Unitializes and destroy a physics body
+ClosePhysicsRAYLIB                 ←      R('ClosePhysicsRetPtr'                 (⍬                 )) ⍝                          ⍝ Unitializes physics pointers and closes physics loop thread
 ∇
 :EndNamespace
