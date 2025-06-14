@@ -3,6 +3,14 @@
 
 ⎕io←1
 
+⍝ ¨, with the prototype given as ⍵⍵, wrapped in a namespace due to operators not entering scopes
+:Namespace E
+  _Each_ ← {⍺←⊢ ⋄ 0≡≢⍵:⍵⍵ ⋄ ⍺ ⍺⍺¨⍵}
+:EndNamespace
+
+⍝ id function used for array-of-functions' prototype
+id←{F←⊢⋄⎕OR'F'}⍬
+
 debug ← {
   0:_←⍬
   ⎕←'StackSize',topRuntime
@@ -39,19 +47,9 @@ unitPushGen ← {
   o ← CpyPush{ ptr⊣⍺⍺((ptr←Push⍬)(,⊂⍵) ⍵⍵) }⍺
   ⎕OR'o'
 }
-typeByteSize ← {⍵≡,'P':8 ⋄ ⍎⊃⌽⍵}¨atomTypes
-pop  ← typeByteSize unitPopGen ¨ atomTypes
-push ← typeByteSize unitPushGen¨ atomTypes
-
-⍝ Fixing prototypes by defining first item to ~reasonable defaults
-idF←⊢
-pop       ,⍨← ⊂⎕OR'idF'
-push      ,⍨← ⊂⎕OR'idF'
-atomTypes ,⍨← ,⊂''
-
-
-_F ← {f←⍺⍺ ⋄ ⎕OR'f'}
-MapFuncs ← {⍺≡⊃⍺:⍺∘⊢⍵ ⋄ ⍺∇¨⍵}
+typeByteSize ← {⍵≡,'P':8 ⋄ ⍎⊃⌽⍵} E._Each_ ⍬⊢ atomTypes
+pop  ← typeByteSize unitPopGen  E._Each_(0/⊂id)⊢ atomTypes
+push ← typeByteSize unitPushGen E._Each_(0/⊂id)⊢ atomTypes
 
 PtrToBytes ← {
   _←'fromU1'⎕NA lib,'|memcpy2 =U1[','] P U8',⍨⍕⍵
@@ -66,7 +64,7 @@ topRuntime ← 0
 
 Push ← {
   topRuntime+←1
-  stack ,← {0≡⍵:0⋄tempAlloc BytesEachArg}¨⍳0⌈topRuntime-≢stack ⍝ Make sure stack always has enough space
+  stack ,← {tempAlloc BytesEachArg}E._Each_⍬⍳0⌈topRuntime-≢stack ⍝ Make sure stack always has enough space
   topRuntime⊃stack
 }
 Pop ← {
@@ -78,7 +76,7 @@ Pop ← {
 NameOfStruct ← {
   2>|≡⍵:⍵
   _← 'NameCheck applied to a non-atomic pointer type, this should be impossible.' Assert ∧/'<=>'≢¨⊂⊃⍵
-  '⋄'∘,⍣¯1⊃⍵
+  ,'⋄'∘,⍣¯1⊃⍵
 }
 remPtrInfo ← {⍵/⍨~ (~atomTypes∊⍨⊂⍵)∧ ∧\'<=>'∊⍨⍵}
 
@@ -86,8 +84,16 @@ remPtrInfo ← {⍵/⍨~ (~atomTypes∊⍨⊂⍵)∧ ∧\'<=>'∊⍨⍵}
 ⍝ -------------------------------- ⍝
 ⍝ Handling pop and pushing structs ⍝
 ⍝ -------------------------------- ⍝
-structs ← ∪{⍵/⍨'⋄'∘≡¨⊃∘⊃¨⍵}##.(⍎¨⎕NL) ¯2
-'No structs found' Assert 0≢≢structs
+structs ← ∪{(('⋄'≡⊃⍤⊃)¨⍵)/⍵}##.{⍎⍵._Each_(0/⊂,⊂'')⎕NL¯2} E
+⎕NA 'I4 ',lib,'|StructCount'
+'Not right amount of structs found' Assert StructCount≡≢structs
+
+⎕NA 'I4 ',lib,'|GetStructNameLength I4'
+⎕NA lib,'|GetStructName =C1[] I4 I4'
+structNames ← {l←GetStructNameLength⍵ ⋄ GetStructName ((l⍴'')l ⍵)}E._Each_(0/⊂'')⊢ ¯1+⍳≢structs
+
+'Not all found struct names matched' Assert structNames≡⍥{⍵[⍋⍵]}NameOfStruct¨structs
+
 ⎕NA 'I4 ',lib,'|GetStructSize I4'
 'tempAlloc' ⎕NA 'P ',lib,'|MemAlloc U4'
 'tempFree'  ⎕NA      lib,'|MemFree P'
@@ -103,14 +109,14 @@ PopStructGen←{
 
   O←F{ ⍝ pop value
     i←atomTypes⍳⍵⍵
-    _←⍺⍺ (Push¨i),⍨Pop⍬
-    ⌽{⍵∘⊢⍬}¨⌽pop[i]
+    _←⍺⍺ (Push E._Each_⍬⊢i),⍨Pop⍬
+    ⌽{⍵∘⊢⍬}E._Each_⍬⌽pop[i]
   }cleaned
   ⎕OR 'O'
 }
 PushStructGen ← {
   name←NameOfStruct ⍵
-  cleaned ← {0=≢⍵: ⍵ ⋄ NameOfStruct¨⍵} {'='≡⊃⍵:,'P'⋄⍵}¨ 1↓⍵
+  cleaned ← NameOfStruct E._Each_ (0/⊂'') {'='≡⊃⍵:,'P'⋄⍵}¨ 1↓⍵
   _←('Struct ',name,' not cleaned properly') Assert ∧/2>≡¨cleaned
   args←' P'⍴⍨2×1+≢cleaned   ⍝ Includes result
   _←'I'⎕NA lib,'|',name,'INTO',args
@@ -119,15 +125,15 @@ PushStructGen ← {
     (name cleaned)←⍵⍵
     i←atomTypes⍳cleaned
     i≢⍥≢⍵:0 Assert⍨name,' (≢⍵)≢',⍕≢i
-    _←push[i] {⍺∘⊢⍵}¨⍵
-    _←⍺⍺ (ptr←Push⍬),⌽Pop¨i
+    _←push[i] {⍺∘⊢⍵}E._Each_⍬⊢ ⍵
+    _←⍺⍺ (ptr←Push⍬),⌽Pop E._Each_⍬⊢i
     ptr
   }(name cleaned)
   ⎕OR'O'
 }
 
-pop ,← PopStructGen¨structs
-push,← PushStructGen¨structs
+pop ,← PopStructGen  E._Each_(0/⊂id)⊢ structs
+push,← PushStructGen E._Each_(0/⊂id)⊢ structs
 ⍝ -------------------------------- ⍝
 
 ⍝ --------------------------- ⍝
@@ -145,8 +151,8 @@ equalPtrPushGen←{
   }(⊃push[atomTypes⍳⊂,'P'])
   ⎕OR'O'
 }
-pop ,← equalPtrPopGen ¨ pop
-push,← equalPtrPushGen¨ push
+pop ,← equalPtrPopGen  E._Each_(0/⊂id)⊢ pop
+push,← equalPtrPushGen E._Each_(0/⊂id)⊢ push
 atomTypes,←'=',¨atomTypes
 ⍝ --------------------------- ⍝
 
@@ -178,8 +184,7 @@ StringPushGen←{
     strPtr ← tempAlloc 1+≢⍵
     _←'Internal error, string pointer allocated for string to push was Null'Assert 0≢strPtr
     _←⍵⍵ (strPtr ⍵)
-    ptr←⍺⍺ strPtr
-    ptr
+    ⍺⍺ strPtr
   }M
   ⎕OR 'push'
 }
@@ -192,8 +197,10 @@ push,←⊂ StringPushGen ⍬
   'Func'⎕NA lib,'|',name,' P'⍴⍨2×≢t
   io←(~atomTypes∊⍨t)∧'='≡¨⊃¨t ⍝ In and out
   bm ← '>'≢¨⊃¨t ⍝ In or out mask, neither is impossible
-  in  ← {(~atomTypes∊⍨⊂⍵)∧'='≡⊃⍵: ,'P' ⋄ ⍵}¨ {0=≢⍵: ⍵ ⋄ (b/¨⍵),¨ NameOfStruct¨ ⍵/⍨¨~b←∧\¨∊∘'<=>'¨⍵} t/⍨ bm ⍝ ~atomTypes∊⍨⊂⍵ is for mainly checking if something is a string
-  out ← {0=≢⍵:⍵⋄,¨'>'∘,⍣¯1¨⍵} {(~atomTypes∊⍨⊂⍵)∧'='≡⊃⍵: ,'P' ⋄ ⍵}¨ {0=≢⍵: ⍵ ⋄ (b/¨⍵),¨ NameOfStruct¨ ⍵/⍨¨~b←∧\¨∊∘'<=>'¨⍵} t/⍨~bm ⍝ ~atomTypes∊⍨⊂⍵ is for mainly checking if something is a string
+  FF ← {(~atomTypes∊⍨⊂⍵)∧'='≡⊃⍵: ,'P' ⋄ ⍵}
+  GG ← {(b/⍵), NameOfStruct ⍵/⍨~b←∧\⍵∊'<=>'}
+  in  ←                             FF¨ GG E._Each_ (0/⊂'')⊢ t/⍨ bm ⍝ ~atomTypes∊⍨⊂⍵ is for mainly checking if something is a string
+  out ← ,¨'>'∘,⍣¯1 E._Each_ (0/⊂'') FF¨ GG E._Each_ (0/⊂'')⊢ t/⍨~bm ⍝ ~atomTypes∊⍨⊂⍵ is for mainly checking if something is a string
   F←(io bm in out name){(io bm in out name)←⍺⍺
     inArgsList ← {1≡≢in:,⊂⍵⋄⍵}⍵
     in≢⍥≢inArgsList:0 Assert⍨'Wrong amount of arguments given to ',name,': ','≢≢⍵',⍨⍕≢in
@@ -203,18 +210,18 @@ push,←⊂ StringPushGen ⍬
     args ← bm
 
     ⍝ Push all outputs, pop them last with the typed-pop
-    ((~bm)/args)←Push{⍺⍺⍬}¨out
+    ((~bm)/args)←Push{⍺⍺⍬} E._Each_⍬⊢ out
 
     ⍝ Push inputs, first references since those will be in the output too
     ref←'='=⊃¨in
-    (( ref)/bm/args) ← push[atomTypes⍳in/⍨ ref] {⍺∘⊢⍵}¨ inArgsList/⍨ ref ⍝ References allocated
-    ((~ref)/bm/args) ← push[atomTypes⍳in/⍨~ref] {⍺∘⊢⍵}¨ inArgsList/⍨~ref ⍝ Non references allocated
+    (( ref)/bm/args) ← push[atomTypes⍳in/⍨ ref] {⍺∘⊢⍵}E._Each_⍬⊢ inArgsList/⍨ ref ⍝ References allocated
+    ((~ref)/bm/args) ← push[atomTypes⍳in/⍨~ref] {⍺∘⊢⍵}E._Each_⍬⊢ inArgsList/⍨~ref ⍝ Non references allocated
 
     maybeNilFunc ← ⍵⍵ ⍝ I tried simplifying out this assignment but was unsuccessful. ⎕OR with niladic functions is no joke.
     _←{⍬≡⍵:maybeNilFunc ⋄ maybeNilFunc⍵} args
-    _←{0≡≢⍵:⍵⋄Pop¨⍵}(/⍨)~ref ⍝ First popping non reference inputs
-    refOuts ← {⍵∘⊢⍬}¨⌽pop[atomTypes⍳in/⍨ref]
-    {1≡≢⍵:⊃⍵⋄⍵} refOuts,⍨{⍵∘⊢⍬}¨⌽pop[atomTypes⍳out]
+    _←Pop E._Each_⍬ (/⍨)~ref ⍝ First popping non reference inputs
+    refOuts ←{⍵∘⊢⍬}E._Each_⍬⌽pop[atomTypes⍳in/⍨ref]
+    {1≡≢⍵:⊃⍵⋄⍵} refOuts,⍨{⍵∘⊢⍬}E._Each_⍬⌽pop[atomTypes⍳out]
   }(⎕OR'Func')
 ∇
 
@@ -224,9 +231,6 @@ push,←⊂ StringPushGen ⍬
 
   SetTraceLogLevelRAYLIB TraceLogLevel.LOG_WARNING
   SetTargetFPSRAYLIB 60
-
-  ⍝ Replace all names of ⍺ that are in ⍵ with the ⍵ counterpart
-  ReplaceNames ← {⍵.(⍎'⍺.',⊢,'←',⊢)¨⍣(×≢a)⊢a←⊃∩/(⍺⍵).⎕NL¯3}
 
   :If mode∊1 3 ⍝ Automatic replacements
     replacements {r←⍵ ⋄ r←r⊣'r'⎕NS⍺} ⎕THIS
