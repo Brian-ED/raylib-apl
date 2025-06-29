@@ -37,6 +37,12 @@ atomTypes ,←⊂ u2   ← 'U2'
 atomTypes←∪atomTypes
 
 lib ← '../libtemp-c-raylib.so'
+
+Read←{
+  _←'R'⎕NA lib,'|memcpy2 =U1[',(⍕⍺),'] P U8' ⍝ MA = Mid After. Means these convert to/from pointer. IF = Into From
+  R (⍺⍴0) ⍵ ⍺
+}
+
 unitPopGen ← {
   _←'CpyPop'⎕NA lib,'|memcpy2 >',⍵,' P U8'
   o ← CpyPop{ ⍺⍺ (⍬ (Pop⍬) ⍵⍵) }⍺
@@ -125,8 +131,9 @@ PushStructGen ← {
     (name cleaned)←⍵⍵
     i←atomTypes⍳cleaned
     i≢⍥≢⍵:0 Assert⍨name,' (≢⍵)≢',⍕≢i
+    ptr←Push⍬
     _←push[i] {⍺∘⊢⍵}E._Each_⍬⊢ ⍵
-    _←⍺⍺ (ptr←Push⍬),⌽Pop E._Each_⍬⊢i
+    _←⍺⍺ ptr,⌽Pop E._Each_⍬⊢i
     ptr
   }(name cleaned)
   ⎕OR'O'
@@ -161,24 +168,20 @@ atomTypes,←'=',¨atomTypes
 ⍝ Handling signed string type ⍝
 ⍝ --------------------------- ⍝
 atomTypes ,←⊂ str ← '=0C1'
-Read←{
-  _←'R'⎕NA lib,'|memcpy2 =U1[',(⍕⍺),'] P U8' ⍝ MA = Mid After. Means these convert to/from pointer. IF = Into From
-  R (⍺⍴0) ⍵ ⍺
-}
-
 StringPopGen←{
-  _←'A'⎕NA lib,'|strcpy2 >0C1 P'
+  _←'A'⎕NA lib,'|strcpy2 >0T1[] P'
   O←(⊃pop[atomTypes⍳⊂,'P']){
     strPtr ← ⍺⍺⍬
+    ptrToStr←(topRuntime+1)⊃stack
     _←'Internal error, the string pointer popped was Null' Assert 0≢strPtr
-    r←⍵⍵ (⍬ strPtr)
+    r←⍵⍵ (⍬ ptrToStr)
     _←tempFree strPtr
     r
   }A
   ⎕OR 'O'
 }
 StringPushGen←{
-  _←'M'⎕NA lib,'|strcpy2 P <0C1'
+  _←'M'⎕NA lib,'|strcpy2 P <0T1[]'
   push←(⊃push[atomTypes⍳⊂,'P']){
     (⍕≢⊢)⍵:0 Assert⍨'Expected string, got: ',⍎⍵
     strPtr ← tempAlloc 1+≢⍵
