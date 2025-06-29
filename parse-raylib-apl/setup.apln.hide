@@ -225,7 +225,7 @@ push,←⊂ StringPushGen ⍬
     ((~bm)/args)←Push{⍺⍺⍬} E._Each_⍬⊢ out
 
     ⍝ Push inputs, first references since those will be in the output too
-    ref←'='=⊃¨in
+    ref ← (str∘≢¨in) ∧ '='=⊃¨in
     (( ref)/bm/args) ← push[atomTypes⍳in/⍨ ref] {⍺∘⊢⍵}E._Each_⍬⊢ inArgsList/⍨ ref ⍝ References allocated
     ((~ref)/bm/args) ← push[atomTypes⍳in/⍨~ref] {⍺∘⊢⍵}E._Each_⍬⊢ inArgsList/⍨~ref ⍝ Non references allocated
 
