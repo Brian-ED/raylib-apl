@@ -3,7 +3,6 @@
   ToFFI        # turns header data from ParseHeader into ffi file characters
   ParseHeader  # Read string 𝕩 and optional function prefix 𝕨, outputs header data
   ToPrettyJson # Read header data from ParseHeader and makes a pretty json file
-  SetPath      # Set the path of the resulting FFI script from ToFFI
 ⟩⇐
 
 ⟨ParseJSON⇐Parse⟩ ← •Import "json.bqn"
@@ -52,13 +51,6 @@ typeReplacements ← ⍉shortendStructNames∾[
   "u2" ‿"unsigned short"
   " "  ‿"void"
 ]
-
-defaultPathDefinition ← "{⍵:'../libtemp-c-raylib.so'⋄'..\temp-c-raylib.dll'}'Linux'≡'-64'~⍨⊃#⎕WG'APLVersion'"
-
-SetPath ← {path𝕊ffi:
-  def ← defaultPathDefinition
-  (⊐⟜1 def⍷ffi)(↑∾path∾def∾⁼↓)ffi
-}
 
 # turns header data from ParseHeader into ffi file characters
 # 𝕨 is an optional name mapping, used so you can rename functions and fix name collisions
@@ -150,12 +142,9 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
   ⟩
   initTradFnHeader ← ⟨
     "⍝ Mode is either 3:All changes, 2:only manual changes 1:only automatic changes, or 0: no changes"
-    "∇{mode} Init (pathToRaylibDotAPLN pathToBinaryArg)"
+    "∇{mode} Init pathToRaylibDotAPLN"
     ""
-    "pathToRaylibDotAPLN ← (⊢,'/'/⍨'/'≢⊃∘⌽),pathToRaylibDotAPLN"
-    ":If ⍬≡pathToBinaryArg"
-    "  pathToBinaryArg ← pathToRaylibDotAPLN,"∾defaultPathDefinition
-    ":Endif"
+    "pathToRaylibDotAPLN ← (⊢,'/'/⍨'/'≢⊃⍤⌽)(⊢,'.'/⍨0=≢⍤⊢),pathToRaylibDotAPLN"
     ""
     "__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__ ← 0 ⎕FIX pathToRaylibDotAPLN,'../parse-raylib-apl/setup.apln.hide'"
     "'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯3"
@@ -163,7 +152,7 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
     "'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯9"
     "⎕EX '__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__'"
     ""
-    "pathToBinary ← pathToBinaryArg"
+    "pathToBinary ← pathToRaylibDotAPLN,lib"
     ":If 0=⎕NC 'mode'"
     "  mode ← 3 ⍝ Default is All changes"
     ":EndIf"

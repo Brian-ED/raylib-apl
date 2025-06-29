@@ -1,7 +1,7 @@
 #!cd $dir && /usr/bin/dyalogscript $fileName
-dir ← ⊃1⎕NPARTS''
-rl ← 0⎕Fix dir,'../../raylib-apl/link/raylib.apln'
-rl.Init (dir,'../../raylib-apl/link/')⍬
+rlDir ← '../../raylib-apl/link/',⍨⊃1⎕NPARTS''
+rl ← 0⎕Fix rlDir,'raylib.apln'
+rl.Init rlDir
 
 board ←⍉⍪0 0 0 0 0 0 0
 board ⍪← 0 0 0 0 0 0 0

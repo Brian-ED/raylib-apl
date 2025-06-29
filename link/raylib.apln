@@ -659,12 +659,9 @@ AutomationEventList ← ⍬ ⍝ Automation event list
   AutomationEventList,←⊂ u                      ⍝ count     ⍝ Events entries count
   AutomationEventList,←⊂ '=',AutomationEvent    ⍝ events    ⍝ Events entries
 ⍝ Mode is either 3:All changes, 2:only manual changes 1:only automatic changes, or 0: no changes
-∇{mode} Init (pathToRaylibDotAPLN pathToBinaryArg)
+∇{mode} Init pathToRaylibDotAPLN
 
-pathToRaylibDotAPLN ← (⊢,'/'/⍨'/'≢⊃∘⌽),pathToRaylibDotAPLN
-:If ⍬≡pathToBinaryArg
-  pathToBinaryArg ← pathToRaylibDotAPLN,{⍵:'../libtemp-c-raylib.so'⋄'..\temp-c-raylib.dll'}'Linux'≡'-64'~⍨⊃#⎕WG'APLVersion'
-:Endif
+pathToRaylibDotAPLN ← (⊢,'/'/⍨'/'≢⊃⍤⌽)(⊢,'.'/⍨0=≢⍤⊢),pathToRaylibDotAPLN
 
 __PLEASE_DO_NOT_REPLACE_EXISTING_VAR__ ← 0 ⎕FIX pathToRaylibDotAPLN,'../parse-raylib-apl/setup.apln.hide'
 '' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯3
@@ -672,7 +669,7 @@ __PLEASE_DO_NOT_REPLACE_EXISTING_VAR__ ← 0 ⎕FIX pathToRaylibDotAPLN,'../pars
 '' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯9
 ⎕EX '__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__'
 
-pathToBinary ← pathToBinaryArg
+pathToBinary ← pathToRaylibDotAPLN,lib
 :If 0=⎕NC 'mode'
   mode ← 3 ⍝ Default is All changes
 :EndIf
