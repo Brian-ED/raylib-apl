@@ -18,7 +18,7 @@ tex ← rl.LoadTextureFromImage (ptr 1000 1000 1 rl.PixelFormat.PIXELFORMAT_UNCO
 rot ← 0
 
 frame ← 0
-'Memcpy' ⎕NA rl.pathToBinary,'|memcpy P <U4[] U8'
+'Memcpy' ⎕NA rl.pathToBinary,'|memcpy2 P <U4[] U8'
 
 :While ~rl.WindowShouldClose⍬
     img ⊖⍨← 1 ⍝ Modified assignment improves performance from 55 FPS to 170 FPS
