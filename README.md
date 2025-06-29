@@ -4,6 +4,7 @@ raylib-apl is a library made to write cross-platform graphical applications usin
 ## Features
 <img align="right" style="width:240px" src="https://github.com/user-attachments/assets/bf969426-7741-4eda-aa03-5c90ee6f87de">
 
+- Supports platforms Windows and Linux.
 - Input-methods: Keyboard, Mouse, Controler and Touchscreen.
 - Graphics: 2D, 3D, Sound, Text, Vector graphics, Images/Textures and shaders.
 - Multiple Fonts formats supported (TTF, OTF, Image fonts, AngelCode fonts)
@@ -17,10 +18,9 @@ raylib-apl is a library made to write cross-platform graphical applications usin
 - VR stereo rendering support with configurable HMD device parameters
 
 # Warning
-Breaking changes to any feature in raylib-apl should be expected for now, as this library is very young and experimental. If you experience code 999, there was likely a "segfault"/error in raylib.
+Breaking changes to any feature in raylib-apl should be expected for now, as this library is very young and experimental. If you experience code 999, there was likely a "segfault"/error in raylib, and so a bug report would be appreciated
 
 # Documentation
-raylib-apl currently only supports Linux. This is due to a bug in `⎕NA` that makes functions taking structs as arguments error.
 
 ## Getting started
 *Feel free to watch [How to install raylib-apl on Linux](https://youtu.be/XdDAqfMHjwI?si=iEv_RxAfz94cIUQC) on youtube.*
