@@ -36,7 +36,16 @@ atomTypes ,←⊂ i8   ← 'I8'
 atomTypes ,←⊂ u2   ← 'U2'
 atomTypes←∪atomTypes
 
-lib ← '../libtemp-c-raylib.so'
+⍝ Optain path to lib file for the current platform
+PlatfromToLibFile ← {
+  platform←⍵
+  'Windows'≡platform:'../temp-c-raylib.dll'
+  'Darwin' ≡platform:'../libtemp-c-raylib.dylib'
+  'Linux'  ≡platform:'../libtemp-c-raylib.so'
+  ('Unknown platform (',platform,')') Assert 0
+}
+lib ← PlatfromToLibFile '-64'~⍨⊃#⎕WG'APLVersion'
+('File ',lib,' was not found') Assert ⎕NEXISTS lib
 
 Read←{
   _←'R'⎕NA lib,'|memcpy2 =U1[',(⍕⍺),'] P U8' ⍝ MA = Mid After. Means these convert to/from pointer. IF = Into From
