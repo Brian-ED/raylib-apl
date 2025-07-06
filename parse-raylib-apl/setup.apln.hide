@@ -39,9 +39,9 @@ atomTypes←∪atomTypes
 ⍝ Optain path to lib file for the current platform
 PlatfromToLibFile ← {
   platform←⍵
-  'Windows'≡platform:'../temp-c-raylib.dll'
-  'Mac'    ≡platform:'../libtemp-c-raylib.dylib'
-  'Linux'  ≡platform:'../libtemp-c-raylib.so'
+  'Windows'≡platform:'../lib/temp-c-raylib.dll'
+  'Mac'    ≡platform:'../lib/libtemp-c-raylib.dylib'
+  'Linux'  ≡platform:'../lib/libtemp-c-raylib.so'
   ('Unknown platform (',platform,')') Assert 0
 }
 lib ← PlatfromToLibFile '-64'~⍨⊃#⎕WG'APLVersion'

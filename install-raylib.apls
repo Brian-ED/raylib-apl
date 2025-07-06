@@ -1,0 +1,43 @@
+#!cd $dir && /usr/bin/dyalogscript $fileName
+
+FullPath ← ∊1∘⎕NPARTS
+
+Assert ← {⍺←'assertion failure' ⋄ 0∊⍵:⍺ ⎕SIGNAL 8 ⋄ shy←0}
+
+PlatfromToLibFile ← {
+  'Windows'≡⍵:'temp-c-raylib.dll'
+  'Linux'  ≡⍵:'libtemp-c-raylib.so'
+  0 Assert⍨'Unknown platform (',⍵,')'
+}
+platform ← '-64'~⍨⊃#⎕WG'APLVersion'
+
+version ← 'v4.0.0'
+libPath ← 'lib'
+⎕MkDir⍣(~⎕NExists libPath)⊢libPath
+fullLibFile ← FullPath libPath,'/',libFile←PlatfromToLibFile platform
+
+git_clone_path ← 'https://www.github.com/Brian-ED/temp-c-raylib/releases/download/',version,'/',libFile
+
+⍝ Expects library to not exist
+{
+  ~⎕NExists⍵:⍬
+  txt←'raylib already installed. Delete it to re-install.',⎕UCS 10
+  txt,←'rm ',⍵,⎕UCS 10
+  txt Assert 0
+} fullLibFile
+
+⍝ ---------------
+⍝ download raylib
+⍝ ---------------
+PlatformToInstallCmd ← {
+  'Windows'≡⍵:'Powershell.exe -Command curl -o "',fullLibFile,'" ',git_clone_path ⍝ If errors: Curl was likely not found
+  'Linux'  ≡⍵:'curl -o "',fullLibFile,'" ',git_clone_path,' -L'
+  0 Assert⍨'Unknown platform (',⍵,')'
+}
+
+⎕CMD PlatformToInstallCmd platform
+
+FileSize ← 2∘⎕NINFO
+'Downloading raylib failed from Github failed. Likely due to redirects not being followed.' Assert 0≢FileSize fullLibFile
+
+⎕←'raylib installed successfully'

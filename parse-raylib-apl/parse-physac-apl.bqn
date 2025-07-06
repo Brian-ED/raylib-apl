@@ -1,6 +1,6 @@
 
 ToFFI‿ParseHeader ← •Import "parseAPL.bqn"
-file ← •FChars "../lib/physac.h"
+file ← •FChars "../include/physac.h"
 file {𝕩/˜¬∨`𝕩≠⊸↑𝕨⍷𝕩}˜↩ "PHYSAC IMPLEMENTATION"
 file ParseHeader˜↩ "PHYSACDEF"
 file ToFFI˜↩ [
