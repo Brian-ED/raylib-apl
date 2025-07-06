@@ -66,7 +66,7 @@ Fix_StatePointer ← {
   (if⊸↑∾il⊸↓)𝕩
 }
 
-file ← •FChars "../lib/rlgl.h"
+file ← •FChars "../include/rlgl.h"
 file Fix_rlVertexBuffer↩
 file Fix_StatePointer↩
 file ParseHeader˜↩ "RLAPI"
