@@ -30,7 +30,7 @@ dyalogscript install-raylib.apls
 Instead of running the above, you can manually download temp-c-raylib from it's [releases page](https://github.com/Brian-ED/temp-c-raylib/releases/).
 
 
-### Importing raylib
+### Importing raylib-apl
 To import raylib-apl as a namespace, take the code below and replace `../` with the path to raylib-apl:
 ```apl
 rlDir ← '../raylib-apl/link/',⍨⊃1⎕NPARTS''
