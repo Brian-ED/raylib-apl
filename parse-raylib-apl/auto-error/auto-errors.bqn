@@ -2,7 +2,7 @@
   names⋄argNames⋄outType⋄argTypes
 ] ← •args
 
-json ← •Import "../json.bqn"
+json ← •Import "../../imports/c-header-to-bqn-ffi/json.bqn"
 out←⟨⟩
 
 fmt←"scopes"‿"functions"

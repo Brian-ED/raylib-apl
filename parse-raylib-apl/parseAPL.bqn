@@ -5,7 +5,7 @@
   ToPrettyJson # Read header data from ParseHeader and makes a pretty json file
 ⟩⇐
 
-⟨ParseJSON⇐Parse⟩ ← •Import "json.bqn"
+⟨ParseJSON⇐Parse⟩ ← •Import "../imports/c-header-to-bqn-ffi/json.bqn"
 
 # util functions
 nl ← @+10 # newline

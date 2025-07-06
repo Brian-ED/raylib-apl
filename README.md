@@ -128,4 +128,4 @@ Brian was hired as an intern by [Dyalog Limited](https://www.dyalog.com/) at abo
 raylib-APL relies on the [raylib C library](https://github.com/raysan5/raylib/). Lots of thanks to raysan5 and the raylib community for this great library.
 
 ### Marshall Lochbaum
-The current version of raylib-apl relies on [json.bqn made by Marshall Lochbaum](https://github.com/mlochbaum/bqn-libs/blob/master/json.bqn), more specifically json.bqn.
+The current version of raylib-apl has parsing that relies on [json.bqn made by Marshall Lochbaum](https://github.com/mlochbaum/bqn-libs/blob/master/json.bqn).bqn. Also the BQN programming language in general!
