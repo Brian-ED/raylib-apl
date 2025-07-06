@@ -23,13 +23,15 @@ Breaking changes to any feature in raylib-apl should be expected for now, as thi
 # Documentation
 
 ## Getting started
-*Feel free to watch [How to install raylib-apl on Linux](https://youtu.be/XdDAqfMHjwI?si=iEv_RxAfz94cIUQC) on youtube.*
+Run the following to install [temp-c-raylib](https://github.com/Brian-ED/temp-c-raylib/) in the `raylib-apl/lib/` folder.
+```bash
+dyalogscript install-raylib.apls
+```
+Instead of running the above, you can manually download temp-c-raylib from it's [releases page](https://github.com/Brian-ED/temp-c-raylib/releases/).
 
-raylib-apl requires a `libtemp-c-raylib.so` file, downloadable [here](https://github.com/Brian-ED/temp-c-raylib/releases/tag/v0.1.0).
-The examples expect the file to be located at the `raylib-apl/` directory.
 
 ### Importing raylib
-To import raylib-apl as a namespace, take the code below and replace `../` with the proper path to raylib-apl:
+To import raylib-apl as a namespace, take the code below and replace `../` with the path to raylib-apl:
 ```apl
 rlDir ← '../raylib-apl/link/',⍨⊃1⎕NPARTS''
 rl ← 0⎕Fix rlDir,'raylib.apln'
