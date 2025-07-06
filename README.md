@@ -7,18 +7,18 @@ raylib-apl is a library made to write cross-platform graphical applications usin
 - Supports platforms Windows and Linux.
 - Input-methods: Keyboard, Mouse, Controler and Touchscreen.
 - Graphics: 2D, 3D, Sound, Text, Vector graphics, Images/Textures and shaders.
-- Multiple Fonts formats supported (TTF, OTF, Image fonts, AngelCode fonts)
-- Multiple texture formats supported, including compressed formats (DXT, ETC, ASTC)
+- Multiple Fonts formats supported (TTF, OTF, Image fonts, AngelCode fonts).
+- Multiple texture formats supported, including compressed formats (DXT, ETC, ASTC).
 - Full 3D support, including 3D Shapes, Models, Billboards, Heightmaps and more!
-- Flexible Materials system, supporting classic maps and PBR maps
-- Animated 3D models supported (skeletal bones animation) (IQM, M3D, glTF)
-- Shaders support, including model shaders and postprocessing shaders
-- Powerful math module for Vector, Matrix and Quaternion operations: raymath
-- Audio loading and playing with streaming support (WAV, QOA, OGG, MP3, FLAC, XM, MOD)
-- VR stereo rendering support with configurable HMD device parameters
+- Flexible Materials system, supporting classic maps and PBR maps.
+- Animated 3D models supported (skeletal bones animation) (IQM, M3D, glTF).
+- Shaders support, including model shaders and postprocessing shaders.
+- Powerful math module for Vector, Matrix and Quaternion operations: raymath.
+- Audio loading and playing with streaming support (WAV, QOA, OGG, MP3, FLAC, XM, MOD).
+- VR stereo rendering support with configurable HMD device parameters.
 
 # Warning
-Breaking changes to any feature in raylib-apl should be expected for now, as this library is very young and experimental. If you experience code 999, there was likely a "segfault"/error in raylib, and so a bug report would be appreciated
+Breaking changes to any feature in raylib-apl should be expected for now, as this library is very young and experimental. If you experience code 999, there was likely a "segfault"/error in raylib, and so a bug report would be appreciated.
 
 # Documentation
 
