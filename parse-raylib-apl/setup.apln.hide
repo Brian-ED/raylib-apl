@@ -40,7 +40,7 @@ atomTypes←∪atomTypes
 PlatfromToLibFile ← {
   platform←⍵
   'Windows'≡platform:'../temp-c-raylib.dll'
-  'Darwin' ≡platform:'../libtemp-c-raylib.dylib'
+  'Mac'    ≡platform:'../libtemp-c-raylib.dylib'
   'Linux'  ≡platform:'../libtemp-c-raylib.so'
   ('Unknown platform (',platform,')') Assert 0
 }

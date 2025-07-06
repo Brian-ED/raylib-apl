@@ -3,9 +3,13 @@
 *.code-workspace
 
 # built from https://github.com/Brian-ED/temp-c-raylib
+# Linux
 libtemp-c-raylib.so
+# Windows
 temp-c-raylib.dll
 temp-c-raylib.pdb
+# Mac-OS
+libtemp-c-raylib.dylib
 
 # Incomplete examples
 examples/6_shaders
