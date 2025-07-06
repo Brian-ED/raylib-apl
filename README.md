@@ -18,7 +18,9 @@ raylib-apl is a library made to write cross-platform graphical applications usin
 - VR stereo rendering support with configurable HMD device parameters.
 
 # Warning
-Breaking changes to any feature in raylib-apl should be expected for now, as this library is very young and experimental. If you experience code 999, there was likely a "segfault"/error in raylib, and so a bug report would be appreciated.
+Breaking changes to any feature in raylib-apl should be expected for now, as this library is very young and experimental. If you experience code 999, there was likely a "segfault"/error in raylib-apl, and so a bug report would be appreciated.
+
+Currently raylib-apl provides 4 different libraries; raylib, raygui, physac, and rlgl. Currently only raylib is stable, due to a lack of testing for the other 3.
 
 # Documentation
 
