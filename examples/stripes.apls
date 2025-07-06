@@ -1,23 +1,21 @@
 #!cd $dir && /usr/bin/dyalogscript $fileName
 rlDir ← '../../raylib-apl/link/',⍨⊃1⎕NPARTS''
 rl ← 0⎕Fix rlDir,'raylib.apln'
-rl.Init rlDir⍬
+rl.Init rlDir
 
 rl.InitWindow 800 800 'Hello!!!'
 
-blue ← 8↑0 0 255 255
-black ← 8↑0 0 0 255
 poses ← 32×¯1+⍳11
 
-:While ~rl.WindowShouldClose
+:While ~rl.WindowShouldClose⍬
     poses +← 1
     poses |⍨← 32×9
-    rl.BeginDrawing
-        rl.ClearBackground ⊂black
+    rl.BeginDrawing⍬
+        rl.ClearBackground rl.color.black
         rl.BeginScissorMode 0 0 256 256
-            rl.DrawRectangle¨ (poses-32),¨⊂0 16 256 blue
-        rl.EndScissorMode
+            rl.DrawRectangle¨ (poses-32),¨⊂0 16 256 rl.color.blue
+        rl.EndScissorMode⍬
         rl.DrawFPS 260 0
-    rl.EndDrawing
+    rl.EndDrawing⍬
 :EndWhile
-rl.CloseWindow
+rl.CloseWindow⍬

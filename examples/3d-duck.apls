@@ -1,30 +1,30 @@
 #!cd $dir && /usr/bin/dyalogscript $fileName
 rlDir ← '../../raylib-apl/link/',⍨⊃1⎕NPARTS''
 rl ← 0⎕Fix rlDir,'raylib.apln'
-rl.Init rlDir⍬
+rl.Init rlDir
 
 rl.InitWindow 800 800 'Hello!!!'
-rl.DisableCursor
+rl.DisableCursor⍬
 
 ⍝ Define the camera to look into our 3d world
-camera  ←⊂ 50 50 50 ⍝ Camera position
+camera ← ⍬
+camera ,←⊂ 50 50 50 ⍝ Camera position
 camera ,←⊂  0 10  0 ⍝ Camera looking at point
 camera ,←⊂  0  1  0 ⍝ Camera up vector (rotation towards target)
 camera ,←⊂ 45       ⍝ Camera field-of-view Y
 camera ,←⊂ rl.CameraProjection.CAMERA_PERSPECTIVE ⍝ Camera type
-camera ,←  4⍴0
 
-model _ ← rl.LoadModelRetPtr 'OBJ/RubberDuck_LOD0.obj'
+model ← rl.LoadModel 'OBJ/RubberDuck_LOD0.obj'
 
+frame←0
 ⍝ For every frame till user closes the window
-:While ~rl.WindowShouldClose
-
+:While ~rl.WindowShouldClose⍬
+    frame+←1
     ⍝ Look for keystrokes from user, move the camera
     camera ← rl.UpdateCamera (camera rl.CameraMode.CAMERA_THIRD_PERSON)
-
     ⍝ Preparing another buffer to draw the new frame, with white background
-    rl.BeginDrawing
-        rl.ClearBackground 8↑rl.color.white
+    rl.BeginDrawing⍬
+        rl.ClearBackground rl.color.white
 
         ⍝ Draws FPS at x=40 y=40
         rl.DrawFPS 40 40
@@ -37,15 +37,15 @@ model _ ← rl.LoadModelRetPtr 'OBJ/RubberDuck_LOD0.obj'
 
             ⍝ Draw the duck model at position
             position ← 0 0 0  ⋄  scale ← 1
-            rl.DrawModel (model position scale (8↑rl.color.white))
+            rl.DrawModel (model position scale rl.color.white)
 
         ⍝ Stop drawing 3d
-        rl.EndMode3D
+        rl.EndMode3D⍬
 
     ⍝ wait till next frame is needed, then switch to this new buffer we've drawn
-    rl.EndDrawing
+    rl.EndDrawing⍬
 :EndWhile
 
 ⍝ Unloading model, freeing it's memory.
 rl.UnloadModel model
-rl.CloseWindow
+rl.CloseWindow⍬

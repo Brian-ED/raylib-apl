@@ -1,12 +1,12 @@
 #!cd $dir && /usr/bin/dyalogscript $fileName
 rlDir ← '../../raylib-apl/link/',⍨⊃1⎕NPARTS''
 rl ← 0⎕Fix rlDir,'raylib.apln'
-rl.Init rlDir⍬
+rl.Init rlDir
 
 rl.InitWindow 800 800 'abc'
-:While ~rl.WindowShouldClose
-    rl.BeginDrawing
-        rl.ClearBackground ⊂8↑rl.color.gray
-    rl.EndDrawing
+:While ~rl.WindowShouldClose⍬
+    rl.BeginDrawing⍬
+        rl.ClearBackground rl.color.gray
+    rl.EndDrawing⍬
 :EndWhile
-rl.CloseWindow
+rl.CloseWindow⍬

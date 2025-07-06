@@ -274,58 +274,59 @@ RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE2     ← 'texture2'          ⍝ textur
 :EndNamespace
 
 
-⍝ Mode is either 3:All changes, 2:only manual changes 1:only automatic changes, or 0: no changes
-∇{mode} Init (pathToMe pathToBinaryArg)
-__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__ ← 0 ⎕FIX pathToMe,'../parse-raylib-apl/setup.apln.hide'
-⎕ ← __PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.R
-'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯3
-'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯2
-'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯9
-⎕EX '__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__' '__PLEASE_DO_NOT_REPLACE_EXISTING_VAR2__'
-
-:If ⍬≡pathToBinaryArg
-  pathToBinaryArg ← pathToMe,{⍵:'../libtemp-c-raylib.so'⋄'..\temp-c-raylib.dll'}'Linux'≡'-64'~⍨⊃#⎕WG'APLVersion'
-:Endif
-pathToBinary ← pathToBinaryArg
-:If 0=⎕NC 'mode'
-  mode ← 3 ⍝ Default is All changes
-:EndIf
-
+bool ← 'I1'
+c    ← 'I1'
+i    ← 'I4'
+f    ← 'F4'
+u    ← 'U4'
+i1   ← 'I1'
+u1   ← 'U1'
+u8   ← 'U8'
+ptr  ← ,'P'
+f8   ← 'F8'
+i8   ← 'I8'
+u2   ← 'U2'
+ustr ← '=C1'
+str  ← '=0C1'
 
 Matrix ← ⍬ ⍝ Matrix, 4x4 components, column major, OpenGL style, right handed
-  Matrix,←⊂ f ⍝ m0   ⍝ Matrix first row (4 components)
-  Matrix,←⊂ f ⍝ m4   ⍝ Matrix first row (4 components)
-  Matrix,←⊂ f ⍝ m8   ⍝ Matrix first row (4 components)
-  Matrix,←⊂ f ⍝ m12  ⍝ Matrix first row (4 components)
-  Matrix,←⊂ f ⍝ m1   ⍝ Matrix second row (4 components)
-  Matrix,←⊂ f ⍝ m5   ⍝ Matrix second row (4 components)
-  Matrix,←⊂ f ⍝ m9   ⍝ Matrix second row (4 components)
-  Matrix,←⊂ f ⍝ m13  ⍝ Matrix second row (4 components)
-  Matrix,←⊂ f ⍝ m2   ⍝ Matrix third row (4 components)
-  Matrix,←⊂ f ⍝ m6   ⍝ Matrix third row (4 components)
-  Matrix,←⊂ f ⍝ m10  ⍝ Matrix third row (4 components)
-  Matrix,←⊂ f ⍝ m14  ⍝ Matrix third row (4 components)
-  Matrix,←⊂ f ⍝ m3   ⍝ Matrix fourth row (4 components)
-  Matrix,←⊂ f ⍝ m7   ⍝ Matrix fourth row (4 components)
-  Matrix,←⊂ f ⍝ m11  ⍝ Matrix fourth row (4 components)
-  Matrix,←⊂ f ⍝ m15  ⍝ Matrix fourth row (4 components)
+  Matrix,←⊂ '⋄Matrix' ⍝      ⍝
+  Matrix,←⊂ f         ⍝ m0   ⍝ Matrix first row (4 components)
+  Matrix,←⊂ f         ⍝ m4   ⍝ Matrix first row (4 components)
+  Matrix,←⊂ f         ⍝ m8   ⍝ Matrix first row (4 components)
+  Matrix,←⊂ f         ⍝ m12  ⍝ Matrix first row (4 components)
+  Matrix,←⊂ f         ⍝ m1   ⍝ Matrix second row (4 components)
+  Matrix,←⊂ f         ⍝ m5   ⍝ Matrix second row (4 components)
+  Matrix,←⊂ f         ⍝ m9   ⍝ Matrix second row (4 components)
+  Matrix,←⊂ f         ⍝ m13  ⍝ Matrix second row (4 components)
+  Matrix,←⊂ f         ⍝ m2   ⍝ Matrix third row (4 components)
+  Matrix,←⊂ f         ⍝ m6   ⍝ Matrix third row (4 components)
+  Matrix,←⊂ f         ⍝ m10  ⍝ Matrix third row (4 components)
+  Matrix,←⊂ f         ⍝ m14  ⍝ Matrix third row (4 components)
+  Matrix,←⊂ f         ⍝ m3   ⍝ Matrix fourth row (4 components)
+  Matrix,←⊂ f         ⍝ m7   ⍝ Matrix fourth row (4 components)
+  Matrix,←⊂ f         ⍝ m11  ⍝ Matrix fourth row (4 components)
+  Matrix,←⊂ f         ⍝ m15  ⍝ Matrix fourth row (4 components)
 
 rlVertexBuffer ← ⍬ ⍝ Dynamic vertex buffers (position + texcoords + colors + indices arrays)
-  rlVertexBuffer,←⊂ i       ⍝ elementCount  ⍝ Number of elements in the buffer (QUADS)
-  rlVertexBuffer,←⊂ '=',f   ⍝ vertices      ⍝ Vertex position (XYZ - 3 components per vertex) (shader-location = 0)
-  rlVertexBuffer,←⊂ '=',f   ⍝ texcoords     ⍝ Vertex texture coordinates (UV - 2 components per vertex) (shader-location = 1)
-  rlVertexBuffer,←⊂ ustr    ⍝ colors        ⍝ Vertex colors (RGBA - 4 components per vertex) (shader-location = 3)
-  rlVertexBuffer,←⊂ '=',u   ⍝ indices       ⍝ Vertex indices (in case vertex data comes indexed) (6 indices per quad)
-  rlVertexBuffer,←⊂ u       ⍝ vaoId         ⍝ OpenGL Vertex Array Object id
-  rlVertexBuffer,←⊂ u,'[4]' ⍝ vboId         ⍝ OpenGL Vertex Buffer Objects id (4 types of vertex data)
+  rlVertexBuffer,←⊂ '⋄rlVertexBuffer' ⍝               ⍝
+  rlVertexBuffer,←⊂ i                 ⍝ elementCount  ⍝ Number of elements in the buffer (QUADS)
+  rlVertexBuffer,←⊂ '=',f             ⍝ vertices      ⍝ Vertex position (XYZ - 3 components per vertex) (shader-location = 0)
+  rlVertexBuffer,←⊂ '=',f             ⍝ texcoords     ⍝ Vertex texture coordinates (UV - 2 components per vertex) (shader-location = 1)
+  rlVertexBuffer,←⊂ ustr              ⍝ colors        ⍝ Vertex colors (RGBA - 4 components per vertex) (shader-location = 3)
+  rlVertexBuffer,←⊂ '=',u             ⍝ indices       ⍝ Vertex indices (in case vertex data comes indexed) (6 indices per quad)
+  rlVertexBuffer,←⊂ u                 ⍝ vaoId         ⍝ OpenGL Vertex Array Object id
+  rlVertexBuffer,←⊂ u,'[4]'           ⍝ vboId         ⍝ OpenGL Vertex Buffer Objects id (4 types of vertex data)
 
 rlDrawCall ← ⍬ ⍝ of those state-change happens (this is done in core module)
-  rlDrawCall,←⊂ i ⍝ mode             ⍝ Drawing mode: LINES, TRIANGLES, QUADS
-  rlDrawCall,←⊂ i ⍝ vertexCount      ⍝ Number of vertex of the draw
-  rlDrawCall,←⊂ i ⍝ vertexAlignment  ⍝ Number of vertex required for index alignment (LINES, TRIANGLES)
-  rlDrawCall,←⊂ u ⍝ textureId        ⍝ Texture id to be used on the draw -> Use to create new draw call if changes
+  rlDrawCall,←⊂ '⋄rlDrawCall' ⍝                  ⍝
+  rlDrawCall,←⊂ i             ⍝ mode             ⍝ Drawing mode: LINES, TRIANGLES, QUADS
+  rlDrawCall,←⊂ i             ⍝ vertexCount      ⍝ Number of vertex of the draw
+  rlDrawCall,←⊂ i             ⍝ vertexAlignment  ⍝ Number of vertex required for index alignment (LINES, TRIANGLES)
+  rlDrawCall,←⊂ u             ⍝ textureId        ⍝ Texture id to be used on the draw -> Use to create new draw call if changes
 
 rlRenderBatch ← ⍬ ⍝ rlRenderBatch type
+  rlRenderBatch,←⊂ '⋄rlRenderBatch'   ⍝                ⍝
   rlRenderBatch,←⊂ i                  ⍝ bufferCount    ⍝ Number of vertex buffers (multi-buffering support)
   rlRenderBatch,←⊂ i                  ⍝ currentBuffer  ⍝ Current buffer tracking in case of multi-buffering
   rlRenderBatch,←⊂ '=',rlVertexBuffer ⍝ vertexBuffer   ⍝ Dynamic buffer(s) for vertex data
@@ -333,362 +334,179 @@ rlRenderBatch ← ⍬ ⍝ rlRenderBatch type
   rlRenderBatch,←⊂ i                  ⍝ drawCounter    ⍝ Draw calls counter
   rlRenderBatch,←⊂ f                  ⍝ currentDepth   ⍝ Current depth value for next draw
 
-rlglData ← ⍬ ⍝
-  rlglData,←⊂ '=',rlRenderBatch                        ⍝ currentBatch               ⍝ Current render batch
-  rlglData,←⊂ rlRenderBatch                            ⍝ defaultBatch               ⍝ Default internal render batch
-  rlglData,←⊂ i                                        ⍝ vertexCounter              ⍝ Current active render batch vertex counter (generic, used for all batches)
-  rlglData,←⊂ f                                        ⍝ texcoordx                  ⍝ Current active texture coordinate (added on glVertex*())
-  rlglData,←⊂ f                                        ⍝ texcoordy                  ⍝ Current active texture coordinate (added on glVertex*())
-  rlglData,←⊂ f                                        ⍝ normalx                    ⍝ Current active normal (added on glVertex*())
-  rlglData,←⊂ f                                        ⍝ normaly                    ⍝ Current active normal (added on glVertex*())
-  rlglData,←⊂ f                                        ⍝ normalz                    ⍝ Current active normal (added on glVertex*())
-  rlglData,←⊂ u1                                       ⍝ colorr                     ⍝ Current active color (added on glVertex*())
-  rlglData,←⊂ u1                                       ⍝ colorg                     ⍝ Current active color (added on glVertex*())
-  rlglData,←⊂ u1                                       ⍝ colorb                     ⍝ Current active color (added on glVertex*())
-  rlglData,←⊂ u1                                       ⍝ colora                     ⍝ Current active color (added on glVertex*())
-  rlglData,←⊂ i                                        ⍝ currentMatrixMode          ⍝ Current matrix mode
-  rlglData,←⊂ '=',Matrix                               ⍝ currentMatrix              ⍝ Current matrix pointer
-  rlglData,←⊂ Matrix                                   ⍝ modelview                  ⍝ Default modelview matrix
-  rlglData,←⊂ Matrix                                   ⍝ projection                 ⍝ Default projection matrix
-  rlglData,←⊂ Matrix                                   ⍝ transform                  ⍝ Transform matrix to be used with rlTranslate, rlRotate, rlScale
-  rlglData,←⊂ bool                                     ⍝ transformRequired          ⍝ Require transform matrix application to current draw-call vertex (if required)
-  rlglData,←⊂ Matrix,'[EZIS_KCATS_XIRTAM_XAM_LR]'      ⍝ stack                      ⍝ Matrix stack for push/pop
-  rlglData,←⊂ i                                        ⍝ stackCounter               ⍝ Matrix stack counter
-  rlglData,←⊂ u                                        ⍝ defaultTextureId           ⍝ Default texture used on shapes/poly drawing (required by shader)
-  rlglData,←⊂ u,'[STINU_ERUTXET_XAM_HCTAB_TLUAFED_LR]' ⍝ activeTextureId            ⍝ Active texture ids to be enabled on batch drawing (0 active by default)
-  rlglData,←⊂ u                                        ⍝ defaultVShaderId           ⍝ Default vertex shader id (used by default shader program)
-  rlglData,←⊂ u                                        ⍝ defaultFShaderId           ⍝ Default fragment shader id (used by default shader program)
-  rlglData,←⊂ u                                        ⍝ defaultShaderId            ⍝ Default shader program id, supports vertex color and diffuse texture
-  rlglData,←⊂ '=',i                                    ⍝ defaultShaderLocs          ⍝ Default shader locations pointer to be used on rendering
-  rlglData,←⊂ u                                        ⍝ currentShaderId            ⍝ Current shader id to be used on rendering (by default, defaultShaderId)
-  rlglData,←⊂ '=',i                                    ⍝ currentShaderLocs          ⍝ Current shader locations pointer to be used on rendering (by default, defaultShaderLocs)
-  rlglData,←⊂ bool                                     ⍝ stereoRender               ⍝ Stereo rendering flag
-  rlglData,←⊂ Matrix,'[2]'                             ⍝ projectionStereo           ⍝ VR stereo rendering eyes projection matrices
-  rlglData,←⊂ Matrix,'[2]'                             ⍝ viewOffsetStereo           ⍝ VR stereo rendering eyes view offset matrices
-  rlglData,←⊂ i                                        ⍝ currentBlendMode           ⍝ Blending mode active
-  rlglData,←⊂ i                                        ⍝ glBlendSrcFactor           ⍝ Blending source factor
-  rlglData,←⊂ i                                        ⍝ glBlendDstFactor           ⍝ Blending destination factor
-  rlglData,←⊂ i                                        ⍝ glBlendEquation            ⍝ Blending equation
-  rlglData,←⊂ i                                        ⍝ glBlendSrcFactorRGB        ⍝ Blending source RGB factor
-  rlglData,←⊂ i                                        ⍝ glBlendDestFactorRGB       ⍝ Blending destination RGB factor
-  rlglData,←⊂ i                                        ⍝ glBlendSrcFactorAlpha      ⍝ Blending source alpha factor
-  rlglData,←⊂ i                                        ⍝ glBlendDestFactorAlpha     ⍝ Blending destination alpha factor
-  rlglData,←⊂ i                                        ⍝ glBlendEquationRGB         ⍝ Blending equation for RGB
-  rlglData,←⊂ i                                        ⍝ glBlendEquationAlpha       ⍝ Blending equation for alpha
-  rlglData,←⊂ bool                                     ⍝ glCustomBlendModeModified  ⍝ Custom blending factor and equation modification status
-  rlglData,←⊂ i                                        ⍝ framebufferWidth           ⍝ Current framebuffer width
-  rlglData,←⊂ i                                        ⍝ framebufferHeight          ⍝ Current framebuffer height
-
 rl_float16 ← ⍬ ⍝ Auxiliar matrix math functions
-  rl_float16,←⊂ f,'[16]' ⍝ v  ⍝
+  rl_float16,←⊂ '⋄rl_float16' ⍝    ⍝
+  rl_float16,←⊂ f,'[16]'      ⍝ v  ⍝
+⍝ Mode is either 3:All changes, 2:only manual changes 1:only automatic changes, or 0: no changes
+∇{mode} Init pathToRaylibDotAPLN
 
-'rlMatrixModeRAYLIB'                            ⎕NA               R('rlMatrixMode'                             (,⊂ i                     )) ⍝ mode                                                                 ⍝ Choose the current matrix to be transformed
-'rlMatrixModeRetPtrRAYLIB'                      ⎕NA               R('rlMatrixModeRetPtr'                       (,⊂ i                     )) ⍝ mode                                                                 ⍝ Choose the current matrix to be transformed
-'rlPushMatrixRAYLIB'                            ⎕NA               R('rlPushMatrix'                             (⍬                        )) ⍝                                                                      ⍝ Push the current matrix to stack
-'rlPushMatrixRetPtrRAYLIB'                      ⎕NA               R('rlPushMatrixRetPtr'                       (⍬                        )) ⍝                                                                      ⍝ Push the current matrix to stack
-'rlPopMatrixRAYLIB'                             ⎕NA               R('rlPopMatrix'                              (⍬                        )) ⍝                                                                      ⍝ Pop latest inserted matrix from stack
-'rlPopMatrixRetPtrRAYLIB'                       ⎕NA               R('rlPopMatrixRetPtr'                        (⍬                        )) ⍝                                                                      ⍝ Pop latest inserted matrix from stack
-'rlLoadIdentityRAYLIB'                          ⎕NA               R('rlLoadIdentity'                           (⍬                        )) ⍝                                                                      ⍝ Reset current matrix to identity matrix
-'rlLoadIdentityRetPtrRAYLIB'                    ⎕NA               R('rlLoadIdentityRetPtr'                     (⍬                        )) ⍝                                                                      ⍝ Reset current matrix to identity matrix
-'rlTranslatefRAYLIB'                            ⎕NA               R('rlTranslatef'                             (f f f                    )) ⍝ x y z                                                                ⍝ Multiply the current matrix by a translation matrix
-'rlTranslatefRetPtrRAYLIB'                      ⎕NA               R('rlTranslatefRetPtr'                       (f f f                    )) ⍝ x y z                                                                ⍝ Multiply the current matrix by a translation matrix
-'rlRotatefRAYLIB'                               ⎕NA               R('rlRotatef'                                (f f f f                  )) ⍝ angle x y z                                                          ⍝ Multiply the current matrix by a rotation matrix
-'rlRotatefRetPtrRAYLIB'                         ⎕NA               R('rlRotatefRetPtr'                          (f f f f                  )) ⍝ angle x y z                                                          ⍝ Multiply the current matrix by a rotation matrix
-'rlScalefRAYLIB'                                ⎕NA               R('rlScalef'                                 (f f f                    )) ⍝ x y z                                                                ⍝ Multiply the current matrix by a scaling matrix
-'rlScalefRetPtrRAYLIB'                          ⎕NA               R('rlScalefRetPtr'                           (f f f                    )) ⍝ x y z                                                                ⍝ Multiply the current matrix by a scaling matrix
-'rlMultMatrixfRAYLIB'                           ⎕NA               R('rlMultMatrixf'                            (,⊂ ('=',f)               )) ⍝ matf                                                                 ⍝ Multiply the current matrix by another matrix
-'rlMultMatrixfRetPtrRAYLIB'                     ⎕NA               R('rlMultMatrixfRetPtr'                      (,⊂ ('=',f)               )) ⍝ matf                                                                 ⍝ Multiply the current matrix by another matrix
-'rlFrustumRAYLIB'                               ⎕NA               R('rlFrustum'                                (f8 f8 f8 f8 f8 f8        )) ⍝ left right bottom top znear zfar                                     ⍝
-'rlFrustumRetPtrRAYLIB'                         ⎕NA               R('rlFrustumRetPtr'                          (f8 f8 f8 f8 f8 f8        )) ⍝ left right bottom top znear zfar                                     ⍝
-'rlOrthoRAYLIB'                                 ⎕NA               R('rlOrtho'                                  (f8 f8 f8 f8 f8 f8        )) ⍝ left right bottom top znear zfar                                     ⍝
-'rlOrthoRetPtrRAYLIB'                           ⎕NA               R('rlOrthoRetPtr'                            (f8 f8 f8 f8 f8 f8        )) ⍝ left right bottom top znear zfar                                     ⍝
-'rlViewportRAYLIB'                              ⎕NA               R('rlViewport'                               (i i i i                  )) ⍝ x y width height                                                     ⍝ Set the viewport area
-'rlViewportRetPtrRAYLIB'                        ⎕NA               R('rlViewportRetPtr'                         (i i i i                  )) ⍝ x y width height                                                     ⍝ Set the viewport area
-'rlSetClipPlanesRAYLIB'                         ⎕NA               R('rlSetClipPlanes'                          (f8 f8                    )) ⍝ nearPlane farPlane                                                   ⍝ Set clip planes distances
-'rlSetClipPlanesRetPtrRAYLIB'                   ⎕NA               R('rlSetClipPlanesRetPtr'                    (f8 f8                    )) ⍝ nearPlane farPlane                                                   ⍝ Set clip planes distances
-'rlGetCullDistanceNearRAYLIB'                   ⎕NA f8            R('rlGetCullDistanceNear'                    (⍬                        )) ⍝                                                                      ⍝ Get cull plane distance near
-'rlGetCullDistanceNearRetPtrRAYLIB'             ⎕NA               R('rlGetCullDistanceNearRetPtr'              (,⊂ ('>',f8)              )) ⍝                                                                      ⍝ Get cull plane distance near
-'rlGetCullDistanceFarRAYLIB'                    ⎕NA f8            R('rlGetCullDistanceFar'                     (⍬                        )) ⍝                                                                      ⍝ Get cull plane distance far
-'rlGetCullDistanceFarRetPtrRAYLIB'              ⎕NA               R('rlGetCullDistanceFarRetPtr'               (,⊂ ('>',f8)              )) ⍝                                                                      ⍝ Get cull plane distance far
-'rlBeginRAYLIB'                                 ⎕NA               R('rlBegin'                                  (,⊂ i                     )) ⍝ mode                                                                 ⍝ Initialize drawing mode (how to organize vertex)
-'rlBeginRetPtrRAYLIB'                           ⎕NA               R('rlBeginRetPtr'                            (,⊂ i                     )) ⍝ mode                                                                 ⍝ Initialize drawing mode (how to organize vertex)
-'rlEndRAYLIB'                                   ⎕NA               R('rlEnd'                                    (⍬                        )) ⍝                                                                      ⍝ Finish vertex providing
-'rlEndRetPtrRAYLIB'                             ⎕NA               R('rlEndRetPtr'                              (⍬                        )) ⍝                                                                      ⍝ Finish vertex providing
-'rlVertex2iRAYLIB'                              ⎕NA               R('rlVertex2i'                               (i i                      )) ⍝ x y                                                                  ⍝ Define one vertex (position) - 2 int
-'rlVertex2iRetPtrRAYLIB'                        ⎕NA               R('rlVertex2iRetPtr'                         (i i                      )) ⍝ x y                                                                  ⍝ Define one vertex (position) - 2 int
-'rlVertex2fRAYLIB'                              ⎕NA               R('rlVertex2f'                               (f f                      )) ⍝ x y                                                                  ⍝ Define one vertex (position) - 2 float
-'rlVertex2fRetPtrRAYLIB'                        ⎕NA               R('rlVertex2fRetPtr'                         (f f                      )) ⍝ x y                                                                  ⍝ Define one vertex (position) - 2 float
-'rlVertex3fRAYLIB'                              ⎕NA               R('rlVertex3f'                               (f f f                    )) ⍝ x y z                                                                ⍝ Define one vertex (position) - 3 float
-'rlVertex3fRetPtrRAYLIB'                        ⎕NA               R('rlVertex3fRetPtr'                         (f f f                    )) ⍝ x y z                                                                ⍝ Define one vertex (position) - 3 float
-'rlTexCoord2fRAYLIB'                            ⎕NA               R('rlTexCoord2f'                             (f f                      )) ⍝ x y                                                                  ⍝ Define one vertex (texture coordinate) - 2 float
-'rlTexCoord2fRetPtrRAYLIB'                      ⎕NA               R('rlTexCoord2fRetPtr'                       (f f                      )) ⍝ x y                                                                  ⍝ Define one vertex (texture coordinate) - 2 float
-'rlNormal3fRAYLIB'                              ⎕NA               R('rlNormal3f'                               (f f f                    )) ⍝ x y z                                                                ⍝ Define one vertex (normal) - 3 float
-'rlNormal3fRetPtrRAYLIB'                        ⎕NA               R('rlNormal3fRetPtr'                         (f f f                    )) ⍝ x y z                                                                ⍝ Define one vertex (normal) - 3 float
-'rlColor4ubRAYLIB'                              ⎕NA               R('rlColor4ub'                               (u1 u1 u1 u1              )) ⍝ r g b a                                                              ⍝ Define one vertex (color) - 4 byte
-'rlColor4ubRetPtrRAYLIB'                        ⎕NA               R('rlColor4ubRetPtr'                         (u1 u1 u1 u1              )) ⍝ r g b a                                                              ⍝ Define one vertex (color) - 4 byte
-'rlColor3fRAYLIB'                               ⎕NA               R('rlColor3f'                                (f f f                    )) ⍝ x y z                                                                ⍝ Define one vertex (color) - 3 float
-'rlColor3fRetPtrRAYLIB'                         ⎕NA               R('rlColor3fRetPtr'                          (f f f                    )) ⍝ x y z                                                                ⍝ Define one vertex (color) - 3 float
-'rlColor4fRAYLIB'                               ⎕NA               R('rlColor4f'                                (f f f f                  )) ⍝ x y z w                                                              ⍝ Define one vertex (color) - 4 float
-'rlColor4fRetPtrRAYLIB'                         ⎕NA               R('rlColor4fRetPtr'                          (f f f f                  )) ⍝ x y z w                                                              ⍝ Define one vertex (color) - 4 float
-'rlEnableVertexArrayRAYLIB'                     ⎕NA bool          R('rlEnableVertexArray'                      (,⊂ u                     )) ⍝ vaoId                                                                ⍝ Enable vertex array (VAO, if supported)
-'rlEnableVertexArrayRetPtrRAYLIB'               ⎕NA               R('rlEnableVertexArrayRetPtr'                (('>',bool) u             )) ⍝ vaoId                                                                ⍝ Enable vertex array (VAO, if supported)
-'rlDisableVertexArrayRAYLIB'                    ⎕NA               R('rlDisableVertexArray'                     (⍬                        )) ⍝                                                                      ⍝ Disable vertex array (VAO, if supported)
-'rlDisableVertexArrayRetPtrRAYLIB'              ⎕NA               R('rlDisableVertexArrayRetPtr'               (⍬                        )) ⍝                                                                      ⍝ Disable vertex array (VAO, if supported)
-'rlEnableVertexBufferRAYLIB'                    ⎕NA               R('rlEnableVertexBuffer'                     (,⊂ u                     )) ⍝ id                                                                   ⍝ Enable vertex buffer (VBO)
-'rlEnableVertexBufferRetPtrRAYLIB'              ⎕NA               R('rlEnableVertexBufferRetPtr'               (,⊂ u                     )) ⍝ id                                                                   ⍝ Enable vertex buffer (VBO)
-'rlDisableVertexBufferRAYLIB'                   ⎕NA               R('rlDisableVertexBuffer'                    (⍬                        )) ⍝                                                                      ⍝ Disable vertex buffer (VBO)
-'rlDisableVertexBufferRetPtrRAYLIB'             ⎕NA               R('rlDisableVertexBufferRetPtr'              (⍬                        )) ⍝                                                                      ⍝ Disable vertex buffer (VBO)
-'rlEnableVertexBufferElementRAYLIB'             ⎕NA               R('rlEnableVertexBufferElement'              (,⊂ u                     )) ⍝ id                                                                   ⍝ Enable vertex buffer element (VBO element)
-'rlEnableVertexBufferElementRetPtrRAYLIB'       ⎕NA               R('rlEnableVertexBufferElementRetPtr'        (,⊂ u                     )) ⍝ id                                                                   ⍝ Enable vertex buffer element (VBO element)
-'rlDisableVertexBufferElementRAYLIB'            ⎕NA               R('rlDisableVertexBufferElement'             (⍬                        )) ⍝                                                                      ⍝ Disable vertex buffer element (VBO element)
-'rlDisableVertexBufferElementRetPtrRAYLIB'      ⎕NA               R('rlDisableVertexBufferElementRetPtr'       (⍬                        )) ⍝                                                                      ⍝ Disable vertex buffer element (VBO element)
-'rlEnableVertexAttributeRAYLIB'                 ⎕NA               R('rlEnableVertexAttribute'                  (,⊂ u                     )) ⍝ index                                                                ⍝ Enable vertex attribute index
-'rlEnableVertexAttributeRetPtrRAYLIB'           ⎕NA               R('rlEnableVertexAttributeRetPtr'            (,⊂ u                     )) ⍝ index                                                                ⍝ Enable vertex attribute index
-'rlDisableVertexAttributeRAYLIB'                ⎕NA               R('rlDisableVertexAttribute'                 (,⊂ u                     )) ⍝ index                                                                ⍝ Disable vertex attribute index
-'rlDisableVertexAttributeRetPtrRAYLIB'          ⎕NA               R('rlDisableVertexAttributeRetPtr'           (,⊂ u                     )) ⍝ index                                                                ⍝ Disable vertex attribute index
-'rlActiveTextureSlotRAYLIB'                     ⎕NA               R('rlActiveTextureSlot'                      (,⊂ i                     )) ⍝ slot                                                                 ⍝ Select and active a texture slot
-'rlActiveTextureSlotRetPtrRAYLIB'               ⎕NA               R('rlActiveTextureSlotRetPtr'                (,⊂ i                     )) ⍝ slot                                                                 ⍝ Select and active a texture slot
-'rlEnableTextureRAYLIB'                         ⎕NA               R('rlEnableTexture'                          (,⊂ u                     )) ⍝ id                                                                   ⍝ Enable texture
-'rlEnableTextureRetPtrRAYLIB'                   ⎕NA               R('rlEnableTextureRetPtr'                    (,⊂ u                     )) ⍝ id                                                                   ⍝ Enable texture
-'rlDisableTextureRAYLIB'                        ⎕NA               R('rlDisableTexture'                         (⍬                        )) ⍝                                                                      ⍝ Disable texture
-'rlDisableTextureRetPtrRAYLIB'                  ⎕NA               R('rlDisableTextureRetPtr'                   (⍬                        )) ⍝                                                                      ⍝ Disable texture
-'rlEnableTextureCubemapRAYLIB'                  ⎕NA               R('rlEnableTextureCubemap'                   (,⊂ u                     )) ⍝ id                                                                   ⍝ Enable texture cubemap
-'rlEnableTextureCubemapRetPtrRAYLIB'            ⎕NA               R('rlEnableTextureCubemapRetPtr'             (,⊂ u                     )) ⍝ id                                                                   ⍝ Enable texture cubemap
-'rlDisableTextureCubemapRAYLIB'                 ⎕NA               R('rlDisableTextureCubemap'                  (⍬                        )) ⍝                                                                      ⍝ Disable texture cubemap
-'rlDisableTextureCubemapRetPtrRAYLIB'           ⎕NA               R('rlDisableTextureCubemapRetPtr'            (⍬                        )) ⍝                                                                      ⍝ Disable texture cubemap
-'rlTextureParametersRAYLIB'                     ⎕NA               R('rlTextureParameters'                      (u i i                    )) ⍝ id param value                                                       ⍝ Set texture parameters (filter, wrap)
-'rlTextureParametersRetPtrRAYLIB'               ⎕NA               R('rlTextureParametersRetPtr'                (u i i                    )) ⍝ id param value                                                       ⍝ Set texture parameters (filter, wrap)
-'rlCubemapParametersRAYLIB'                     ⎕NA               R('rlCubemapParameters'                      (u i i                    )) ⍝ id param value                                                       ⍝ Set cubemap parameters (filter, wrap)
-'rlCubemapParametersRetPtrRAYLIB'               ⎕NA               R('rlCubemapParametersRetPtr'                (u i i                    )) ⍝ id param value                                                       ⍝ Set cubemap parameters (filter, wrap)
-'rlEnableShaderRAYLIB'                          ⎕NA               R('rlEnableShader'                           (,⊂ u                     )) ⍝ id                                                                   ⍝ Enable shader program
-'rlEnableShaderRetPtrRAYLIB'                    ⎕NA               R('rlEnableShaderRetPtr'                     (,⊂ u                     )) ⍝ id                                                                   ⍝ Enable shader program
-'rlDisableShaderRAYLIB'                         ⎕NA               R('rlDisableShader'                          (⍬                        )) ⍝                                                                      ⍝ Disable shader program
-'rlDisableShaderRetPtrRAYLIB'                   ⎕NA               R('rlDisableShaderRetPtr'                    (⍬                        )) ⍝                                                                      ⍝ Disable shader program
-'rlEnableFramebufferRAYLIB'                     ⎕NA               R('rlEnableFramebuffer'                      (,⊂ u                     )) ⍝ id                                                                   ⍝ Enable render texture (fbo)
-'rlEnableFramebufferRetPtrRAYLIB'               ⎕NA               R('rlEnableFramebufferRetPtr'                (,⊂ u                     )) ⍝ id                                                                   ⍝ Enable render texture (fbo)
-'rlDisableFramebufferRAYLIB'                    ⎕NA               R('rlDisableFramebuffer'                     (⍬                        )) ⍝                                                                      ⍝ Disable render texture (fbo), return to default framebuffer
-'rlDisableFramebufferRetPtrRAYLIB'              ⎕NA               R('rlDisableFramebufferRetPtr'               (⍬                        )) ⍝                                                                      ⍝ Disable render texture (fbo), return to default framebuffer
-'rlGetActiveFramebufferRAYLIB'                  ⎕NA u             R('rlGetActiveFramebuffer'                   (⍬                        )) ⍝                                                                      ⍝ Get the currently active render texture (fbo), 0 for default framebuffer
-'rlGetActiveFramebufferRetPtrRAYLIB'            ⎕NA               R('rlGetActiveFramebufferRetPtr'             (,⊂ ('>',u)               )) ⍝                                                                      ⍝ Get the currently active render texture (fbo), 0 for default framebuffer
-'rlActiveDrawBuffersRAYLIB'                     ⎕NA               R('rlActiveDrawBuffers'                      (,⊂ i                     )) ⍝ count                                                                ⍝ Activate multiple draw color buffers
-'rlActiveDrawBuffersRetPtrRAYLIB'               ⎕NA               R('rlActiveDrawBuffersRetPtr'                (,⊂ i                     )) ⍝ count                                                                ⍝ Activate multiple draw color buffers
-'rlBlitFramebufferRAYLIB'                       ⎕NA               R('rlBlitFramebuffer'                        (i i i i i i i i i        )) ⍝ srcX srcY srcWidth srcHeight dstX dstY dstWidth dstHeight bufferMask ⍝ Blit active framebuffer to main framebuffer
-'rlBlitFramebufferRetPtrRAYLIB'                 ⎕NA               R('rlBlitFramebufferRetPtr'                  (i i i i i i i i i        )) ⍝ srcX srcY srcWidth srcHeight dstX dstY dstWidth dstHeight bufferMask ⍝ Blit active framebuffer to main framebuffer
-'rlBindFramebufferRAYLIB'                       ⎕NA               R('rlBindFramebuffer'                        (u u                      )) ⍝ target framebuffer                                                   ⍝ Bind framebuffer (FBO)
-'rlBindFramebufferRetPtrRAYLIB'                 ⎕NA               R('rlBindFramebufferRetPtr'                  (u u                      )) ⍝ target framebuffer                                                   ⍝ Bind framebuffer (FBO)
-'rlEnableColorBlendRAYLIB'                      ⎕NA               R('rlEnableColorBlend'                       (⍬                        )) ⍝                                                                      ⍝ Enable color blending
-'rlEnableColorBlendRetPtrRAYLIB'                ⎕NA               R('rlEnableColorBlendRetPtr'                 (⍬                        )) ⍝                                                                      ⍝ Enable color blending
-'rlDisableColorBlendRAYLIB'                     ⎕NA               R('rlDisableColorBlend'                      (⍬                        )) ⍝                                                                      ⍝ Disable color blending
-'rlDisableColorBlendRetPtrRAYLIB'               ⎕NA               R('rlDisableColorBlendRetPtr'                (⍬                        )) ⍝                                                                      ⍝ Disable color blending
-'rlEnableDepthTestRAYLIB'                       ⎕NA               R('rlEnableDepthTest'                        (⍬                        )) ⍝                                                                      ⍝ Enable depth test
-'rlEnableDepthTestRetPtrRAYLIB'                 ⎕NA               R('rlEnableDepthTestRetPtr'                  (⍬                        )) ⍝                                                                      ⍝ Enable depth test
-'rlDisableDepthTestRAYLIB'                      ⎕NA               R('rlDisableDepthTest'                       (⍬                        )) ⍝                                                                      ⍝ Disable depth test
-'rlDisableDepthTestRetPtrRAYLIB'                ⎕NA               R('rlDisableDepthTestRetPtr'                 (⍬                        )) ⍝                                                                      ⍝ Disable depth test
-'rlEnableDepthMaskRAYLIB'                       ⎕NA               R('rlEnableDepthMask'                        (⍬                        )) ⍝                                                                      ⍝ Enable depth write
-'rlEnableDepthMaskRetPtrRAYLIB'                 ⎕NA               R('rlEnableDepthMaskRetPtr'                  (⍬                        )) ⍝                                                                      ⍝ Enable depth write
-'rlDisableDepthMaskRAYLIB'                      ⎕NA               R('rlDisableDepthMask'                       (⍬                        )) ⍝                                                                      ⍝ Disable depth write
-'rlDisableDepthMaskRetPtrRAYLIB'                ⎕NA               R('rlDisableDepthMaskRetPtr'                 (⍬                        )) ⍝                                                                      ⍝ Disable depth write
-'rlEnableBackfaceCullingRAYLIB'                 ⎕NA               R('rlEnableBackfaceCulling'                  (⍬                        )) ⍝                                                                      ⍝ Enable backface culling
-'rlEnableBackfaceCullingRetPtrRAYLIB'           ⎕NA               R('rlEnableBackfaceCullingRetPtr'            (⍬                        )) ⍝                                                                      ⍝ Enable backface culling
-'rlDisableBackfaceCullingRAYLIB'                ⎕NA               R('rlDisableBackfaceCulling'                 (⍬                        )) ⍝                                                                      ⍝ Disable backface culling
-'rlDisableBackfaceCullingRetPtrRAYLIB'          ⎕NA               R('rlDisableBackfaceCullingRetPtr'           (⍬                        )) ⍝                                                                      ⍝ Disable backface culling
-'rlColorMaskRAYLIB'                             ⎕NA               R('rlColorMask'                              (bool bool bool bool      )) ⍝ r g b a                                                              ⍝ Color mask control
-'rlColorMaskRetPtrRAYLIB'                       ⎕NA               R('rlColorMaskRetPtr'                        (bool bool bool bool      )) ⍝ r g b a                                                              ⍝ Color mask control
-'rlSetCullFaceRAYLIB'                           ⎕NA               R('rlSetCullFace'                            (,⊂ i                     )) ⍝ mode                                                                 ⍝ Set face culling mode
-'rlSetCullFaceRetPtrRAYLIB'                     ⎕NA               R('rlSetCullFaceRetPtr'                      (,⊂ i                     )) ⍝ mode                                                                 ⍝ Set face culling mode
-'rlEnableScissorTestRAYLIB'                     ⎕NA               R('rlEnableScissorTest'                      (⍬                        )) ⍝                                                                      ⍝ Enable scissor test
-'rlEnableScissorTestRetPtrRAYLIB'               ⎕NA               R('rlEnableScissorTestRetPtr'                (⍬                        )) ⍝                                                                      ⍝ Enable scissor test
-'rlDisableScissorTestRAYLIB'                    ⎕NA               R('rlDisableScissorTest'                     (⍬                        )) ⍝                                                                      ⍝ Disable scissor test
-'rlDisableScissorTestRetPtrRAYLIB'              ⎕NA               R('rlDisableScissorTestRetPtr'               (⍬                        )) ⍝                                                                      ⍝ Disable scissor test
-'rlScissorRAYLIB'                               ⎕NA               R('rlScissor'                                (i i i i                  )) ⍝ x y width height                                                     ⍝ Scissor test
-'rlScissorRetPtrRAYLIB'                         ⎕NA               R('rlScissorRetPtr'                          (i i i i                  )) ⍝ x y width height                                                     ⍝ Scissor test
-'rlEnableWireModeRAYLIB'                        ⎕NA               R('rlEnableWireMode'                         (⍬                        )) ⍝                                                                      ⍝ Enable wire mode
-'rlEnableWireModeRetPtrRAYLIB'                  ⎕NA               R('rlEnableWireModeRetPtr'                   (⍬                        )) ⍝                                                                      ⍝ Enable wire mode
-'rlEnablePointModeRAYLIB'                       ⎕NA               R('rlEnablePointMode'                        (⍬                        )) ⍝                                                                      ⍝ Enable point mode
-'rlEnablePointModeRetPtrRAYLIB'                 ⎕NA               R('rlEnablePointModeRetPtr'                  (⍬                        )) ⍝                                                                      ⍝ Enable point mode
-'rlDisableWireModeRAYLIB'                       ⎕NA               R('rlDisableWireMode'                        (⍬                        )) ⍝                                                                      ⍝ Disable wire (and point) mode
-'rlDisableWireModeRetPtrRAYLIB'                 ⎕NA               R('rlDisableWireModeRetPtr'                  (⍬                        )) ⍝                                                                      ⍝ Disable wire (and point) mode
-'rlSetLineWidthRAYLIB'                          ⎕NA               R('rlSetLineWidth'                           (,⊂ f                     )) ⍝ width                                                                ⍝ Set the line drawing width
-'rlSetLineWidthRetPtrRAYLIB'                    ⎕NA               R('rlSetLineWidthRetPtr'                     (,⊂ f                     )) ⍝ width                                                                ⍝ Set the line drawing width
-'rlGetLineWidthRAYLIB'                          ⎕NA f             R('rlGetLineWidth'                           (⍬                        )) ⍝                                                                      ⍝ Get the line drawing width
-'rlGetLineWidthRetPtrRAYLIB'                    ⎕NA               R('rlGetLineWidthRetPtr'                     (,⊂ ('>',f)               )) ⍝                                                                      ⍝ Get the line drawing width
-'rlEnableSmoothLinesRAYLIB'                     ⎕NA               R('rlEnableSmoothLines'                      (⍬                        )) ⍝                                                                      ⍝ Enable line aliasing
-'rlEnableSmoothLinesRetPtrRAYLIB'               ⎕NA               R('rlEnableSmoothLinesRetPtr'                (⍬                        )) ⍝                                                                      ⍝ Enable line aliasing
-'rlDisableSmoothLinesRAYLIB'                    ⎕NA               R('rlDisableSmoothLines'                     (⍬                        )) ⍝                                                                      ⍝ Disable line aliasing
-'rlDisableSmoothLinesRetPtrRAYLIB'              ⎕NA               R('rlDisableSmoothLinesRetPtr'               (⍬                        )) ⍝                                                                      ⍝ Disable line aliasing
-'rlEnableStereoRenderRAYLIB'                    ⎕NA               R('rlEnableStereoRender'                     (⍬                        )) ⍝                                                                      ⍝ Enable stereo rendering
-'rlEnableStereoRenderRetPtrRAYLIB'              ⎕NA               R('rlEnableStereoRenderRetPtr'               (⍬                        )) ⍝                                                                      ⍝ Enable stereo rendering
-'rlDisableStereoRenderRAYLIB'                   ⎕NA               R('rlDisableStereoRender'                    (⍬                        )) ⍝                                                                      ⍝ Disable stereo rendering
-'rlDisableStereoRenderRetPtrRAYLIB'             ⎕NA               R('rlDisableStereoRenderRetPtr'              (⍬                        )) ⍝                                                                      ⍝ Disable stereo rendering
-'rlIsStereoRenderEnabledRAYLIB'                 ⎕NA bool          R('rlIsStereoRenderEnabled'                  (⍬                        )) ⍝                                                                      ⍝ Check if stereo render is enabled
-'rlIsStereoRenderEnabledRetPtrRAYLIB'           ⎕NA               R('rlIsStereoRenderEnabledRetPtr'            (,⊂ ('>',bool)            )) ⍝                                                                      ⍝ Check if stereo render is enabled
-'rlClearColorRAYLIB'                            ⎕NA               R('rlClearColor'                             (u1 u1 u1 u1              )) ⍝ r g b a                                                              ⍝ Clear color buffer with color
-'rlClearColorRetPtrRAYLIB'                      ⎕NA               R('rlClearColorRetPtr'                       (u1 u1 u1 u1              )) ⍝ r g b a                                                              ⍝ Clear color buffer with color
-'rlClearScreenBuffersRAYLIB'                    ⎕NA               R('rlClearScreenBuffers'                     (⍬                        )) ⍝                                                                      ⍝ Clear used screen buffers (color and depth)
-'rlClearScreenBuffersRetPtrRAYLIB'              ⎕NA               R('rlClearScreenBuffersRetPtr'               (⍬                        )) ⍝                                                                      ⍝ Clear used screen buffers (color and depth)
-'rlCheckErrorsRAYLIB'                           ⎕NA               R('rlCheckErrors'                            (⍬                        )) ⍝                                                                      ⍝ Check and log OpenGL error codes
-'rlCheckErrorsRetPtrRAYLIB'                     ⎕NA               R('rlCheckErrorsRetPtr'                      (⍬                        )) ⍝                                                                      ⍝ Check and log OpenGL error codes
-'rlSetBlendModeRAYLIB'                          ⎕NA               R('rlSetBlendMode'                           (,⊂ i                     )) ⍝ mode                                                                 ⍝ Set blending mode
-'rlSetBlendModeRetPtrRAYLIB'                    ⎕NA               R('rlSetBlendModeRetPtr'                     (,⊂ i                     )) ⍝ mode                                                                 ⍝ Set blending mode
-'rlSetBlendFactorsRAYLIB'                       ⎕NA               R('rlSetBlendFactors'                        (i i i                    )) ⍝ glSrcFactor glDstFactor glEquation                                   ⍝ Set blending mode factor and equation (using OpenGL factors)
-'rlSetBlendFactorsRetPtrRAYLIB'                 ⎕NA               R('rlSetBlendFactorsRetPtr'                  (i i i                    )) ⍝ glSrcFactor glDstFactor glEquation                                   ⍝ Set blending mode factor and equation (using OpenGL factors)
-'rlSetBlendFactorsSeparateRAYLIB'               ⎕NA               R('rlSetBlendFactorsSeparate'                (i i i i i i              )) ⍝ glSrcRGB glDstRGB glSrcAlpha glDstAlpha glEqRGB glEqAlpha            ⍝ Set blending mode factors and equations separately (using OpenGL factors)
-'rlSetBlendFactorsSeparateRetPtrRAYLIB'         ⎕NA               R('rlSetBlendFactorsSeparateRetPtr'          (i i i i i i              )) ⍝ glSrcRGB glDstRGB glSrcAlpha glDstAlpha glEqRGB glEqAlpha            ⍝ Set blending mode factors and equations separately (using OpenGL factors)
-'rlglInitRAYLIB'                                ⎕NA               R('rlglInit'                                 (i i                      )) ⍝ width height                                                         ⍝ Initialize rlgl (buffers, shaders, textures, states)
-'rlglInitRetPtrRAYLIB'                          ⎕NA               R('rlglInitRetPtr'                           (i i                      )) ⍝ width height                                                         ⍝ Initialize rlgl (buffers, shaders, textures, states)
-'rlglCloseRAYLIB'                               ⎕NA               R('rlglClose'                                (⍬                        )) ⍝                                                                      ⍝ De-initialize rlgl (buffers, shaders, textures)
-'rlglCloseRetPtrRAYLIB'                         ⎕NA               R('rlglCloseRetPtr'                          (⍬                        )) ⍝                                                                      ⍝ De-initialize rlgl (buffers, shaders, textures)
-'rlLoadExtensionsRAYLIB'                        ⎕NA               R('rlLoadExtensions'                         (,⊂ ptr                   )) ⍝ loader                                                               ⍝ Load OpenGL extensions (loader function required)
-'rlLoadExtensionsRetPtrRAYLIB'                  ⎕NA               R('rlLoadExtensionsRetPtr'                   (,⊂ ptr                   )) ⍝ loader                                                               ⍝ Load OpenGL extensions (loader function required)
-'rlGetVersionRAYLIB'                            ⎕NA i             R('rlGetVersion'                             (⍬                        )) ⍝                                                                      ⍝ Get current OpenGL version
-'rlGetVersionRetPtrRAYLIB'                      ⎕NA               R('rlGetVersionRetPtr'                       (,⊂ ('>',i)               )) ⍝                                                                      ⍝ Get current OpenGL version
-'rlSetFramebufferWidthRAYLIB'                   ⎕NA               R('rlSetFramebufferWidth'                    (,⊂ i                     )) ⍝ width                                                                ⍝ Set current framebuffer width
-'rlSetFramebufferWidthRetPtrRAYLIB'             ⎕NA               R('rlSetFramebufferWidthRetPtr'              (,⊂ i                     )) ⍝ width                                                                ⍝ Set current framebuffer width
-'rlGetFramebufferWidthRAYLIB'                   ⎕NA i             R('rlGetFramebufferWidth'                    (⍬                        )) ⍝                                                                      ⍝ Get default framebuffer width
-'rlGetFramebufferWidthRetPtrRAYLIB'             ⎕NA               R('rlGetFramebufferWidthRetPtr'              (,⊂ ('>',i)               )) ⍝                                                                      ⍝ Get default framebuffer width
-'rlSetFramebufferHeightRAYLIB'                  ⎕NA               R('rlSetFramebufferHeight'                   (,⊂ i                     )) ⍝ height                                                               ⍝ Set current framebuffer height
-'rlSetFramebufferHeightRetPtrRAYLIB'            ⎕NA               R('rlSetFramebufferHeightRetPtr'             (,⊂ i                     )) ⍝ height                                                               ⍝ Set current framebuffer height
-'rlGetFramebufferHeightRAYLIB'                  ⎕NA i             R('rlGetFramebufferHeight'                   (⍬                        )) ⍝                                                                      ⍝ Get default framebuffer height
-'rlGetFramebufferHeightRetPtrRAYLIB'            ⎕NA               R('rlGetFramebufferHeightRetPtr'             (,⊂ ('>',i)               )) ⍝                                                                      ⍝ Get default framebuffer height
-'rlGetTextureIdDefaultRAYLIB'                   ⎕NA u             R('rlGetTextureIdDefault'                    (⍬                        )) ⍝                                                                      ⍝ Get default texture id
-'rlGetTextureIdDefaultRetPtrRAYLIB'             ⎕NA               R('rlGetTextureIdDefaultRetPtr'              (,⊂ ('>',u)               )) ⍝                                                                      ⍝ Get default texture id
-'rlGetShaderIdDefaultRAYLIB'                    ⎕NA u             R('rlGetShaderIdDefault'                     (⍬                        )) ⍝                                                                      ⍝ Get default shader id
-'rlGetShaderIdDefaultRetPtrRAYLIB'              ⎕NA               R('rlGetShaderIdDefaultRetPtr'               (,⊂ ('>',u)               )) ⍝                                                                      ⍝ Get default shader id
-'rlGetShaderLocsDefaultRAYLIB'                  ⎕NA ptr           R('rlGetShaderLocsDefault'                   (⍬                        )) ⍝                                                                      ⍝ Get default shader locations
-'rlGetShaderLocsDefaultRetPtrRAYLIB'            ⎕NA               R('rlGetShaderLocsDefaultRetPtr'             (,⊂ ptr                   )) ⍝                                                                      ⍝ Get default shader locations
-'rlLoadRenderBatchRAYLIB'                       ⎕NA rlRenderBatch R('rlLoadRenderBatch'                        (i i                      )) ⍝ numBuffers bufferElements                                            ⍝ Load a render batch system
-'rlLoadRenderBatchRetPtrRAYLIB'                 ⎕NA               R('rlLoadRenderBatchRetPtr'                  (('>',rlRenderBatch) i i  )) ⍝ numBuffers bufferElements                                            ⍝ Load a render batch system
-'rlUnloadRenderBatchRAYLIB'                     ⎕NA               R('rlUnloadRenderBatch'                      (,⊂ rlRenderBatch         )) ⍝ batch                                                                ⍝ Unload render batch system
-'rlUnloadRenderBatchRetPtrRAYLIB'               ⎕NA               R('rlUnloadRenderBatchRetPtr'                (,⊂ rlRenderBatch         )) ⍝ batch                                                                ⍝ Unload render batch system
-'rlDrawRenderBatchRAYLIB'                       ⎕NA               R('rlDrawRenderBatch'                        (,⊂ ('=',rlRenderBatch)   )) ⍝ batch                                                                ⍝ Draw render batch data (Update->Draw->Reset)
-'rlDrawRenderBatchRetPtrRAYLIB'                 ⎕NA               R('rlDrawRenderBatchRetPtr'                  (,⊂ ('=',rlRenderBatch)   )) ⍝ batch                                                                ⍝ Draw render batch data (Update->Draw->Reset)
-'rlSetRenderBatchActiveRAYLIB'                  ⎕NA               R('rlSetRenderBatchActive'                   (,⊂ ('=',rlRenderBatch)   )) ⍝ batch                                                                ⍝ Set the active render batch for rlgl (NULL for default internal)
-'rlSetRenderBatchActiveRetPtrRAYLIB'            ⎕NA               R('rlSetRenderBatchActiveRetPtr'             (,⊂ ('=',rlRenderBatch)   )) ⍝ batch                                                                ⍝ Set the active render batch for rlgl (NULL for default internal)
-'rlDrawRenderBatchActiveRAYLIB'                 ⎕NA               R('rlDrawRenderBatchActive'                  (⍬                        )) ⍝                                                                      ⍝ Update and draw internal render batch
-'rlDrawRenderBatchActiveRetPtrRAYLIB'           ⎕NA               R('rlDrawRenderBatchActiveRetPtr'            (⍬                        )) ⍝                                                                      ⍝ Update and draw internal render batch
-'rlCheckRenderBatchLimitRAYLIB'                 ⎕NA bool          R('rlCheckRenderBatchLimit'                  (,⊂ i                     )) ⍝ vCount                                                               ⍝ Check internal buffer overflow for a given number of vertex
-'rlCheckRenderBatchLimitRetPtrRAYLIB'           ⎕NA               R('rlCheckRenderBatchLimitRetPtr'            (('>',bool) i             )) ⍝ vCount                                                               ⍝ Check internal buffer overflow for a given number of vertex
-'rlSetTextureRAYLIB'                            ⎕NA               R('rlSetTexture'                             (,⊂ u                     )) ⍝ id                                                                   ⍝ Set current texture for render batch and check buffers limits
-'rlSetTextureRetPtrRAYLIB'                      ⎕NA               R('rlSetTextureRetPtr'                       (,⊂ u                     )) ⍝ id                                                                   ⍝ Set current texture for render batch and check buffers limits
-'rlLoadVertexArrayRAYLIB'                       ⎕NA u             R('rlLoadVertexArray'                        (⍬                        )) ⍝                                                                      ⍝ Load vertex array (vao) if supported
-'rlLoadVertexArrayRetPtrRAYLIB'                 ⎕NA               R('rlLoadVertexArrayRetPtr'                  (,⊂ ('>',u)               )) ⍝                                                                      ⍝ Load vertex array (vao) if supported
-'rlLoadVertexBufferRAYLIB'                      ⎕NA u             R('rlLoadVertexBuffer'                       (ptr i bool               )) ⍝ buffer size dynamic                                                  ⍝ Load a vertex buffer object
-'rlLoadVertexBufferRetPtrRAYLIB'                ⎕NA               R('rlLoadVertexBufferRetPtr'                 (('>',u) ptr i bool       )) ⍝ buffer size dynamic                                                  ⍝ Load a vertex buffer object
-'rlLoadVertexBufferElementRAYLIB'               ⎕NA u             R('rlLoadVertexBufferElement'                (ptr i bool               )) ⍝ buffer size dynamic                                                  ⍝ Load vertex buffer elements object
-'rlLoadVertexBufferElementRetPtrRAYLIB'         ⎕NA               R('rlLoadVertexBufferElementRetPtr'          (('>',u) ptr i bool       )) ⍝ buffer size dynamic                                                  ⍝ Load vertex buffer elements object
-'rlUpdateVertexBufferRAYLIB'                    ⎕NA               R('rlUpdateVertexBuffer'                     (u ptr i i                )) ⍝ bufferId data dataSize offset                                        ⍝ Update vertex buffer object data on GPU buffer
-'rlUpdateVertexBufferRetPtrRAYLIB'              ⎕NA               R('rlUpdateVertexBufferRetPtr'               (u ptr i i                )) ⍝ bufferId data dataSize offset                                        ⍝ Update vertex buffer object data on GPU buffer
-'rlUpdateVertexBufferElementsRAYLIB'            ⎕NA               R('rlUpdateVertexBufferElements'             (u ptr i i                )) ⍝ id data dataSize offset                                              ⍝ Update vertex buffer elements data on GPU buffer
-'rlUpdateVertexBufferElementsRetPtrRAYLIB'      ⎕NA               R('rlUpdateVertexBufferElementsRetPtr'       (u ptr i i                )) ⍝ id data dataSize offset                                              ⍝ Update vertex buffer elements data on GPU buffer
-'rlUnloadVertexArrayRAYLIB'                     ⎕NA               R('rlUnloadVertexArray'                      (,⊂ u                     )) ⍝ vaoId                                                                ⍝ Unload vertex array (vao)
-'rlUnloadVertexArrayRetPtrRAYLIB'               ⎕NA               R('rlUnloadVertexArrayRetPtr'                (,⊂ u                     )) ⍝ vaoId                                                                ⍝ Unload vertex array (vao)
-'rlUnloadVertexBufferRAYLIB'                    ⎕NA               R('rlUnloadVertexBuffer'                     (,⊂ u                     )) ⍝ vboId                                                                ⍝ Unload vertex buffer object
-'rlUnloadVertexBufferRetPtrRAYLIB'              ⎕NA               R('rlUnloadVertexBufferRetPtr'               (,⊂ u                     )) ⍝ vboId                                                                ⍝ Unload vertex buffer object
-'rlSetVertexAttributeRAYLIB'                    ⎕NA               R('rlSetVertexAttribute'                     (u i i bool i i           )) ⍝ index compSize type normalized stride offset                         ⍝ Set vertex attribute data configuration
-'rlSetVertexAttributeRetPtrRAYLIB'              ⎕NA               R('rlSetVertexAttributeRetPtr'               (u i i bool i i           )) ⍝ index compSize type normalized stride offset                         ⍝ Set vertex attribute data configuration
-'rlSetVertexAttributeDivisorRAYLIB'             ⎕NA               R('rlSetVertexAttributeDivisor'              (u i                      )) ⍝ index divisor                                                        ⍝ Set vertex attribute data divisor
-'rlSetVertexAttributeDivisorRetPtrRAYLIB'       ⎕NA               R('rlSetVertexAttributeDivisorRetPtr'        (u i                      )) ⍝ index divisor                                                        ⍝ Set vertex attribute data divisor
-'rlSetVertexAttributeDefaultRAYLIB'             ⎕NA               R('rlSetVertexAttributeDefault'              (i ptr i i                )) ⍝ locIndex value attribType count                                      ⍝ Set vertex attribute default value, when attribute to provided
-'rlSetVertexAttributeDefaultRetPtrRAYLIB'       ⎕NA               R('rlSetVertexAttributeDefaultRetPtr'        (i ptr i i                )) ⍝ locIndex value attribType count                                      ⍝ Set vertex attribute default value, when attribute to provided
-'rlDrawVertexArrayRAYLIB'                       ⎕NA               R('rlDrawVertexArray'                        (i i                      )) ⍝ offset count                                                         ⍝ Draw vertex array (currently active vao)
-'rlDrawVertexArrayRetPtrRAYLIB'                 ⎕NA               R('rlDrawVertexArrayRetPtr'                  (i i                      )) ⍝ offset count                                                         ⍝ Draw vertex array (currently active vao)
-'rlDrawVertexArrayElementsRAYLIB'               ⎕NA               R('rlDrawVertexArrayElements'                (i i ptr                  )) ⍝ offset count buffer                                                  ⍝ Draw vertex array elements
-'rlDrawVertexArrayElementsRetPtrRAYLIB'         ⎕NA               R('rlDrawVertexArrayElementsRetPtr'          (i i ptr                  )) ⍝ offset count buffer                                                  ⍝ Draw vertex array elements
-'rlDrawVertexArrayInstancedRAYLIB'              ⎕NA               R('rlDrawVertexArrayInstanced'               (i i i                    )) ⍝ offset count instances                                               ⍝ Draw vertex array (currently active vao) with instancing
-'rlDrawVertexArrayInstancedRetPtrRAYLIB'        ⎕NA               R('rlDrawVertexArrayInstancedRetPtr'         (i i i                    )) ⍝ offset count instances                                               ⍝ Draw vertex array (currently active vao) with instancing
-'rlDrawVertexArrayElementsInstancedRAYLIB'      ⎕NA               R('rlDrawVertexArrayElementsInstanced'       (i i ptr i                )) ⍝ offset count buffer instances                                        ⍝ Draw vertex array elements with instancing
-'rlDrawVertexArrayElementsInstancedRetPtrRAYLIB'⎕NA               R('rlDrawVertexArrayElementsInstancedRetPtr' (i i ptr i                )) ⍝ offset count buffer instances                                        ⍝ Draw vertex array elements with instancing
-'rlLoadTextureRAYLIB'                           ⎕NA u             R('rlLoadTexture'                            (ptr i i i i              )) ⍝ data width height format mipmapCount                                 ⍝ Load texture data
-'rlLoadTextureRetPtrRAYLIB'                     ⎕NA               R('rlLoadTextureRetPtr'                      (('>',u) ptr i i i i      )) ⍝ data width height format mipmapCount                                 ⍝ Load texture data
-'rlLoadTextureDepthRAYLIB'                      ⎕NA u             R('rlLoadTextureDepth'                       (i i bool                 )) ⍝ width height useRenderBuffer                                         ⍝ Load depth texture/renderbuffer (to be attached to fbo)
-'rlLoadTextureDepthRetPtrRAYLIB'                ⎕NA               R('rlLoadTextureDepthRetPtr'                 (('>',u) i i bool         )) ⍝ width height useRenderBuffer                                         ⍝ Load depth texture/renderbuffer (to be attached to fbo)
-'rlLoadTextureCubemapRAYLIB'                    ⎕NA u             R('rlLoadTextureCubemap'                     (ptr i i i                )) ⍝ data size format mipmapCount                                         ⍝ Load texture cubemap data
-'rlLoadTextureCubemapRetPtrRAYLIB'              ⎕NA               R('rlLoadTextureCubemapRetPtr'               (('>',u) ptr i i i        )) ⍝ data size format mipmapCount                                         ⍝ Load texture cubemap data
-'rlUpdateTextureRAYLIB'                         ⎕NA               R('rlUpdateTexture'                          (u i i i i i ptr          )) ⍝ id offsetX offsetY width height format data                          ⍝ Update texture with new data on GPU
-'rlUpdateTextureRetPtrRAYLIB'                   ⎕NA               R('rlUpdateTextureRetPtr'                    (u i i i i i ptr          )) ⍝ id offsetX offsetY width height format data                          ⍝ Update texture with new data on GPU
-'rlGetGlTextureFormatsRAYLIB'                   ⎕NA               R('rlGetGlTextureFormats'                    (i ('=',u) ('=',u) ('=',u))) ⍝ format glInternalFormat glFormat glType                              ⍝ Get OpenGL internal formats
-'rlGetGlTextureFormatsRetPtrRAYLIB'             ⎕NA               R('rlGetGlTextureFormatsRetPtr'              (i ('=',u) ('=',u) ('=',u))) ⍝ format glInternalFormat glFormat glType                              ⍝ Get OpenGL internal formats
-'rlGetPixelFormatNameRAYLIB'                    ⎕NA (ptr⊣str)     R('rlGetPixelFormatName'                     (,⊂ u                     )) ⍝ format                                                               ⍝ Get name string for pixel format
-'rlGetPixelFormatNameRetPtrRAYLIB'              ⎕NA               R('rlGetPixelFormatNameRetPtr'               (('>',str) u              )) ⍝ format                                                               ⍝ Get name string for pixel format
-'rlUnloadTextureRAYLIB'                         ⎕NA               R('rlUnloadTexture'                          (,⊂ u                     )) ⍝ id                                                                   ⍝ Unload texture from GPU memory
-'rlUnloadTextureRetPtrRAYLIB'                   ⎕NA               R('rlUnloadTextureRetPtr'                    (,⊂ u                     )) ⍝ id                                                                   ⍝ Unload texture from GPU memory
-'rlGenTextureMipmapsRAYLIB'                     ⎕NA               R('rlGenTextureMipmaps'                      (u i i i ('=',i)          )) ⍝ id width height format mipmaps                                       ⍝ Generate mipmap data for selected texture
-'rlGenTextureMipmapsRetPtrRAYLIB'               ⎕NA               R('rlGenTextureMipmapsRetPtr'                (u i i i ('=',i)          )) ⍝ id width height format mipmaps                                       ⍝ Generate mipmap data for selected texture
-'rlReadTexturePixelsRAYLIB'                     ⎕NA ptr           R('rlReadTexturePixels'                      (u i i i                  )) ⍝ id width height format                                               ⍝ Read texture pixel data
-'rlReadTexturePixelsRetPtrRAYLIB'               ⎕NA               R('rlReadTexturePixelsRetPtr'                (('>',ptr) u i i i        )) ⍝ id width height format                                               ⍝ Read texture pixel data
-'rlReadScreenPixelsRAYLIB'                      ⎕NA (ptr⊣ustr)    R('rlReadScreenPixels'                       (i i                      )) ⍝ width height                                                         ⍝ Read screen pixel data (color buffer)
-'rlReadScreenPixelsRetPtrRAYLIB'                ⎕NA               R('rlReadScreenPixelsRetPtr'                 (('>',ustr) i i           )) ⍝ width height                                                         ⍝ Read screen pixel data (color buffer)
-'rlLoadFramebufferRAYLIB'                       ⎕NA u             R('rlLoadFramebuffer'                        (⍬                        )) ⍝                                                                      ⍝ Load an empty framebuffer
-'rlLoadFramebufferRetPtrRAYLIB'                 ⎕NA               R('rlLoadFramebufferRetPtr'                  (,⊂ ('>',u)               )) ⍝                                                                      ⍝ Load an empty framebuffer
-'rlFramebufferAttachRAYLIB'                     ⎕NA               R('rlFramebufferAttach'                      (u u i i i                )) ⍝ fboId texId attachType texType mipLevel                              ⍝ Attach texture/renderbuffer to a framebuffer
-'rlFramebufferAttachRetPtrRAYLIB'               ⎕NA               R('rlFramebufferAttachRetPtr'                (u u i i i                )) ⍝ fboId texId attachType texType mipLevel                              ⍝ Attach texture/renderbuffer to a framebuffer
-'rlFramebufferCompleteRAYLIB'                   ⎕NA bool          R('rlFramebufferComplete'                    (,⊂ u                     )) ⍝ id                                                                   ⍝ Verify framebuffer is complete
-'rlFramebufferCompleteRetPtrRAYLIB'             ⎕NA               R('rlFramebufferCompleteRetPtr'              (('>',bool) u             )) ⍝ id                                                                   ⍝ Verify framebuffer is complete
-'rlUnloadFramebufferRAYLIB'                     ⎕NA               R('rlUnloadFramebuffer'                      (,⊂ u                     )) ⍝ id                                                                   ⍝ Delete framebuffer from GPU
-'rlUnloadFramebufferRetPtrRAYLIB'               ⎕NA               R('rlUnloadFramebufferRetPtr'                (,⊂ u                     )) ⍝ id                                                                   ⍝ Delete framebuffer from GPU
-'rlLoadShaderCodeRAYLIB'                        ⎕NA u             R('rlLoadShaderCode'                         (str str                  )) ⍝ vsCode fsCode                                                        ⍝ Load shader from code strings
-'rlLoadShaderCodeRetPtrRAYLIB'                  ⎕NA               R('rlLoadShaderCodeRetPtr'                   (('>',u) str str          )) ⍝ vsCode fsCode                                                        ⍝ Load shader from code strings
-'rlCompileShaderRAYLIB'                         ⎕NA u             R('rlCompileShader'                          (str i                    )) ⍝ shaderCode type                                                      ⍝ Compile custom shader and return shader id (type: RL_VERTEX_SHADER, RL_FRAGMENT_SHADER, RL_COMPUTE_SHADER)
-'rlCompileShaderRetPtrRAYLIB'                   ⎕NA               R('rlCompileShaderRetPtr'                    (('>',u) str i            )) ⍝ shaderCode type                                                      ⍝ Compile custom shader and return shader id (type: RL_VERTEX_SHADER, RL_FRAGMENT_SHADER, RL_COMPUTE_SHADER)
-'rlLoadShaderProgramRAYLIB'                     ⎕NA u             R('rlLoadShaderProgram'                      (u u                      )) ⍝ vShaderId fShaderId                                                  ⍝ Load custom shader program
-'rlLoadShaderProgramRetPtrRAYLIB'               ⎕NA               R('rlLoadShaderProgramRetPtr'                (('>',u) u u              )) ⍝ vShaderId fShaderId                                                  ⍝ Load custom shader program
-'rlUnloadShaderProgramRAYLIB'                   ⎕NA               R('rlUnloadShaderProgram'                    (,⊂ u                     )) ⍝ id                                                                   ⍝ Unload shader program
-'rlUnloadShaderProgramRetPtrRAYLIB'             ⎕NA               R('rlUnloadShaderProgramRetPtr'              (,⊂ u                     )) ⍝ id                                                                   ⍝ Unload shader program
-'rlGetLocationUniformRAYLIB'                    ⎕NA i             R('rlGetLocationUniform'                     (u str                    )) ⍝ shaderId uniformName                                                 ⍝ Get shader location uniform
-'rlGetLocationUniformRetPtrRAYLIB'              ⎕NA               R('rlGetLocationUniformRetPtr'               (('>',i) u str            )) ⍝ shaderId uniformName                                                 ⍝ Get shader location uniform
-'rlGetLocationAttribRAYLIB'                     ⎕NA i             R('rlGetLocationAttrib'                      (u str                    )) ⍝ shaderId attribName                                                  ⍝ Get shader location attribute
-'rlGetLocationAttribRetPtrRAYLIB'               ⎕NA               R('rlGetLocationAttribRetPtr'                (('>',i) u str            )) ⍝ shaderId attribName                                                  ⍝ Get shader location attribute
-'rlSetUniformRAYLIB'                            ⎕NA               R('rlSetUniform'                             (i ptr i i                )) ⍝ locIndex value uniformType count                                     ⍝ Set shader value uniform
-'rlSetUniformRetPtrRAYLIB'                      ⎕NA               R('rlSetUniformRetPtr'                       (i ptr i i                )) ⍝ locIndex value uniformType count                                     ⍝ Set shader value uniform
-'rlSetUniformMatrixRAYLIB'                      ⎕NA               R('rlSetUniformMatrix'                       (i Matrix                 )) ⍝ locIndex mat                                                         ⍝ Set shader value matrix
-'rlSetUniformMatrixRetPtrRAYLIB'                ⎕NA               R('rlSetUniformMatrixRetPtr'                 (i Matrix                 )) ⍝ locIndex mat                                                         ⍝ Set shader value matrix
-'rlSetUniformMatricesRAYLIB'                    ⎕NA               R('rlSetUniformMatrices'                     (i ('=',Matrix) i         )) ⍝ locIndex mat count                                                   ⍝ Set shader value matrices
-'rlSetUniformMatricesRetPtrRAYLIB'              ⎕NA               R('rlSetUniformMatricesRetPtr'               (i ('=',Matrix) i         )) ⍝ locIndex mat count                                                   ⍝ Set shader value matrices
-'rlSetUniformSamplerRAYLIB'                     ⎕NA               R('rlSetUniformSampler'                      (i u                      )) ⍝ locIndex textureId                                                   ⍝ Set shader value sampler
-'rlSetUniformSamplerRetPtrRAYLIB'               ⎕NA               R('rlSetUniformSamplerRetPtr'                (i u                      )) ⍝ locIndex textureId                                                   ⍝ Set shader value sampler
-'rlSetShaderRAYLIB'                             ⎕NA               R('rlSetShader'                              (u ('=',i)                )) ⍝ id locs                                                              ⍝ Set shader currently active (id and locations)
-'rlSetShaderRetPtrRAYLIB'                       ⎕NA               R('rlSetShaderRetPtr'                        (u ('=',i)                )) ⍝ id locs                                                              ⍝ Set shader currently active (id and locations)
-'rlLoadComputeShaderProgramRAYLIB'              ⎕NA u             R('rlLoadComputeShaderProgram'               (,⊂ u                     )) ⍝ shaderId                                                             ⍝ Load compute shader program
-'rlLoadComputeShaderProgramRetPtrRAYLIB'        ⎕NA               R('rlLoadComputeShaderProgramRetPtr'         (('>',u) u                )) ⍝ shaderId                                                             ⍝ Load compute shader program
-'rlComputeShaderDispatchRAYLIB'                 ⎕NA               R('rlComputeShaderDispatch'                  (u u u                    )) ⍝ groupX groupY groupZ                                                 ⍝ Dispatch compute shader (equivalent to *draw* for graphics pipeline)
-'rlComputeShaderDispatchRetPtrRAYLIB'           ⎕NA               R('rlComputeShaderDispatchRetPtr'            (u u u                    )) ⍝ groupX groupY groupZ                                                 ⍝ Dispatch compute shader (equivalent to *draw* for graphics pipeline)
-'rlLoadShaderBufferRAYLIB'                      ⎕NA u             R('rlLoadShaderBuffer'                       (u ptr i                  )) ⍝ size data usageHint                                                  ⍝ Load shader storage buffer object (SSBO)
-'rlLoadShaderBufferRetPtrRAYLIB'                ⎕NA               R('rlLoadShaderBufferRetPtr'                 (('>',u) u ptr i          )) ⍝ size data usageHint                                                  ⍝ Load shader storage buffer object (SSBO)
-'rlUnloadShaderBufferRAYLIB'                    ⎕NA               R('rlUnloadShaderBuffer'                     (,⊂ u                     )) ⍝ ssboId                                                               ⍝ Unload shader storage buffer object (SSBO)
-'rlUnloadShaderBufferRetPtrRAYLIB'              ⎕NA               R('rlUnloadShaderBufferRetPtr'               (,⊂ u                     )) ⍝ ssboId                                                               ⍝ Unload shader storage buffer object (SSBO)
-'rlUpdateShaderBufferRAYLIB'                    ⎕NA               R('rlUpdateShaderBuffer'                     (u ptr u u                )) ⍝ id data dataSize offset                                              ⍝ Update SSBO buffer data
-'rlUpdateShaderBufferRetPtrRAYLIB'              ⎕NA               R('rlUpdateShaderBufferRetPtr'               (u ptr u u                )) ⍝ id data dataSize offset                                              ⍝ Update SSBO buffer data
-'rlBindShaderBufferRAYLIB'                      ⎕NA               R('rlBindShaderBuffer'                       (u u                      )) ⍝ id index                                                             ⍝ Bind SSBO buffer
-'rlBindShaderBufferRetPtrRAYLIB'                ⎕NA               R('rlBindShaderBufferRetPtr'                 (u u                      )) ⍝ id index                                                             ⍝ Bind SSBO buffer
-'rlReadShaderBufferRAYLIB'                      ⎕NA               R('rlReadShaderBuffer'                       (u ptr u u                )) ⍝ id dest count offset                                                 ⍝ Read SSBO buffer data (GPU->CPU)
-'rlReadShaderBufferRetPtrRAYLIB'                ⎕NA               R('rlReadShaderBufferRetPtr'                 (u ptr u u                )) ⍝ id dest count offset                                                 ⍝ Read SSBO buffer data (GPU->CPU)
-'rlCopyShaderBufferRAYLIB'                      ⎕NA               R('rlCopyShaderBuffer'                       (u u u u u                )) ⍝ destId srcId destOffset srcOffset count                              ⍝ Copy SSBO data between buffers
-'rlCopyShaderBufferRetPtrRAYLIB'                ⎕NA               R('rlCopyShaderBufferRetPtr'                 (u u u u u                )) ⍝ destId srcId destOffset srcOffset count                              ⍝ Copy SSBO data between buffers
-'rlGetShaderBufferSizeRAYLIB'                   ⎕NA u             R('rlGetShaderBufferSize'                    (,⊂ u                     )) ⍝ id                                                                   ⍝ Get SSBO buffer size
-'rlGetShaderBufferSizeRetPtrRAYLIB'             ⎕NA               R('rlGetShaderBufferSizeRetPtr'              (('>',u) u                )) ⍝ id                                                                   ⍝ Get SSBO buffer size
-'rlBindImageTextureRAYLIB'                      ⎕NA               R('rlBindImageTexture'                       (u u i bool               )) ⍝ id index format readonly                                             ⍝ Bind image texture
-'rlBindImageTextureRetPtrRAYLIB'                ⎕NA               R('rlBindImageTextureRetPtr'                 (u u i bool               )) ⍝ id index format readonly                                             ⍝ Bind image texture
-'rlGetMatrixModelviewRAYLIB'                    ⎕NA Matrix        R('rlGetMatrixModelview'                     (⍬                        )) ⍝                                                                      ⍝ Get internal modelview matrix
-'rlGetMatrixModelviewRetPtrRAYLIB'              ⎕NA               R('rlGetMatrixModelviewRetPtr'               (,⊂ ('>',Matrix)          )) ⍝                                                                      ⍝ Get internal modelview matrix
-'rlGetMatrixProjectionRAYLIB'                   ⎕NA Matrix        R('rlGetMatrixProjection'                    (⍬                        )) ⍝                                                                      ⍝ Get internal projection matrix
-'rlGetMatrixProjectionRetPtrRAYLIB'             ⎕NA               R('rlGetMatrixProjectionRetPtr'              (,⊂ ('>',Matrix)          )) ⍝                                                                      ⍝ Get internal projection matrix
-'rlGetMatrixTransformRAYLIB'                    ⎕NA Matrix        R('rlGetMatrixTransform'                     (⍬                        )) ⍝                                                                      ⍝ Get internal accumulated transform matrix
-'rlGetMatrixTransformRetPtrRAYLIB'              ⎕NA               R('rlGetMatrixTransformRetPtr'               (,⊂ ('>',Matrix)          )) ⍝                                                                      ⍝ Get internal accumulated transform matrix
-'rlGetMatrixProjectionStereoRAYLIB'             ⎕NA Matrix        R('rlGetMatrixProjectionStereo'              (,⊂ i                     )) ⍝ eye                                                                  ⍝ Get internal projection matrix for stereo render (selected eye)
-'rlGetMatrixProjectionStereoRetPtrRAYLIB'       ⎕NA               R('rlGetMatrixProjectionStereoRetPtr'        (('>',Matrix) i           )) ⍝ eye                                                                  ⍝ Get internal projection matrix for stereo render (selected eye)
-'rlGetMatrixViewOffsetStereoRAYLIB'             ⎕NA Matrix        R('rlGetMatrixViewOffsetStereo'              (,⊂ i                     )) ⍝ eye                                                                  ⍝ Get internal view offset matrix for stereo render (selected eye)
-'rlGetMatrixViewOffsetStereoRetPtrRAYLIB'       ⎕NA               R('rlGetMatrixViewOffsetStereoRetPtr'        (('>',Matrix) i           )) ⍝ eye                                                                  ⍝ Get internal view offset matrix for stereo render (selected eye)
-'rlSetMatrixProjectionRAYLIB'                   ⎕NA               R('rlSetMatrixProjection'                    (,⊂ Matrix                )) ⍝ proj                                                                 ⍝ Set a custom projection matrix (replaces internal projection matrix)
-'rlSetMatrixProjectionRetPtrRAYLIB'             ⎕NA               R('rlSetMatrixProjectionRetPtr'              (,⊂ Matrix                )) ⍝ proj                                                                 ⍝ Set a custom projection matrix (replaces internal projection matrix)
-'rlSetMatrixModelviewRAYLIB'                    ⎕NA               R('rlSetMatrixModelview'                     (,⊂ Matrix                )) ⍝ view                                                                 ⍝ Set a custom modelview matrix (replaces internal modelview matrix)
-'rlSetMatrixModelviewRetPtrRAYLIB'              ⎕NA               R('rlSetMatrixModelviewRetPtr'               (,⊂ Matrix                )) ⍝ view                                                                 ⍝ Set a custom modelview matrix (replaces internal modelview matrix)
-'rlSetMatrixProjectionStereoRAYLIB'             ⎕NA               R('rlSetMatrixProjectionStereo'              (Matrix Matrix            )) ⍝ right left                                                           ⍝ Set eyes projection matrices for stereo rendering
-'rlSetMatrixProjectionStereoRetPtrRAYLIB'       ⎕NA               R('rlSetMatrixProjectionStereoRetPtr'        (Matrix Matrix            )) ⍝ right left                                                           ⍝ Set eyes projection matrices for stereo rendering
-'rlSetMatrixViewOffsetStereoRAYLIB'             ⎕NA               R('rlSetMatrixViewOffsetStereo'              (Matrix Matrix            )) ⍝ right left                                                           ⍝ Set eyes view offsets matrices for stereo rendering
-'rlSetMatrixViewOffsetStereoRetPtrRAYLIB'       ⎕NA               R('rlSetMatrixViewOffsetStereoRetPtr'        (Matrix Matrix            )) ⍝ right left                                                           ⍝ Set eyes view offsets matrices for stereo rendering
-'rlLoadDrawCubeRAYLIB'                          ⎕NA               R('rlLoadDrawCube'                           (⍬                        )) ⍝                                                                      ⍝ Load and draw a cube
-'rlLoadDrawCubeRetPtrRAYLIB'                    ⎕NA               R('rlLoadDrawCubeRetPtr'                     (⍬                        )) ⍝                                                                      ⍝ Load and draw a cube
-'rlLoadDrawQuadRAYLIB'                          ⎕NA               R('rlLoadDrawQuad'                           (⍬                        )) ⍝                                                                      ⍝ Load and draw a quad
-'rlLoadDrawQuadRetPtrRAYLIB'                    ⎕NA               R('rlLoadDrawQuadRetPtr'                     (⍬                        )) ⍝                                                                      ⍝ Load and draw a quad
+pathToRaylibDotAPLN ← (⊢,'/'/⍨'/'≢⊃⍤⌽)(⊢,'.'/⍨0=≢⍤⊢),pathToRaylibDotAPLN
+
+__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__ ← 0 ⎕FIX pathToRaylibDotAPLN,'../parse-raylib-apl/setup.apln.hide'
+'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯3
+'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯2
+'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯9
+⎕EX '__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__'
+
+pathToBinary ← pathToRaylibDotAPLN,lib
+:If 0=⎕NC 'mode'
+  mode ← 3 ⍝ Default is All changes
+:EndIf
+
+
+rlMatrixModeRAYLIB                       ←               R('rlMatrixModeRetPtr'                       (,⊂ i                     )) ⍝ mode                                                                 ⍝ Choose the current matrix to be transformed
+rlPushMatrixRAYLIB                       ←               R('rlPushMatrixRetPtr'                       (⍬                        )) ⍝                                                                      ⍝ Push the current matrix to stack
+rlPopMatrixRAYLIB                        ←               R('rlPopMatrixRetPtr'                        (⍬                        )) ⍝                                                                      ⍝ Pop latest inserted matrix from stack
+rlLoadIdentityRAYLIB                     ←               R('rlLoadIdentityRetPtr'                     (⍬                        )) ⍝                                                                      ⍝ Reset current matrix to identity matrix
+rlTranslatefRAYLIB                       ←               R('rlTranslatefRetPtr'                       (f f f                    )) ⍝ x y z                                                                ⍝ Multiply the current matrix by a translation matrix
+rlRotatefRAYLIB                          ←               R('rlRotatefRetPtr'                          (f f f f                  )) ⍝ angle x y z                                                          ⍝ Multiply the current matrix by a rotation matrix
+rlScalefRAYLIB                           ←               R('rlScalefRetPtr'                           (f f f                    )) ⍝ x y z                                                                ⍝ Multiply the current matrix by a scaling matrix
+rlMultMatrixfRAYLIB                      ←               R('rlMultMatrixfRetPtr'                      (,⊂ ('<',f)               )) ⍝ matf                                                                 ⍝ Multiply the current matrix by another matrix
+rlFrustumRAYLIB                          ←               R('rlFrustumRetPtr'                          (f8 f8 f8 f8 f8 f8        )) ⍝ left right bottom top znear zfar                                     ⍝
+rlOrthoRAYLIB                            ←               R('rlOrthoRetPtr'                            (f8 f8 f8 f8 f8 f8        )) ⍝ left right bottom top znear zfar                                     ⍝
+rlViewportRAYLIB                         ←               R('rlViewportRetPtr'                         (i i i i                  )) ⍝ x y width height                                                     ⍝ Set the viewport area
+rlSetClipPlanesRAYLIB                    ←               R('rlSetClipPlanesRetPtr'                    (f8 f8                    )) ⍝ nearPlane farPlane                                                   ⍝ Set clip planes distances
+rlGetCullDistanceNearRAYLIB              ←               R('rlGetCullDistanceNearRetPtr'              (,⊂ ('>',f8)              )) ⍝                                                                      ⍝ Get cull plane distance near
+rlGetCullDistanceFarRAYLIB               ←               R('rlGetCullDistanceFarRetPtr'               (,⊂ ('>',f8)              )) ⍝                                                                      ⍝ Get cull plane distance far
+rlBeginRAYLIB                            ←               R('rlBeginRetPtr'                            (,⊂ i                     )) ⍝ mode                                                                 ⍝ Initialize drawing mode (how to organize vertex)
+rlEndRAYLIB                              ←               R('rlEndRetPtr'                              (⍬                        )) ⍝                                                                      ⍝ Finish vertex providing
+rlVertex2iRAYLIB                         ←               R('rlVertex2iRetPtr'                         (i i                      )) ⍝ x y                                                                  ⍝ Define one vertex (position) - 2 int
+rlVertex2fRAYLIB                         ←               R('rlVertex2fRetPtr'                         (f f                      )) ⍝ x y                                                                  ⍝ Define one vertex (position) - 2 float
+rlVertex3fRAYLIB                         ←               R('rlVertex3fRetPtr'                         (f f f                    )) ⍝ x y z                                                                ⍝ Define one vertex (position) - 3 float
+rlTexCoord2fRAYLIB                       ←               R('rlTexCoord2fRetPtr'                       (f f                      )) ⍝ x y                                                                  ⍝ Define one vertex (texture coordinate) - 2 float
+rlNormal3fRAYLIB                         ←               R('rlNormal3fRetPtr'                         (f f f                    )) ⍝ x y z                                                                ⍝ Define one vertex (normal) - 3 float
+rlColor4ubRAYLIB                         ←               R('rlColor4ubRetPtr'                         (u1 u1 u1 u1              )) ⍝ r g b a                                                              ⍝ Define one vertex (color) - 4 byte
+rlColor3fRAYLIB                          ←               R('rlColor3fRetPtr'                          (f f f                    )) ⍝ x y z                                                                ⍝ Define one vertex (color) - 3 float
+rlColor4fRAYLIB                          ←               R('rlColor4fRetPtr'                          (f f f f                  )) ⍝ x y z w                                                              ⍝ Define one vertex (color) - 4 float
+rlEnableVertexArrayRAYLIB                ←               R('rlEnableVertexArrayRetPtr'                (('>',bool) u             )) ⍝ vaoId                                                                ⍝ Enable vertex array (VAO, if supported)
+rlDisableVertexArrayRAYLIB               ←               R('rlDisableVertexArrayRetPtr'               (⍬                        )) ⍝                                                                      ⍝ Disable vertex array (VAO, if supported)
+rlEnableVertexBufferRAYLIB               ←               R('rlEnableVertexBufferRetPtr'               (,⊂ u                     )) ⍝ id                                                                   ⍝ Enable vertex buffer (VBO)
+rlDisableVertexBufferRAYLIB              ←               R('rlDisableVertexBufferRetPtr'              (⍬                        )) ⍝                                                                      ⍝ Disable vertex buffer (VBO)
+rlEnableVertexBufferElementRAYLIB        ←               R('rlEnableVertexBufferElementRetPtr'        (,⊂ u                     )) ⍝ id                                                                   ⍝ Enable vertex buffer element (VBO element)
+rlDisableVertexBufferElementRAYLIB       ←               R('rlDisableVertexBufferElementRetPtr'       (⍬                        )) ⍝                                                                      ⍝ Disable vertex buffer element (VBO element)
+rlEnableVertexAttributeRAYLIB            ←               R('rlEnableVertexAttributeRetPtr'            (,⊂ u                     )) ⍝ index                                                                ⍝ Enable vertex attribute index
+rlDisableVertexAttributeRAYLIB           ←               R('rlDisableVertexAttributeRetPtr'           (,⊂ u                     )) ⍝ index                                                                ⍝ Disable vertex attribute index
+rlActiveTextureSlotRAYLIB                ←               R('rlActiveTextureSlotRetPtr'                (,⊂ i                     )) ⍝ slot                                                                 ⍝ Select and active a texture slot
+rlEnableTextureRAYLIB                    ←               R('rlEnableTextureRetPtr'                    (,⊂ u                     )) ⍝ id                                                                   ⍝ Enable texture
+rlDisableTextureRAYLIB                   ←               R('rlDisableTextureRetPtr'                   (⍬                        )) ⍝                                                                      ⍝ Disable texture
+rlEnableTextureCubemapRAYLIB             ←               R('rlEnableTextureCubemapRetPtr'             (,⊂ u                     )) ⍝ id                                                                   ⍝ Enable texture cubemap
+rlDisableTextureCubemapRAYLIB            ←               R('rlDisableTextureCubemapRetPtr'            (⍬                        )) ⍝                                                                      ⍝ Disable texture cubemap
+rlTextureParametersRAYLIB                ←               R('rlTextureParametersRetPtr'                (u i i                    )) ⍝ id param value                                                       ⍝ Set texture parameters (filter, wrap)
+rlCubemapParametersRAYLIB                ←               R('rlCubemapParametersRetPtr'                (u i i                    )) ⍝ id param value                                                       ⍝ Set cubemap parameters (filter, wrap)
+rlEnableShaderRAYLIB                     ←               R('rlEnableShaderRetPtr'                     (,⊂ u                     )) ⍝ id                                                                   ⍝ Enable shader program
+rlDisableShaderRAYLIB                    ←               R('rlDisableShaderRetPtr'                    (⍬                        )) ⍝                                                                      ⍝ Disable shader program
+rlEnableFramebufferRAYLIB                ←               R('rlEnableFramebufferRetPtr'                (,⊂ u                     )) ⍝ id                                                                   ⍝ Enable render texture (fbo)
+rlDisableFramebufferRAYLIB               ←               R('rlDisableFramebufferRetPtr'               (⍬                        )) ⍝                                                                      ⍝ Disable render texture (fbo), return to default framebuffer
+rlGetActiveFramebufferRAYLIB             ←               R('rlGetActiveFramebufferRetPtr'             (,⊂ ('>',u)               )) ⍝                                                                      ⍝ Get the currently active render texture (fbo), 0 for default framebuffer
+rlActiveDrawBuffersRAYLIB                ←               R('rlActiveDrawBuffersRetPtr'                (,⊂ i                     )) ⍝ count                                                                ⍝ Activate multiple draw color buffers
+rlBlitFramebufferRAYLIB                  ←               R('rlBlitFramebufferRetPtr'                  (i i i i i i i i i        )) ⍝ srcX srcY srcWidth srcHeight dstX dstY dstWidth dstHeight bufferMask ⍝ Blit active framebuffer to main framebuffer
+rlBindFramebufferRAYLIB                  ←               R('rlBindFramebufferRetPtr'                  (u u                      )) ⍝ target framebuffer                                                   ⍝ Bind framebuffer (FBO)
+rlEnableColorBlendRAYLIB                 ←               R('rlEnableColorBlendRetPtr'                 (⍬                        )) ⍝                                                                      ⍝ Enable color blending
+rlDisableColorBlendRAYLIB                ←               R('rlDisableColorBlendRetPtr'                (⍬                        )) ⍝                                                                      ⍝ Disable color blending
+rlEnableDepthTestRAYLIB                  ←               R('rlEnableDepthTestRetPtr'                  (⍬                        )) ⍝                                                                      ⍝ Enable depth test
+rlDisableDepthTestRAYLIB                 ←               R('rlDisableDepthTestRetPtr'                 (⍬                        )) ⍝                                                                      ⍝ Disable depth test
+rlEnableDepthMaskRAYLIB                  ←               R('rlEnableDepthMaskRetPtr'                  (⍬                        )) ⍝                                                                      ⍝ Enable depth write
+rlDisableDepthMaskRAYLIB                 ←               R('rlDisableDepthMaskRetPtr'                 (⍬                        )) ⍝                                                                      ⍝ Disable depth write
+rlEnableBackfaceCullingRAYLIB            ←               R('rlEnableBackfaceCullingRetPtr'            (⍬                        )) ⍝                                                                      ⍝ Enable backface culling
+rlDisableBackfaceCullingRAYLIB           ←               R('rlDisableBackfaceCullingRetPtr'           (⍬                        )) ⍝                                                                      ⍝ Disable backface culling
+rlColorMaskRAYLIB                        ←               R('rlColorMaskRetPtr'                        (bool bool bool bool      )) ⍝ r g b a                                                              ⍝ Color mask control
+rlSetCullFaceRAYLIB                      ←               R('rlSetCullFaceRetPtr'                      (,⊂ i                     )) ⍝ mode                                                                 ⍝ Set face culling mode
+rlEnableScissorTestRAYLIB                ←               R('rlEnableScissorTestRetPtr'                (⍬                        )) ⍝                                                                      ⍝ Enable scissor test
+rlDisableScissorTestRAYLIB               ←               R('rlDisableScissorTestRetPtr'               (⍬                        )) ⍝                                                                      ⍝ Disable scissor test
+rlScissorRAYLIB                          ←               R('rlScissorRetPtr'                          (i i i i                  )) ⍝ x y width height                                                     ⍝ Scissor test
+rlEnableWireModeRAYLIB                   ←               R('rlEnableWireModeRetPtr'                   (⍬                        )) ⍝                                                                      ⍝ Enable wire mode
+rlEnablePointModeRAYLIB                  ←               R('rlEnablePointModeRetPtr'                  (⍬                        )) ⍝                                                                      ⍝ Enable point mode
+rlDisableWireModeRAYLIB                  ←               R('rlDisableWireModeRetPtr'                  (⍬                        )) ⍝                                                                      ⍝ Disable wire (and point) mode
+rlSetLineWidthRAYLIB                     ←               R('rlSetLineWidthRetPtr'                     (,⊂ f                     )) ⍝ width                                                                ⍝ Set the line drawing width
+rlGetLineWidthRAYLIB                     ←               R('rlGetLineWidthRetPtr'                     (,⊂ ('>',f)               )) ⍝                                                                      ⍝ Get the line drawing width
+rlEnableSmoothLinesRAYLIB                ←               R('rlEnableSmoothLinesRetPtr'                (⍬                        )) ⍝                                                                      ⍝ Enable line aliasing
+rlDisableSmoothLinesRAYLIB               ←               R('rlDisableSmoothLinesRetPtr'               (⍬                        )) ⍝                                                                      ⍝ Disable line aliasing
+rlEnableStereoRenderRAYLIB               ←               R('rlEnableStereoRenderRetPtr'               (⍬                        )) ⍝                                                                      ⍝ Enable stereo rendering
+rlDisableStereoRenderRAYLIB              ←               R('rlDisableStereoRenderRetPtr'              (⍬                        )) ⍝                                                                      ⍝ Disable stereo rendering
+rlIsStereoRenderEnabledRAYLIB            ←               R('rlIsStereoRenderEnabledRetPtr'            (,⊂ ('>',bool)            )) ⍝                                                                      ⍝ Check if stereo render is enabled
+rlClearColorRAYLIB                       ←               R('rlClearColorRetPtr'                       (u1 u1 u1 u1              )) ⍝ r g b a                                                              ⍝ Clear color buffer with color
+rlClearScreenBuffersRAYLIB               ←               R('rlClearScreenBuffersRetPtr'               (⍬                        )) ⍝                                                                      ⍝ Clear used screen buffers (color and depth)
+rlCheckErrorsRAYLIB                      ←               R('rlCheckErrorsRetPtr'                      (⍬                        )) ⍝                                                                      ⍝ Check and log OpenGL error codes
+rlSetBlendModeRAYLIB                     ←               R('rlSetBlendModeRetPtr'                     (,⊂ i                     )) ⍝ mode                                                                 ⍝ Set blending mode
+rlSetBlendFactorsRAYLIB                  ←               R('rlSetBlendFactorsRetPtr'                  (i i i                    )) ⍝ glSrcFactor glDstFactor glEquation                                   ⍝ Set blending mode factor and equation (using OpenGL factors)
+rlSetBlendFactorsSeparateRAYLIB          ←               R('rlSetBlendFactorsSeparateRetPtr'          (i i i i i i              )) ⍝ glSrcRGB glDstRGB glSrcAlpha glDstAlpha glEqRGB glEqAlpha            ⍝ Set blending mode factors and equations separately (using OpenGL factors)
+rlglInitRAYLIB                           ←               R('rlglInitRetPtr'                           (i i                      )) ⍝ width height                                                         ⍝ Initialize rlgl (buffers, shaders, textures, states)
+rlglCloseRAYLIB                          ←               R('rlglCloseRetPtr'                          (⍬                        )) ⍝                                                                      ⍝ De-initialize rlgl (buffers, shaders, textures)
+rlLoadExtensionsRAYLIB                   ←               R('rlLoadExtensionsRetPtr'                   (,⊂ ptr                   )) ⍝ loader                                                               ⍝ Load OpenGL extensions (loader function required)
+rlGetVersionRAYLIB                       ←               R('rlGetVersionRetPtr'                       (,⊂ ('>',i)               )) ⍝                                                                      ⍝ Get current OpenGL version
+rlSetFramebufferWidthRAYLIB              ←               R('rlSetFramebufferWidthRetPtr'              (,⊂ i                     )) ⍝ width                                                                ⍝ Set current framebuffer width
+rlGetFramebufferWidthRAYLIB              ←               R('rlGetFramebufferWidthRetPtr'              (,⊂ ('>',i)               )) ⍝                                                                      ⍝ Get default framebuffer width
+rlSetFramebufferHeightRAYLIB             ←               R('rlSetFramebufferHeightRetPtr'             (,⊂ i                     )) ⍝ height                                                               ⍝ Set current framebuffer height
+rlGetFramebufferHeightRAYLIB             ←               R('rlGetFramebufferHeightRetPtr'             (,⊂ ('>',i)               )) ⍝                                                                      ⍝ Get default framebuffer height
+rlGetTextureIdDefaultRAYLIB              ←               R('rlGetTextureIdDefaultRetPtr'              (,⊂ ('>',u)               )) ⍝                                                                      ⍝ Get default texture id
+rlGetShaderIdDefaultRAYLIB               ←               R('rlGetShaderIdDefaultRetPtr'               (,⊂ ('>',u)               )) ⍝                                                                      ⍝ Get default shader id
+rlGetShaderLocsDefaultRAYLIB             ←               R('rlGetShaderLocsDefaultRetPtr'             (,⊂ ptr                   )) ⍝                                                                      ⍝ Get default shader locations
+rlLoadRenderBatchRAYLIB                  ←               R('rlLoadRenderBatchRetPtr'                  (('>',rlRenderBatch) i i  )) ⍝ numBuffers bufferElements                                            ⍝ Load a render batch system
+rlUnloadRenderBatchRAYLIB                ←               R('rlUnloadRenderBatchRetPtr'                (,⊂ rlRenderBatch         )) ⍝ batch                                                                ⍝ Unload render batch system
+rlDrawRenderBatchRAYLIB                  ←               R('rlDrawRenderBatchRetPtr'                  (,⊂ ('=',rlRenderBatch)   )) ⍝ batch                                                                ⍝ Draw render batch data (Update->Draw->Reset)
+rlSetRenderBatchActiveRAYLIB             ←               R('rlSetRenderBatchActiveRetPtr'             (,⊂ ('=',rlRenderBatch)   )) ⍝ batch                                                                ⍝ Set the active render batch for rlgl (NULL for default internal)
+rlDrawRenderBatchActiveRAYLIB            ←               R('rlDrawRenderBatchActiveRetPtr'            (⍬                        )) ⍝                                                                      ⍝ Update and draw internal render batch
+rlCheckRenderBatchLimitRAYLIB            ←               R('rlCheckRenderBatchLimitRetPtr'            (('>',bool) i             )) ⍝ vCount                                                               ⍝ Check internal buffer overflow for a given number of vertex
+rlSetTextureRAYLIB                       ←               R('rlSetTextureRetPtr'                       (,⊂ u                     )) ⍝ id                                                                   ⍝ Set current texture for render batch and check buffers limits
+rlLoadVertexArrayRAYLIB                  ←               R('rlLoadVertexArrayRetPtr'                  (,⊂ ('>',u)               )) ⍝                                                                      ⍝ Load vertex array (vao) if supported
+rlLoadVertexBufferRAYLIB                 ←               R('rlLoadVertexBufferRetPtr'                 (('>',u) ptr i bool       )) ⍝ buffer size dynamic                                                  ⍝ Load a vertex buffer object
+rlLoadVertexBufferElementRAYLIB          ←               R('rlLoadVertexBufferElementRetPtr'          (('>',u) ptr i bool       )) ⍝ buffer size dynamic                                                  ⍝ Load vertex buffer elements object
+rlUpdateVertexBufferRAYLIB               ←               R('rlUpdateVertexBufferRetPtr'               (u ptr i i                )) ⍝ bufferId data dataSize offset                                        ⍝ Update vertex buffer object data on GPU buffer
+rlUpdateVertexBufferElementsRAYLIB       ←               R('rlUpdateVertexBufferElementsRetPtr'       (u ptr i i                )) ⍝ id data dataSize offset                                              ⍝ Update vertex buffer elements data on GPU buffer
+rlUnloadVertexArrayRAYLIB                ←               R('rlUnloadVertexArrayRetPtr'                (,⊂ u                     )) ⍝ vaoId                                                                ⍝ Unload vertex array (vao)
+rlUnloadVertexBufferRAYLIB               ←               R('rlUnloadVertexBufferRetPtr'               (,⊂ u                     )) ⍝ vboId                                                                ⍝ Unload vertex buffer object
+rlSetVertexAttributeRAYLIB               ←               R('rlSetVertexAttributeRetPtr'               (u i i bool i i           )) ⍝ index compSize type normalized stride offset                         ⍝ Set vertex attribute data configuration
+rlSetVertexAttributeDivisorRAYLIB        ←               R('rlSetVertexAttributeDivisorRetPtr'        (u i                      )) ⍝ index divisor                                                        ⍝ Set vertex attribute data divisor
+rlSetVertexAttributeDefaultRAYLIB        ←               R('rlSetVertexAttributeDefaultRetPtr'        (i ptr i i                )) ⍝ locIndex value attribType count                                      ⍝ Set vertex attribute default value, when attribute to provided
+rlDrawVertexArrayRAYLIB                  ←               R('rlDrawVertexArrayRetPtr'                  (i i                      )) ⍝ offset count                                                         ⍝ Draw vertex array (currently active vao)
+rlDrawVertexArrayElementsRAYLIB          ←               R('rlDrawVertexArrayElementsRetPtr'          (i i ptr                  )) ⍝ offset count buffer                                                  ⍝ Draw vertex array elements
+rlDrawVertexArrayInstancedRAYLIB         ←               R('rlDrawVertexArrayInstancedRetPtr'         (i i i                    )) ⍝ offset count instances                                               ⍝ Draw vertex array (currently active vao) with instancing
+rlDrawVertexArrayElementsInstancedRAYLIB ←               R('rlDrawVertexArrayElementsInstancedRetPtr' (i i ptr i                )) ⍝ offset count buffer instances                                        ⍝ Draw vertex array elements with instancing
+rlLoadTextureRAYLIB                      ←               R('rlLoadTextureRetPtr'                      (('>',u) ptr i i i i      )) ⍝ data width height format mipmapCount                                 ⍝ Load texture data
+rlLoadTextureDepthRAYLIB                 ←               R('rlLoadTextureDepthRetPtr'                 (('>',u) i i bool         )) ⍝ width height useRenderBuffer                                         ⍝ Load depth texture/renderbuffer (to be attached to fbo)
+rlLoadTextureCubemapRAYLIB               ←               R('rlLoadTextureCubemapRetPtr'               (('>',u) ptr i i i        )) ⍝ data size format mipmapCount                                         ⍝ Load texture cubemap data
+rlUpdateTextureRAYLIB                    ←               R('rlUpdateTextureRetPtr'                    (u i i i i i ptr          )) ⍝ id offsetX offsetY width height format data                          ⍝ Update texture with new data on GPU
+rlGetGlTextureFormatsRAYLIB              ←               R('rlGetGlTextureFormatsRetPtr'              (i ('=',u) ('=',u) ('=',u))) ⍝ format glInternalFormat glFormat glType                              ⍝ Get OpenGL internal formats
+rlGetPixelFormatNameRAYLIB               ←               R('rlGetPixelFormatNameRetPtr'               (('>',str) u              )) ⍝ format                                                               ⍝ Get name string for pixel format
+rlUnloadTextureRAYLIB                    ←               R('rlUnloadTextureRetPtr'                    (,⊂ u                     )) ⍝ id                                                                   ⍝ Unload texture from GPU memory
+rlGenTextureMipmapsRAYLIB                ←               R('rlGenTextureMipmapsRetPtr'                (u i i i ('=',i)          )) ⍝ id width height format mipmaps                                       ⍝ Generate mipmap data for selected texture
+rlReadTexturePixelsRAYLIB                ←               R('rlReadTexturePixelsRetPtr'                (('>',ptr) u i i i        )) ⍝ id width height format                                               ⍝ Read texture pixel data
+rlReadScreenPixelsRAYLIB                 ←               R('rlReadScreenPixelsRetPtr'                 (('>',ustr) i i           )) ⍝ width height                                                         ⍝ Read screen pixel data (color buffer)
+rlLoadFramebufferRAYLIB                  ←               R('rlLoadFramebufferRetPtr'                  (,⊂ ('>',u)               )) ⍝                                                                      ⍝ Load an empty framebuffer
+rlFramebufferAttachRAYLIB                ←               R('rlFramebufferAttachRetPtr'                (u u i i i                )) ⍝ fboId texId attachType texType mipLevel                              ⍝ Attach texture/renderbuffer to a framebuffer
+rlFramebufferCompleteRAYLIB              ←               R('rlFramebufferCompleteRetPtr'              (('>',bool) u             )) ⍝ id                                                                   ⍝ Verify framebuffer is complete
+rlUnloadFramebufferRAYLIB                ←               R('rlUnloadFramebufferRetPtr'                (,⊂ u                     )) ⍝ id                                                                   ⍝ Delete framebuffer from GPU
+rlLoadShaderCodeRAYLIB                   ←               R('rlLoadShaderCodeRetPtr'                   (('>',u) str str          )) ⍝ vsCode fsCode                                                        ⍝ Load shader from code strings
+rlCompileShaderRAYLIB                    ←               R('rlCompileShaderRetPtr'                    (('>',u) str i            )) ⍝ shaderCode type                                                      ⍝ Compile custom shader and return shader id (type: RL_VERTEX_SHADER, RL_FRAGMENT_SHADER, RL_COMPUTE_SHADER)
+rlLoadShaderProgramRAYLIB                ←               R('rlLoadShaderProgramRetPtr'                (('>',u) u u              )) ⍝ vShaderId fShaderId                                                  ⍝ Load custom shader program
+rlUnloadShaderProgramRAYLIB              ←               R('rlUnloadShaderProgramRetPtr'              (,⊂ u                     )) ⍝ id                                                                   ⍝ Unload shader program
+rlGetLocationUniformRAYLIB               ←               R('rlGetLocationUniformRetPtr'               (('>',i) u str            )) ⍝ shaderId uniformName                                                 ⍝ Get shader location uniform
+rlGetLocationAttribRAYLIB                ←               R('rlGetLocationAttribRetPtr'                (('>',i) u str            )) ⍝ shaderId attribName                                                  ⍝ Get shader location attribute
+rlSetUniformRAYLIB                       ←               R('rlSetUniformRetPtr'                       (i ptr i i                )) ⍝ locIndex value uniformType count                                     ⍝ Set shader value uniform
+rlSetUniformMatrixRAYLIB                 ←               R('rlSetUniformMatrixRetPtr'                 (i Matrix                 )) ⍝ locIndex mat                                                         ⍝ Set shader value matrix
+rlSetUniformMatricesRAYLIB               ←               R('rlSetUniformMatricesRetPtr'               (i ('<',Matrix) i         )) ⍝ locIndex mat count                                                   ⍝ Set shader value matrices
+rlSetUniformSamplerRAYLIB                ←               R('rlSetUniformSamplerRetPtr'                (i u                      )) ⍝ locIndex textureId                                                   ⍝ Set shader value sampler
+rlSetShaderRAYLIB                        ←               R('rlSetShaderRetPtr'                        (u ('=',i)                )) ⍝ id locs                                                              ⍝ Set shader currently active (id and locations)
+rlLoadComputeShaderProgramRAYLIB         ←               R('rlLoadComputeShaderProgramRetPtr'         (('>',u) u                )) ⍝ shaderId                                                             ⍝ Load compute shader program
+rlComputeShaderDispatchRAYLIB            ←               R('rlComputeShaderDispatchRetPtr'            (u u u                    )) ⍝ groupX groupY groupZ                                                 ⍝ Dispatch compute shader (equivalent to *draw* for graphics pipeline)
+rlLoadShaderBufferRAYLIB                 ←               R('rlLoadShaderBufferRetPtr'                 (('>',u) u ptr i          )) ⍝ size data usageHint                                                  ⍝ Load shader storage buffer object (SSBO)
+rlUnloadShaderBufferRAYLIB               ←               R('rlUnloadShaderBufferRetPtr'               (,⊂ u                     )) ⍝ ssboId                                                               ⍝ Unload shader storage buffer object (SSBO)
+rlUpdateShaderBufferRAYLIB               ←               R('rlUpdateShaderBufferRetPtr'               (u ptr u u                )) ⍝ id data dataSize offset                                              ⍝ Update SSBO buffer data
+rlBindShaderBufferRAYLIB                 ←               R('rlBindShaderBufferRetPtr'                 (u u                      )) ⍝ id index                                                             ⍝ Bind SSBO buffer
+rlReadShaderBufferRAYLIB                 ←               R('rlReadShaderBufferRetPtr'                 (u ptr u u                )) ⍝ id dest count offset                                                 ⍝ Read SSBO buffer data (GPU->CPU)
+rlCopyShaderBufferRAYLIB                 ←               R('rlCopyShaderBufferRetPtr'                 (u u u u u                )) ⍝ destId srcId destOffset srcOffset count                              ⍝ Copy SSBO data between buffers
+rlGetShaderBufferSizeRAYLIB              ←               R('rlGetShaderBufferSizeRetPtr'              (('>',u) u                )) ⍝ id                                                                   ⍝ Get SSBO buffer size
+rlBindImageTextureRAYLIB                 ←               R('rlBindImageTextureRetPtr'                 (u u i bool               )) ⍝ id index format readonly                                             ⍝ Bind image texture
+rlGetMatrixModelviewRAYLIB               ←               R('rlGetMatrixModelviewRetPtr'               (,⊂ ('>',Matrix)          )) ⍝                                                                      ⍝ Get internal modelview matrix
+rlGetMatrixProjectionRAYLIB              ←               R('rlGetMatrixProjectionRetPtr'              (,⊂ ('>',Matrix)          )) ⍝                                                                      ⍝ Get internal projection matrix
+rlGetMatrixTransformRAYLIB               ←               R('rlGetMatrixTransformRetPtr'               (,⊂ ('>',Matrix)          )) ⍝                                                                      ⍝ Get internal accumulated transform matrix
+rlGetMatrixProjectionStereoRAYLIB        ←               R('rlGetMatrixProjectionStereoRetPtr'        (('>',Matrix) i           )) ⍝ eye                                                                  ⍝ Get internal projection matrix for stereo render (selected eye)
+rlGetMatrixViewOffsetStereoRAYLIB        ←               R('rlGetMatrixViewOffsetStereoRetPtr'        (('>',Matrix) i           )) ⍝ eye                                                                  ⍝ Get internal view offset matrix for stereo render (selected eye)
+rlSetMatrixProjectionRAYLIB              ←               R('rlSetMatrixProjectionRetPtr'              (,⊂ Matrix                )) ⍝ proj                                                                 ⍝ Set a custom projection matrix (replaces internal projection matrix)
+rlSetMatrixModelviewRAYLIB               ←               R('rlSetMatrixModelviewRetPtr'               (,⊂ Matrix                )) ⍝ view                                                                 ⍝ Set a custom modelview matrix (replaces internal modelview matrix)
+rlSetMatrixProjectionStereoRAYLIB        ←               R('rlSetMatrixProjectionStereoRetPtr'        (Matrix Matrix            )) ⍝ right left                                                           ⍝ Set eyes projection matrices for stereo rendering
+rlSetMatrixViewOffsetStereoRAYLIB        ←               R('rlSetMatrixViewOffsetStereoRetPtr'        (Matrix Matrix            )) ⍝ right left                                                           ⍝ Set eyes view offsets matrices for stereo rendering
+rlLoadDrawCubeRAYLIB                     ←               R('rlLoadDrawCubeRetPtr'                     (⍬                        )) ⍝                                                                      ⍝ Load and draw a cube
+rlLoadDrawQuadRAYLIB                     ←               R('rlLoadDrawQuadRetPtr'                     (⍬                        )) ⍝                                                                      ⍝ Load and draw a quad
 ∇
 :EndNamespace

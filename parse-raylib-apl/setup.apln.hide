@@ -1,103 +1,250 @@
 :Namespace setup
-⍝ Makes an importer that improves the ffi function creation syntax
-∇ OutputStr ← {outType} MakeImporter (pathToBin funcName inpTypes)
-    ;NestedStructToStr ;NestedStructToStrReturn ;⎕IO
-  ⎕IO←1
-  ⍝ outType's default is ''
-  :If 0=⎕NC'outType'
-    outType←''
-  :EndIf
+⍝ Makes an importer that improves the FFI function creation syntax
 
-  NestedStructToStr ← {
-    2=+/⍵∊'<=>': '=P[]'
-    2>|≡⍵:⍵
-    m←0≠≡¨⍵
-    (PtrLeft BracketsRight) ← {n←∨\⍵='['⋄((~n)/⍵)(n/⍵)}(~m)/⍵
-    PtrLeft,BracketsRight,⍨{
-      2>|≡⍵:⍵
-      ('{','}',⍨1↓⊃,/' ',¨∇¨⍵/⍨0≠≡¨⍵),⍵/⍨0=≡¨⍵
-    } PadStruct m/⍵
-  }
-  NestedStructToStrReturn ← {
-    ((,'=')≢1↑⍵)∧1≥|≡⍵:⍵
-    ptr
-  }
-  OutputStr ← (NestedStructToStrReturn outType),' ',pathToBin,'|',funcName,⊃,/' ',¨NestedStructToStr¨inpTypes
-∇
+⎕io←1
 
-R ← {⍺←''⋄⍺ MakeImporter (⊂pathToBinary),⍵}
+⍝ ¨, with the prototype given as ⍵⍵, wrapped in a namespace due to operators not entering scopes
+:Namespace E
+  _Each_ ← {⍺←⊢ ⋄ 0≡≢⍵:⍵⍵ ⋄ ⍺ ⍺⍺¨⍵}
+:EndNamespace
 
-⍝ predefined C types
-bool ← 'I1'
-c    ← 'I1'
-i    ← 'I4'
-f    ← 'F4'
-u    ← 'U4'
-i1   ← 'I1'
-u1   ← 'U1'
-u8   ← 'U8'
-str  ← '=0C1'
-ustr ← '=C1'
-ptr  ← ,'P'
-f8   ← 'F8'
-i8   ← 'I8'
-u2   ← 'U2'
+⍝ id function used for array-of-functions' prototype
+id←{F←⊢⋄⎕OR'F'}⍬
 
-ComputerAlignment ← 8
-types ← i u i1 ptr f8 i8 u2 f u1 u8 'U3' 'F4[2]' 'F4[2]' 'F4[2]' 'F4[2]' 'F4[2]' 'F4[2]' 'F4[4]' 'F4[4]' 'I4[4]' 'U1[32]' 'U4[4]'
-sizes ← 4 4  1 8    8  8  2 4  1  8   3    8       8       8       8       8       8       8       8      8        8        8
-
-⍝ Building struct
-⍝ Struct memory needs to be alligned, so we need to add padding.
-PadStruct ← {
-  PadFlat←{
-    ⍝ ┌Add to struct
-    ⍝ │ ┌Add the new elem after fills to allign it
-    ⍝ │ │    ┌Add fills       ┌Measure offset off alignment
-    ⍝ │ │    │    Alignment┐  │   ┌Position in memory
-    ⍝ ├┐├───┐├──────────┐┌─┴─┐├┐┌─┴─┐ ┌──────┬Loop over ⍵ with initial ⍬
-    ⊃{⍵,⍺,∘⊂⍨1 1 'U1'⍴∘⊂⍨(2⊃⍺)|-+/⊃¨⍵}/⍬,∘⊂⍨⌽⍵
-  }
-  Size ← {
-    (⊂⍵)∊types: sizes[types⍳⊂⍵]
-    1⊃⍬⊣⎕←'Length of type unknown, please add to types list in this script: ',⍵
-  }
-  Align←{
-    0=≡⍵:⍵
-    s←∇¨⍵
-    ∨/'<=>'∊⊃s: 8 8(,'P')
-    1=|≡s:(2⍴Size s),⊂s
-    m←0≠≡¨s
-    la←PadFlat m/s
-    size←+/1⊃¨la
-    alignment←⌈/2⊃¨la
-    size alignment,⊂(s/⍨⌽∧\⌽~m),⍨(s/⍨∧\~m),3⊃¨la
-  }
-  (size padding items) ← Align ⍵
-
-  ⍝ {{F4 F4 F4} {F4 F4 F4} {F4 F4 F4} F4 I4} ⍝ unchanged (does work with padding)
-
-  ⍝ {U4 I4 I4 I4 I4} → {U4 I4 I4 I4 I4 U1 U1 U1 U1}
-  ⍝ ={U4 I4 I4 I4 I4} {P I4 I4 I4 I4}
-  items,u1⍴∘⊂⍨ComputerAlignment|size
+debug ← {
+  0:_←⍬
+  ⎕←'StackSize',topRuntime
+  ⎕←⍵
+  ⍵
 }
 
+Assert ← {⍺←'assertion failure' ⋄ 0∊⍵:⍺{(⎕←⍺) ⎕SIGNAL 8}⍵ ⋄ shy←0}
+
+⍝ predefined C types
+atomTypes ← ⍬
+atomTypes ,←⊂ bool ← 'I1'
+atomTypes ,←⊂ c    ← 'I1'
+atomTypes ,←⊂ i    ← 'I4'
+atomTypes ,←⊂ f    ← 'F4'
+atomTypes ,←⊂ u    ← 'U4'
+atomTypes ,←⊂ i1   ← 'I1'
+atomTypes ,←⊂ u1   ← 'U1'
+atomTypes ,←⊂ u8   ← 'U8'
+atomTypes ,←⊂ ptr  ← ,'P'
+atomTypes ,←⊂ f8   ← 'F8'
+atomTypes ,←⊂ i8   ← 'I8'
+atomTypes ,←⊂ u2   ← 'U2'
+atomTypes←∪atomTypes
+
+⍝ Optain path to lib file for the current platform
+PlatfromToLibFile ← {
+  platform←⍵
+  'Windows'≡platform:'../temp-c-raylib.dll'
+  'Darwin' ≡platform:'../libtemp-c-raylib.dylib'
+  'Linux'  ≡platform:'../libtemp-c-raylib.so'
+  ('Unknown platform (',platform,')') Assert 0
+}
+lib ← PlatfromToLibFile '-64'~⍨⊃#⎕WG'APLVersion'
+('File ',lib,' was not found') Assert ⎕NEXISTS lib
+
+Read←{
+  _←'R'⎕NA lib,'|memcpy2 =U1[',(⍕⍺),'] P U8' ⍝ MA = Mid After. Means these convert to/from pointer. IF = Into From
+  R (⍺⍴0) ⍵ ⍺
+}
+
+unitPopGen ← {
+  _←'CpyPop'⎕NA lib,'|memcpy2 >',⍵,' P U8'
+  o ← CpyPop{ ⍺⍺ (⍬ (Pop⍬) ⍵⍵) }⍺
+  ⎕OR'o'
+}
+unitPushGen ← {
+  _←'CpyPush'⎕NA lib,'|memcpy2 P <',⍵,' U8'
+  o ← CpyPush{ ptr⊣⍺⍺((ptr←Push⍬)(,⊂⍵) ⍵⍵) }⍺
+  ⎕OR'o'
+}
+typeByteSize ← {⍵≡,'P':8 ⋄ ⍎⊃⌽⍵} E._Each_ ⍬⊢ atomTypes
+pop  ← typeByteSize unitPopGen  E._Each_(0/⊂id)⊢ atomTypes
+push ← typeByteSize unitPushGen E._Each_(0/⊂id)⊢ atomTypes
+
+PtrToBytes ← {
+  _←'fromU1'⎕NA lib,'|memcpy2 =U1[','] P U8',⍨⍕⍵
+  fromU1(⍵⍴0)⍺⍵
+}
+
+⍝ ---------------- ⍝
+⍝ Stack operations ⍝
+⍝ ---------------- ⍝
+stack ← ⍬
+topRuntime ← 0
+
+Push ← {
+  topRuntime+←1
+  stack ,← {tempAlloc BytesEachArg}E._Each_⍬⍳0⌈topRuntime-≢stack ⍝ Make sure stack always has enough space
+  topRuntime⊃stack
+}
+Pop ← {
+  topRuntime-←1
+  _←'Stack underflow' Assert 0≤topRuntime
+  (topRuntime+1)⊃stack
+}
+
+NameOfStruct ← {
+  2>|≡⍵:⍵
+  _← 'NameCheck applied to a non-atomic pointer type, this should be impossible.' Assert ∧/'<=>'≢¨⊂⊃⍵
+  ,'⋄'∘,⍣¯1⊃⍵
+}
+remPtrInfo ← {⍵/⍨~ (~atomTypes∊⍨⊂⍵)∧ ∧\'<=>'∊⍨⍵}
+
+
+⍝ -------------------------------- ⍝
+⍝ Handling pop and pushing structs ⍝
+⍝ -------------------------------- ⍝
+structs ← ∪{(('⋄'≡⊃⍤⊃)¨⍵)/⍵}##.{⍎⍵._Each_(0/⊂,⊂'')⎕NL¯2} E
+⎕NA 'I4 ',lib,'|StructCount'
+'Not right amount of structs found' Assert StructCount≡≢structs
+
+⎕NA 'I4 ',lib,'|GetStructNameLength I4'
+⎕NA lib,'|GetStructName =C1[] I4 I4'
+structNames ← {l←GetStructNameLength⍵ ⋄ GetStructName ((l⍴'')l ⍵)}E._Each_(0/⊂'')⊢ ¯1+⍳≢structs
+
+'Not all found struct names matched' Assert structNames≡⍥{⍵[⍋⍵]}NameOfStruct¨structs
+
+⎕NA 'I4 ',lib,'|GetStructSize I4'
+'tempAlloc' ⎕NA 'P ',lib,'|MemAlloc U4'
+'tempFree'  ⎕NA      lib,'|MemFree P'
+BytesEachArg ← ⌈/ GetStructSize¨ ⎕IO-⍨⍳≢structs
+atomTypes ,← 1↓¨⊃¨structs
+
+PopStructGen←{
+  name←NameOfStruct ⍵
+  cleaned ← {0=≢⍵: ⍵ ⋄ NameOfStruct¨⍵} {'='≡⊃⍵:,'P'⋄⍵}¨ 1↓⍵
+  _←('Struct ',name,' not cleaned properly') Assert ∧/2>≡¨cleaned
+  args←' P'⍴⍨2×1+≢cleaned   ⍝ Includes result
+  _←'F'⎕NA lib,'|',name,'FROM',args
+
+  O←F{ ⍝ pop value
+    i←atomTypes⍳⍵⍵
+    _←⍺⍺ (Push E._Each_⍬⊢i),⍨Pop⍬
+    ⌽{⍵∘⊢⍬}E._Each_⍬⌽pop[i]
+  }cleaned
+  ⎕OR 'O'
+}
+PushStructGen ← {
+  name←NameOfStruct ⍵
+  cleaned ← NameOfStruct E._Each_ (0/⊂'') {'='≡⊃⍵:,'P'⋄⍵}¨ 1↓⍵
+  _←('Struct ',name,' not cleaned properly') Assert ∧/2>≡¨cleaned
+  args←' P'⍴⍨2×1+≢cleaned   ⍝ Includes result
+  _←'I'⎕NA lib,'|',name,'INTO',args
+
+  O←I{ ⍝ push value
+    (name cleaned)←⍵⍵
+    i←atomTypes⍳cleaned
+    i≢⍥≢⍵:0 Assert⍨ 'Wrong struct length given for ',name,', (',(⍕≢i),'≢≢⍵)'
+    ptr←Push⍬
+    _←push[i] {⍺∘⊢⍵}E._Each_⍬⊢ ⍵
+    _←⍺⍺ ptr,⌽Pop E._Each_⍬⊢i
+    ptr
+  }(name cleaned)
+  ⎕OR'O'
+}
+
+pop ,← PopStructGen  E._Each_(0/⊂id)⊢ structs
+push,← PushStructGen E._Each_(0/⊂id)⊢ structs
+⍝ -------------------------------- ⍝
+
+⍝ --------------------------- ⍝
+⍝ Handling all =type versions ⍝
+⍝ --------------------------- ⍝
+equalPtrPopGen←{
+  O←⍵{ ⍺⍺⍬⊣⍵⍵⍬ }(⊃pop[atomTypes⍳⊂,'P'])
+  ⎕OR'O'
+}
+equalPtrPushGen←{
+  O←⍵{ ⍵⍵ ⍺⍺ ⍵ }(⊃push[atomTypes⍳⊂,'P'])
+  ⎕OR'O'
+}
+pop ,← equalPtrPopGen  E._Each_(0/⊂id)⊢ pop
+push,← equalPtrPushGen E._Each_(0/⊂id)⊢ push
+atomTypes,←'=',¨atomTypes
+⍝ --------------------------- ⍝
+
+
+⍝ --------------------------- ⍝
+⍝ Handling signed string type ⍝
+⍝ --------------------------- ⍝
+atomTypes ,←⊂ str ← '=0C1'
+StringPopGen←{
+  _←'A'⎕NA lib,'|strcpy2 >0T1[] P'
+  O←(⊃pop[atomTypes⍳⊂,'P']){
+    strPtr ← ⍺⍺⍬
+    ptrToStr←(topRuntime+1)⊃stack
+    _←'Internal error, the string pointer popped was Null' Assert 0≢strPtr
+    r←⍵⍵ (⍬ ptrToStr)
+    _←tempFree strPtr
+    r
+  }A
+  ⎕OR 'O'
+}
+StringPushGen←{
+  _←'M'⎕NA lib,'|strcpy2 P <0T1[]'
+  push←(⊃push[atomTypes⍳⊂,'P']){
+    (⍕≢⊢)⍵:0 Assert⍨'Expected string, got: ',⍎⍵
+    strPtr ← tempAlloc 1+≢⍵
+    _←'Internal error, string pointer allocated for string to push was Null'Assert 0≢strPtr
+    _←⍵⍵ (strPtr ⍵)
+    ⍺⍺ strPtr
+  }M
+  ⎕OR 'push'
+}
+pop ,←⊂ StringPopGen  ⍬
+push,←⊂ StringPushGen ⍬
+⍝ --------------------------- ⍝
+
+
+∇F←R (name t);bm;in;out;io
+  'Func'⎕NA lib,'|',name,' P'⍴⍨2×≢t
+  io←(~atomTypes∊⍨t)∧'='≡¨⊃¨t ⍝ In and out
+  bm ← '>'≢¨⊃¨t ⍝ In or out mask, neither is impossible
+  FF ← {(~atomTypes∊⍨⊂⍵)∧'='≡⊃⍵: ,'P' ⋄ ⍵}
+  GG ← {(b/⍵), NameOfStruct ⍵/⍨~b←∧\⍵∊'<=>'}
+  in  ←                             FF¨ GG E._Each_ (0/⊂'')⊢ t/⍨ bm ⍝ ~atomTypes∊⍨⊂⍵ is for mainly checking if something is a string
+  out ← ,¨'>'∘,⍣¯1 E._Each_ (0/⊂'') FF¨ GG E._Each_ (0/⊂'')⊢ t/⍨~bm ⍝ ~atomTypes∊⍨⊂⍵ is for mainly checking if something is a string
+  F←(io bm in out name){(io bm in out name)←⍺⍺
+    inArgsList ← {1≡≢in:,⊂⍵⋄⍵}⍵
+    in≢⍥≢inArgsList:0 Assert⍨'Wrong amount of arguments given to ',name,': ','≢≢⍵',⍨⍕≢in
+
+    ⍝ all elements in args will be replaced by pointers
+    ⍝ which will be arguments given to the called function
+    args ← bm
+
+    ⍝ Push all outputs, pop them last with the typed-pop
+    ((~bm)/args)←Push{⍺⍺⍬} E._Each_⍬⊢ out
+
+    ⍝ Push inputs, first references since those will be in the output too
+    ref ← (str∘≢¨in) ∧ '='=⊃¨in
+    (( ref)/bm/args) ← push[atomTypes⍳in/⍨ ref] {⍺∘⊢⍵}E._Each_⍬⊢ inArgsList/⍨ ref ⍝ References allocated
+    ((~ref)/bm/args) ← push[atomTypes⍳in/⍨~ref] {⍺∘⊢⍵}E._Each_⍬⊢ inArgsList/⍨~ref ⍝ Non references allocated
+
+    maybeNilFunc ← ⍵⍵ ⍝ I tried simplifying out this assignment but was unsuccessful. ⎕OR with niladic functions is no joke.
+    _←{⍬≡⍵:maybeNilFunc ⋄ maybeNilFunc⍵} args
+    _←Pop E._Each_⍬ (/⍨)~ref ⍝ First popping non reference inputs
+    refOuts ←{⍵∘⊢⍬}E._Each_⍬⌽pop[atomTypes⍳in/⍨ref]
+    {1≡≢⍵:⊃⍵⋄⍵} refOuts,⍨{⍵∘⊢⍬}E._Each_⍬⌽pop[atomTypes⍳out]
+  }(⎕OR'Func')
+∇
+
+
 ∇AfterDefaultDefinitions mode
-  replacements ⊢← 0 ⎕FIX pathToMe,'../parse-raylib-apl/replacements.apln.hide'
+  replacements ⊢← 0 ⎕FIX pathToRaylibDotAPLN,'../parse-raylib-apl/replacements.apln.hide'
 
-  SetTraceLogLevelRAYLIB ,TraceLogLevel.LOG_WARNING
+  SetTraceLogLevelRAYLIB TraceLogLevel.LOG_WARNING
   SetTargetFPSRAYLIB 60
-
-  ⍝ Replace all names of ⍺ that are in ⍵ with the ⍵ counterpart
-  ReplaceNames ← {⍵.(⍎'⍺.',⊢,'←',⊢)¨⍣(×≢a)⊢a←⊃∩/(⍺⍵).⎕NL¯3}
 
   :If mode∊1 3 ⍝ Automatic replacements
     replacements {r←⍵ ⋄ r←r⊣'r'⎕NS⍺} ⎕THIS
   :EndIf
 
   :If mode∊2 3 ⍝ Custom replacements
-    ⍝ ⎕NA somehow doesn't need padding at {F4 F4 F4}. Using {F4 F4 F4 U1 U1 U1 U1} makes the model dissapear.
-    ⎕NA pathToBinary,'|DrawModel {{F4 F4 F4 F4 F4 F4 F4 F4 F4 F4 F4 F4 F4 F4 F4 F4} I4 I4 P P P I4 U1 U1 U1 U1 P P} {F4 F4 F4} F4 {U1 U1 U1 U1 U1 U1 U1 U1}'
     customReplacements {r←⍵ ⋄ r←r⊣'r'⎕NS⍺} ⎕THIS
   :EndIf
 ∇
