@@ -39,7 +39,7 @@ rlDir ← '../raylib-apl/link/',⍨⊃1⎕NPARTS''
 rl ← 0⎕Fix rlDir,'raylib.apln'
 rl.Init rlDir
 ```
-When making a script file like the raylib-apl's examples, I would recommend the `.apls` file extension and adding this line at the top of the script `#!cd $dir && /usr/bin/dyalogscript $fileName`.
+When making a script file like the raylib-apl's examples, I would recommend the `.apls` file extension and adding this line at the top of the script `#!cd $dir && /usr/bin/dyalogscript $fileName`. When running `.apls` files, remember to always be in their directory.
 
 ### Using Link:
 You may [\]Link](https://dyalog.github.io/link/4.0/API/) to the `raylib-apl/link` folder.
@@ -82,9 +82,6 @@ raylib.CloseWindow
 Inside this scope, you are allowed a lot more. You can use functions like `SetWindowIcon`, `GetScreenWidth`, `GetMonitorCount`, `LoadShader`, `GetMouseRay`, and many more.
 
 #### Scopes in detail
-In the current version of raylib-apl, running a function that requires a scope outside that scope can crash the Dyalog interpreter, or lead to unintended output.
-Not closing a scope after starting it may also crash or give unintended output.
-
 There are other functions that start and end scopes, like `StartDrawing` and `EndDrawing`. `StartDrawing` and `EndDrawing` require the `InitWindow` scope. Inside the `StartDrawing` scope you can use functions like `ClearBackground`, which sets the background of the window to a given color. An important note about `EndDrawing` is that it automatically delays to whatever frame-rate you choose, which by default is your monitor refresh rate. As an example, if your monitor has a refresh rate of 60 frames per second, `EndDrawing` will delay a maximum of `÷60`. I say "maximum", because `EndDrawing` delays just enough to keep your `:while` loop running 60 times a second, so if your loop takes `÷60` seconds to run, `EndDrawing` wouldn't delay.
 
 #### First application
@@ -107,12 +104,6 @@ To get a good start into raylib-apl, mess around with the [examples](https://git
 ## Using dyalogscript
 All raylib-apl examples support using [dyalogscript](https://help.dyalog.com/19.0/#UserGuide/Installation%20and%20Configuration/Shell%20Scripts.htm?Highlight=dyalogscript), by having the following on the top of every example:  
 `#!cd $dir && /usr/bin/dyalogscript $fileName`
-
-# ⎕NA problems
-
-Functions that `⎕NA` outputs can't return `F4`, it formats them incorrectly on Linux. Instead, give a struct in a pointer that C modifies.
-
-argument of type `>U8` is ignored, but you still need to give ⎕NA the input type. Solved by just having a wrapper function in APL that passes `⍬`.
 
 # Optionally parsing `raylib-apl/link/raylib.apln`
 The auto-parsing isn't needed since the parser output is premade, though if you still need to parse, install [CBQN](https://github.com/dzaima/CBQN) to run `bqn raylib-apl/parse-raylib-apl/parseAll.bqn`.
