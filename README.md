@@ -101,6 +101,8 @@ rl.CloseWindow⍬ # End InitWindow scope
 #### Now to start
 To get a good start into raylib-apl, mess around with the [examples](https://github.com/Brian-ED/raylib-apl/tree/master/examples) and see what you can make!
 
+For a proper list of functions and namespaces found in raylib-apl, consider having a look into what the [raylib.apln file](https://github.com/Brian-ED/raylib-apl/blob/master/link/raylib.apln) defines. Note that the function definitions there aren't final, so drop the RAYLIB suffix to use the proper function. An example is the value `raylib.KeyboardKey.KEY_SLASH` can be given as argument to `raylib.IsKeyPressed` to check if the slash key is pressed.
+
 ## Using dyalogscript
 All raylib-apl examples support using [dyalogscript](https://help.dyalog.com/19.0/#UserGuide/Installation%20and%20Configuration/Shell%20Scripts.htm?Highlight=dyalogscript), by having the following on the top of every example:  
 `#!cd $dir && /usr/bin/dyalogscript $fileName`
