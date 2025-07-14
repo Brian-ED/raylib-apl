@@ -60,9 +60,9 @@ jobs:
         run: |
           unset DISPLAY
           cd "${GITHUB_WORKSPACE}"
-          chmod +x "${GITHUB_WORKSPACE}/.github/workflows/activate.apls"
+          chmod +x "${GITHUB_WORKSPACE}/.github/workflows/activate.apls" "${GITHUB_WORKSPACE}/.github/workflows/update.apls"
           xvfb-run -a "${GITHUB_WORKSPACE}/.github/workflows/activate.apls"
-          xvfb-run -a "${GITHUB_WORKSPACE}/.github/workflows/update.apls"
+          echo y | xvfb-run -a "${GITHUB_WORKSPACE}/.github/workflows/update.apls"
       - name: Build Project
         run: |
           unset DISPLAY
@@ -97,9 +97,9 @@ jobs:
         run: |
           unset DISPLAY
           cd "${GITHUB_WORKSPACE}"
-          chmod +x "${GITHUB_WORKSPACE}/.github/workflows/activate.apls"
+          chmod +x "${GITHUB_WORKSPACE}/.github/workflows/activate.apls" "${GITHUB_WORKSPACE}/.github/workflows/update.apls"
           xvfb-run -a "${GITHUB_WORKSPACE}/.github/workflows/activate.apls"
-          xvfb-run -a "${GITHUB_WORKSPACE}/.github/workflows/update.apls"
+          echo y | xvfb-run -a "${GITHUB_WORKSPACE}/.github/workflows/update.apls" 
       - name: Download a single artifact
         uses: actions/download-artifact@v4
         with:
