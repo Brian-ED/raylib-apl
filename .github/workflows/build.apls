@@ -3,7 +3,7 @@
 ⎕PW←500
 ⎕SE.(⍎⊃2⎕FIX'/StartupSession.aplf',⍨2⎕NQ#'GetEnvironment' 'DYALOG')
 ⎕ML ⎕IO←1 0 ⍝ ⎕IO delana est
-⎕SE.UCMD 'Tatin.Version'
+⎕←⎕SE.UCMD 'Tatin.Version'
 parms←⎕ns ''
 parms.(projectPath targetPath version dependencyFolder)←'.' 'Dist' '' ''
 ⎕SE.Tatin.BuildPackage parms
