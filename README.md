@@ -39,6 +39,14 @@ rlDir ← '../raylib-apl/link/',⍨⊃1⎕NPARTS''
 rl ← 0⎕Fix rlDir,'raylib.apln'
 rl.Init rlDir
 ```
+
+OR if using Tatin, take the code below:
+
+```apl
+rl ← raylibapl.raylib
+rl.Init raylibapl.TatinVars.HOME,'/link'
+```
+
 When making a script file like the raylib-apl's examples, I would recommend the `.apls` file extension and adding this line at the top of the script `#!cd $dir && /usr/bin/dyalogscript $fileName`. When running `.apls` files, remember to always be in their directory.
 
 ### Using Link:

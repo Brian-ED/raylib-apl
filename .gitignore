@@ -8,5 +8,8 @@ lib/
 # Incomplete examples
 examples/6_shaders
 
+# build output directory
+out/ 
+
 # vscode settings
 .vscode
