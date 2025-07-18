@@ -1,65 +1,106 @@
 # raylib-apl
-raylib-apl is a library made to write cross-platform graphical applications using the Dyalog APL programming language.
+A comprehensive library for creating cross-platform graphical applications using the Dyalog APL programming language. Built on the powerful [raylib](https://github.com/raysan5/raylib) C library, raylib-apl brings modern graphics programming to APL.
 
 ## Features
 <img align="right" style="width:240px" src="https://github.com/user-attachments/assets/bf969426-7741-4eda-aa03-5c90ee6f87de">
 
-- Supports platforms Windows and Linux.
-- Input-methods: Keyboard, Mouse, Controler and Touchscreen.
-- Graphics: 2D, 3D, Sound, Text, Vector graphics, Images/Textures and shaders.
-- Multiple Fonts formats supported (TTF, OTF, Image fonts, AngelCode fonts).
-- Multiple texture formats supported, including compressed formats (DXT, ETC, ASTC).
-- Full 3D support, including 3D Shapes, Models, Billboards, Heightmaps and more!
-- Flexible Materials system, supporting classic maps and PBR maps.
-- Animated 3D models supported (skeletal bones animation) (IQM, M3D, glTF).
-- Shaders support, including model shaders and postprocessing shaders.
-- Powerful math module for Vector, Matrix and Quaternion operations: raymath.
-- Audio loading and playing with streaming support (WAV, QOA, OGG, MP3, FLAC, XM, MOD).
-- VR stereo rendering support with configurable HMD device parameters.
+- **Cross-platform**: Windows, Linux, and macOS* support
+- **Input handling**: Keyboard, Mouse, Controller, and Touchscreen
+- **Rich graphics**: 2D, 3D, Sound, Text, Vector graphics, Images/Textures, and shaders
+- **Font support**: TTF, OTF, Image fonts, and AngelCode fonts
+- **Texture formats**: Multiple formats including compressed (DXT, ETC, ASTC)
+- **3D capabilities**: 3D Shapes, Models, Billboards, Heightmaps, and more
+- **Materials system**: Classic maps and PBR (Physically Based Rendering) maps
+- **Animation**: Skeletal bone animation (IQM, M3D, glTF)
+- **Shaders**: Model shaders and postprocessing shaders
+- **Math module**: Vector, Matrix, and Quaternion operations via raymath
+- **Audio**: Loading and streaming (WAV, QOA, OGG, MP3, FLAC, XM, MOD)
+- **VR support**: Stereo rendering with configurable HMD parameters
 
-# Warning
-Breaking changes to any feature in raylib-apl should be expected for now, as this library is very young and experimental. If you experience code 999, there was likely a "segfault"/error in raylib-apl, and so a bug report would be appreciated.
+## Development Disclaimer
+raylib-apl is in active development and should be considered experimental. Breaking changes may occur without notice. If you encounter code 999 errors, this likely indicates a segfault - please report these as bugs.
 
-Currently raylib-apl provides 4 different libraries; raylib, raygui, physac, and rlgl. Currently only raylib is stable, due to a lack of testing for the other 3.
+The library includes four modules:
+- **raylib**: Core graphics library (stable)
+- **raygui**: GUI library (limited testing)
+- **physac**: 2D physics library (limited testing)
+- **rlgl**: Low-level graphics (limited testing)
 
-# Documentation
+### Platform-Specific Notes
+- **Windows & Linux**: Full support with all features
+- ***macOS**: Supported, but requires `ENABLE_CEF=0` when starting Dyalog due to an unavoidable conflict with HtmlRenderer. On macOS, you cannot run both raylib-apl and HtmlRenderer in the same application/process.
 
-## Getting started
-Run the following to install [temp-c-raylib](https://github.com/Brian-ED/temp-c-raylib/) in the `raylib-apl/lib/` folder.
-```bash
-dyalogscript install-raylib.apls
-```
-Instead of running the above, you can manually download temp-c-raylib from it's [releases page](https://github.com/Brian-ED/temp-c-raylib/releases/).
+## Quick Start
 
+### Installation Methods
 
-### Importing raylib-apl
-To import raylib-apl as a namespace, take the code below and replace `../` with the path to raylib-apl:
+> **⚠️ macOS Users**: Start Dyalog with `ENABLE_CEF=0` to avoid HtmlRenderer conflicts. This can be done in the RIDE environment variables, or via command line:
+> ```bash
+> ENABLE_CEF=0 dyalog
+> ```
+
+#### Option 1: Tatin Package Manager (Recommended)
+[Tatin](https://tatin.dev/) is Dyalog APL's package manager that makes installing and managing APL packages simple and reliable. When using Tatin, it is recommended to use [Cider](https://github.com/aplteam/Cider), which uses Link to load your project files, but does a whole lot more than just that.
+
+For more information on Tatin usage, see [tatin.dev](https://tatin.dev/).
+
+1. **Install Tatin** (if not already installed):
+   ```apl
+   ]Activate tatin
+   ```
+   Then restart Dyalog, update Tatin, and restart again:
+   ```apl
+   ]UpdateTatin
+   ```
+
+2. **Install raylib-apl**:
+   ```apl
+   ]Tatin.InstallPackages raylibapl
+   ```
+
+3. **Use in your code**:
+   ```apl
+   ⍝ Load the package
+   rl ← raylibapl.raylib
+   
+   ⍝ Initialize (Tatin handles the path automatically)
+   rl.Init raylibapl.TatinVars.HOME,'/link'
+   
+   ⍝ Create your first window
+   rl.InitWindow 800 600 'My raylib-apl App'
+   rl.CloseWindow⍬
+   ```
+
+#### Option 2: Manual Installation
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/Brian-ED/raylib-apl.git
+   cd raylib-apl
+   ```
+
+2. **Download dependencies**:
+   ```bash
+   dyalogscript install-raylib.apls
+   ```
+   Or manually download [temp-c-raylib](https://github.com/Brian-ED/temp-c-raylib/releases/) to the `raylib-apl/lib/` folder.
+
+3. **Import manually**:
+   ```apl
+   rlDir ← '../raylib-apl/link/',⍨⊃1⎕NPARTS''
+   rl ← 0⎕Fix rlDir,'raylib.apln'
+   rl.Init rlDir
+   ```
+
+#### Alternative: Using Link
+For development and experimentation, you can use Dyalog's Link system with the cloned repository:
+
 ```apl
-rlDir ← '../raylib-apl/link/',⍨⊃1⎕NPARTS''
-rl ← 0⎕Fix rlDir,'raylib.apln'
-rl.Init rlDir
-```
-
-OR if using Tatin, take the code below:
-
-```apl
-rl ← raylibapl.raylib
-rl.Init raylibapl.TatinVars.HOME,'/link'
-```
-
-When making a script file like the raylib-apl's examples, I would recommend the `.apls` file extension and adding this line at the top of the script `#!cd $dir && /usr/bin/dyalogscript $fileName`. When running `.apls` files, remember to always be in their directory.
-
-### Using Link:
-You may [\]Link](https://dyalog.github.io/link/4.0/API/) to the `raylib-apl/link` folder.
-This imports `raylib.apln`, `rlgl.apln`, and `raymath.apln`, each of which are from [raylib](https://github.com/raysan5/raylib). A 2d physics library called [physac](https://github.com/victorfisac/Physac) is also included as `physac.apln`, and a GUI library called [raygui](https://github.com/raysan5/raygui) as `raygui.apln`.
-
-Example using raylib-apl with `]link` is shown below:
-```apl
-]cd /home/brian/Persinal/Scripts/APL/raylib-apl/link
+]cd /path/to/raylib-apl/link
 ]link.create # .
 raylib.Init ''
 
-raylib.InitWindow 800 800 'Hello!!!'
+⍝ Now you can use raylib functions directly
+raylib.InitWindow 800 800 'Hello World!'
 :While ~raylib.WindowShouldClose⍬
     raylib.BeginDrawing⍬
         raylib.ClearBackground raylib.color.gray
@@ -68,65 +109,148 @@ raylib.InitWindow 800 800 'Hello!!!'
 raylib.CloseWindow⍬
 ```
 
-## Intro to raylib-apl
-
-#### InitWindow
-Developing an application with raylib-apl is very low level. The entirety of raylib-apl is about 200 functions that take in a list of inputs and returns some outputs, and/or change the state of the application. An example of changing the state of the application is the following:
+### Creating Script Files
+For standalone scripts, use the `.apls` extension and add this shebang line at the top:
 ```apl
-raylib.InitWindow 400 400 'Title'
+#!cd $dir && /usr/bin/dyalogscript $fileName
 ```
-This function opens a new window, with width=400, height=400, and window title being "Title".
-This changes the state of the computer screen of course, but it also changes something very important, it creates a kind of scope.
+Always run `.apls` files from their containing directory.
+
+## Programming with raylib-apl
+
+### Understanding the Architecture
+raylib-apl is a direct, low-level interface to the raylib C library, providing approximately 200 functions that either return values or modify the application state. The library uses a **scope-based architecture** where certain functions create contexts that enable additional functionality.
+
+### Core Concepts: Scopes and Contexts
+
+#### The Window Context
+Every raylib-apl application begins by creating a window context:
 
 ```apl
-# Begin scope where window is open
-raylib.InitWindow 400 400 'Title'
-
-  # Inside this scope, I am allowed to use a lot more functions.
-
-# End scope where window is open, meaning closing window
-raylib.CloseWindow
+rl.InitWindow 800 600 'My Application'
+⍝ Window context is now active
+⍝ Many raylib functions are now available
+rl.CloseWindow⍬
+⍝ Window context is now closed
 ```
-Inside this scope, you are allowed a lot more. You can use functions like `SetWindowIcon`, `GetScreenWidth`, `GetMonitorCount`, `LoadShader`, `GetMouseRay`, and many more.
 
-#### Scopes in detail
-There are other functions that start and end scopes, like `StartDrawing` and `EndDrawing`. `StartDrawing` and `EndDrawing` require the `InitWindow` scope. Inside the `StartDrawing` scope you can use functions like `ClearBackground`, which sets the background of the window to a given color. An important note about `EndDrawing` is that it automatically delays to whatever frame-rate you choose, which by default is your monitor refresh rate. As an example, if your monitor has a refresh rate of 60 frames per second, `EndDrawing` will delay a maximum of `÷60`. I say "maximum", because `EndDrawing` delays just enough to keep your `:while` loop running 60 times a second, so if your loop takes `÷60` seconds to run, `EndDrawing` wouldn't delay.
+Within the window context, you can use functions like:
+- `SetWindowIcon` - Set the window icon
+- `GetScreenWidth` - Get the current screen width
+- `GetMonitorCount` - Get the number of available monitors
+- `LoadShader` - Load graphics shaders
+- `GetMouseRay` - Get a ray from the mouse position
 
-#### First application
-Applications made with raylib-apl have a common structure and style. As you can see by the below example, there's a `:while` loop used that draws the frame using `BeginDrawing`, where the frame being drawn is gray because of `ClearBackground` . This example is intentionally very simple, simply drawing a window with a black background.
+#### The Drawing Context
+Most rendering must occur within a drawing context, which is nested inside the window context:
+
 ```apl
-rl.InitWindow 800 800 'abc' # Begin InitWindow scope
+rl.BeginDrawing⍬
+⍝ Drawing context is active
+⍝ Can now use drawing functions
+rl.ClearBackground rl.color.black
+rl.DrawText 'Hello, World!' 10 10 20 rl.color.white
+rl.EndDrawing⍬
+⍝ Drawing context is closed and frame is presented
+```
 
-:While ~rl.WindowShouldClose⍬ # Run this loop per frame
-  rl.BeginDrawing⍬ # Begin a drawing scope to draw the current frame
-    rl.ClearBackground⍬ rl.color.gray # Set background to gray
-  rl.EndDrawing⍬ # End the Drawing scope
+**Important**: `EndDrawing` automatically handles frame timing, limiting your application to the monitor's refresh rate (typically 60 FPS). If your frame logic takes longer than 1/60th of a second, `EndDrawing` won't add additional delay.
+
+### Your First Application
+Here's a complete raylib-apl application that demonstrates the standard structure:
+
+```apl
+⍝ Initialize the library (using Tatin)
+rl ← raylibapl.raylib
+rl.Init raylibapl.TatinVars.HOME,'/link'
+
+⍝ Create a window
+rl.InitWindow 800 600 'My First raylib-apl App'
+
+⍝ Main application loop
+:While ~rl.WindowShouldClose⍬
+    rl.BeginDrawing⍬
+        rl.ClearBackground rl.color.darkblue
+        rl.DrawText 'Hello, raylib-apl!' 10 10 20 rl.color.white
+    rl.EndDrawing⍬
 :EndWhile
 
-rl.CloseWindow⍬ # End InitWindow scope
+⍝ Clean up
+rl.CloseWindow⍬
 ```
 
-#### Now to start
-To get a good start into raylib-apl, mess around with the [examples](https://github.com/Brian-ED/raylib-apl/tree/master/examples) and see what you can make!
+### Exploring Further
+- **Examples**: Check out the [examples directory](https://github.com/Brian-ED/raylib-apl/tree/master/examples) for practical demonstrations
+- **API Reference**: Examine the [raylib.apln file](https://github.com/Brian-ED/raylib-apl/blob/master/link/raylib.apln) for available functions and constants
+- **Constants**: Use values like `raylib.KeyboardKey.KEY_SLASH` with functions like `rl.IsKeyPressed` to check for specific key presses
 
-For a proper list of functions and namespaces found in raylib-apl, consider having a look into what the [raylib.apln file](https://github.com/Brian-ED/raylib-apl/blob/master/link/raylib.apln) defines. Note that the function definitions there aren't final, so drop the RAYLIB suffix to use the proper function. An example is the value `raylib.KeyboardKey.KEY_SLASH` can be given as argument to `raylib.IsKeyPressed` to check if the slash key is pressed.
+### Common Patterns
+Most raylib-apl applications follow this pattern:
+1. Initialize the library
+2. Create a window
+3. Load resources (textures, sounds, etc.)
+4. Enter the main loop:
+   - Process input
+   - Update game state
+   - Draw the frame
+5. Clean up resources
+6. Close the window
 
-## Using dyalogscript
-All raylib-apl examples support using [dyalogscript](https://help.dyalog.com/19.0/#UserGuide/Installation%20and%20Configuration/Shell%20Scripts.htm?Highlight=dyalogscript), by having the following on the top of every example:  
-`#!cd $dir && /usr/bin/dyalogscript $fileName`
+## Advanced Usage
 
-# Optionally parsing `raylib-apl/link/raylib.apln`
-The auto-parsing isn't needed since the parser output is premade, though if you still need to parse, install [CBQN](https://github.com/dzaima/CBQN) to run `bqn raylib-apl/parse-raylib-apl/parseAll.bqn`.
+### Using dyalogscript
+All raylib-apl examples are designed to work with [dyalogscript](https://help.dyalog.com/19.0/#UserGuide/Installation%20and%20Configuration/Shell%20Scripts.htm?Highlight=dyalogscript) for easy execution. Simply add this shebang line at the top of your `.apls` files:
 
-# Credits
+```apl
+#!cd $dir && /usr/bin/dyalogscript $fileName
+```
+
+### Multiple Library Support
+raylib-apl provides access to four distinct libraries:
+
+| Library | Description | Status |
+|---------|-------------|---------|
+| **raylib** | Core graphics and windowing | ✅ Stable |
+| **raygui** | Immediate-mode GUI system | ⚠️ Limited testing |
+| **physac** | 2D physics simulation | ⚠️ Limited testing |
+| **rlgl** | Low-level graphics wrapper | ⚠️ Limited testing |
+
+### Development and Parsing
+The library includes pre-parsed bindings, but if you need to regenerate them:
+
+1. Install [CBQN](https://github.com/dzaima/CBQN)
+2. Run: `bqn raylib-apl/parse-raylib-apl/parseAll.bqn`
+
+This parsing system converts the raylib C headers into APL-compatible function definitions.
+
+## Contributing and Support
+
+### Reporting Issues
+If you encounter problems:
+- **Code 999 errors**: Usually indicate segfaults - please report with details
+- **General issues**: Use the GitHub issue tracker
+- **Questions**: Check existing examples and documentation first
+
+### Community
+- **Examples**: Browse the [examples directory](https://github.com/Brian-ED/raylib-apl/tree/master/examples) for inspiration
+- **raylib Documentation**: The [official raylib cheatsheet](https://www.raylib.com/cheatsheet/cheatsheet.html) applies to raylib-apl functions
+- **APL Resources**: Visit [Dyalog's website](https://www.dyalog.com/) for APL learning materials
+
+## Credits and Acknowledgments
 
 ### Dyalog Limited
-raylib-apl has been financially supported by [Dyalog Limited](https://www.dyalog.com/).
-Brian was hired as an intern by [Dyalog Limited](https://www.dyalog.com/) at about 7th of July 2024 to develop raylib-apl, alongside [Asher](https://github.com/asherbhs). Brian has continued being funded for the development.
-[The Dyalog team](https://www.dyalog.com/meet-team-dyalog.htm) have helped a lot with the development of this library.
+raylib-apl is financially supported by [Dyalog Limited](https://www.dyalog.com/). Development began in July 2024 when Brian was hired as an intern to work on this project alongside [Asher](https://github.com/asherbhs). The project continues to receive funding and support from [the Dyalog team](https://www.dyalog.com/meet-team-dyalog.htm).
 
-### raylib
-raylib-APL relies on the [raylib C library](https://github.com/raysan5/raylib/). Lots of thanks to raysan5 and the raylib community for this great library.
+### raylib Community
+This project builds upon the excellent [raylib C library](https://github.com/raysan5/raylib/) created by raysan5. We're grateful to the entire raylib community for their foundational work.
 
-### Marshall Lochbaum
-The current version of raylib-apl has parsing that relies on [json.bqn made by Marshall Lochbaum](https://github.com/mlochbaum/bqn-libs/blob/master/json.bqn).bqn. Also the BQN programming language in general!
+### Technical Contributors
+- **Marshall Lochbaum**: The parsing system uses [json.bqn](https://github.com/mlochbaum/bqn-libs/blob/master/json.bqn) and is built with the BQN programming language
+- **temp-c-raylib**: The C bindings are provided by the [temp-c-raylib](https://github.com/Brian-ED/temp-c-raylib/) project
+
+---
+
+## License
+This project is licensed under the terms specified in the [LICENSE](LICENSE) file.
+
+*Ready to start building amazing graphics applications with APL? Check out the [examples](https://github.com/Brian-ED/raylib-apl/tree/master/examples) and dive in!*
