@@ -6,6 +6,7 @@ Assert ← {⍺←'assertion failure' ⋄ 0∊⍵:⍺ ⎕SIGNAL 8 ⋄ shy←0}
 PlatfromToLibFile ← {
   'Windows'≡⍵:'temp-c-raylib.dll'
   'Linux'  ≡⍵:'libtemp-c-raylib.so'
+  'Mac'    ≡⍵:'libtemp-c-raylib.dylib'
   0 Assert⍨'Unknown platform (',⍵,')'
 }
 platform ← '-64'~⍨⊃#⎕WG'APLVersion'
@@ -37,6 +38,7 @@ git_clone_path ← 'https://www.github.com/Brian-ED/temp-c-raylib/releases/downl
 PlatformToInstallCmd ← {
   'Windows'≡⍵:'Powershell.exe -Command "Invoke-WebRequest -Uri ''',git_clone_path,''' -OutFile ''',fullLibFile,'''"' ⍝ If errors: Curl was likely not found
   'Linux'  ≡⍵:'curl -o "',fullLibFile,'" ',git_clone_path,' -L'
+  'Mac'    ≡⍵:'curl -o "',fullLibFile,'" ',git_clone_path,' -L'
   0 Assert⍨'Unknown platform (',⍵,')'
 }
 
