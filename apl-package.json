@@ -13,7 +13,7 @@
   ml: 1,
   name: "raylibapl",
   os_lin: 1,
-  os_mac: 0,
+  os_mac: 1,
   os_win: 1,
   project_url: "https://github.com/Brian-ED/raylib-apl",
   source: "link",
