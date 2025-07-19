@@ -152,7 +152,7 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
     "'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯9"
     "⎕EX '__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__'"
     ""
-    "pathToBinary ← pathToRaylibDotAPLN,lib"
+    "pathToBinary ← lib"
     ":If 0=⎕NC 'mode'"
     "  mode ← 3 ⍝ Default is All changes"
     ":EndIf"

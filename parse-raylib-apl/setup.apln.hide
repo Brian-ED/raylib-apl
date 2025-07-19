@@ -36,16 +36,38 @@ atomTypes ,←⊂ i8   ← 'I8'
 atomTypes ,←⊂ u2   ← 'U2'
 atomTypes←∪atomTypes
 
+FilePrefixGet←{
+  9≡40∘⎕ATX '##.##.TatinVars':##.##.TatinVars.HOME,'/'
+  '../'
+}
+prefix←FilePrefixGet ⍬
+
+∇ installAutoForTatin fileExists
+  :If (~fileExists)∧9≡40∘⎕ATX '##.##.TatinVars'
+    ##.##.installraylib 1
+  :ElseIf ~fileExists
+    ('File ',lib,' was not found') Assert ~fileExists
+  :EndIf
+∇
+
 ⍝ Optain path to lib file for the current platform
 PlatfromToLibFile ← {
   platform←⍵
-  'Windows'≡platform:'../lib/temp-c-raylib.dll'
-  'Mac'    ≡platform:'../lib/libtemp-c-raylib.dylib'
-  'Linux'  ≡platform:'../lib/libtemp-c-raylib.so'
+  'Windows'≡platform:prefix,'lib/temp-c-raylib.dll'
+  'Mac'    ≡platform:prefix,'lib/libtemp-c-raylib.dylib'
+  'Linux'  ≡platform:prefix,'lib/libtemp-c-raylib.so'
   ('Unknown platform (',platform,')') Assert 0
 }
-lib ← PlatfromToLibFile '-64'~⍨⊃#⎕WG'APLVersion'
-('File ',lib,' was not found') Assert ⎕NEXISTS lib
+
+fixPath←{
+  'Windows'≡'-64'~⍨⊃#⎕WG'APLVersion':('\'@('/'∘=))⍵
+  lib
+}
+
+lib ← ∊1⎕NPARTS PlatfromToLibFile '-64'~⍨⊃#⎕WG'APLVersion'
+lib←fixPath lib
+installAutoForTatin ⎕NEXISTS lib
+lib←∊'"',lib'"'
 
 Read←{
   _←'R'⎕NA lib,'|memcpy2 =U1[',(⍕⍺),'] P U8' ⍝ MA = Mid After. Means these convert to/from pointer. IF = Into From

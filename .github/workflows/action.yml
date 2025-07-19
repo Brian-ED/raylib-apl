@@ -1,0 +1,88 @@
+name: RayLib APL CI
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Dyalog APL
+        run: |
+          DEBFILE=$(curl -s https://www.dyalog.com/uploads/php/download.dyalog.com/download.php?file=docker.metafile | awk -v v="19.0" '$0~v && /deb/ {print $3}')
+          curl -o /tmp/dyalog.deb "${DEBFILE}"
+          sudo apt install -y /tmp/dyalog.deb
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.X'
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Activate Tatin and Cider
+        run: |
+          unset DISPLAY
+          cd "${GITHUB_WORKSPACE}"
+          chmod +x "${GITHUB_WORKSPACE}/.github/workflows/activate.apls" "${GITHUB_WORKSPACE}/.github/workflows/update.apls"
+          xvfb-run -a "${GITHUB_WORKSPACE}/.github/workflows/activate.apls"
+          echo y | xvfb-run -a "${GITHUB_WORKSPACE}/.github/workflows/update.apls"
+      - name: Build Project
+        run: |
+          unset DISPLAY
+          export BATCH=true
+          cd "${GITHUB_WORKSPACE}"
+          chmod +x "${GITHUB_WORKSPACE}/.github/workflows/build.apls"
+          xvfb-run -a "${GITHUB_WORKSPACE}/.github/workflows/build.apls"
+      - name: Get Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: package
+          path: Dist/*-*-*.zip # Like bkaw-JWTAPL-2.1.0.zip
+
+  publish:
+    name: Publish
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
+    steps:
+      - name: Install Dyalog APL
+        run: |
+          DEBFILE=$(curl -s https://www.dyalog.com/uploads/php/download.dyalog.com/download.php?file=docker.metafile | awk -v v="19.0" '$0~v && /deb/ {print $3}')
+          curl -o /tmp/dyalog.deb "${DEBFILE}"
+          sudo apt install -y /tmp/dyalog.deb
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.X'
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Activate Tatin and Cider
+        run: |
+          unset DISPLAY
+          cd "${GITHUB_WORKSPACE}"
+          chmod +x "${GITHUB_WORKSPACE}/.github/workflows/activate.apls" "${GITHUB_WORKSPACE}/.github/workflows/update.apls"
+          xvfb-run -a "${GITHUB_WORKSPACE}/.github/workflows/activate.apls"
+          echo y | xvfb-run -a "${GITHUB_WORKSPACE}/.github/workflows/update.apls" 
+      - name: Download a single artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: package
+      - name: Publish Artifacts
+        env:
+          RELEASE_VERSION: ${{ github.event.release.tag_name }}
+          TATIN_API_KEY: ${{ secrets.TATIN_API_KEY }}
+        run: |
+         export BATCH=true
+          # Use $RELEASE_VERSION in your publish steps?
+          echo "Publishing the build artifacts for version $RELEASE_VERSION..."
+          cd "${GITHUB_WORKSPACE}"
+          chmod +x "${GITHUB_WORKSPACE}/.github/workflows/publish.apls"
+          xvfb-run -a "${GITHUB_WORKSPACE}/.github/workflows/publish.apls"
