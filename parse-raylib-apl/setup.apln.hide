@@ -42,13 +42,11 @@ FilePrefixGet←{
 }
 prefix←FilePrefixGet ⍬
 
-∇ success←installAutoForTatin fileExists
+∇ installAutoForTatin fileExists
   :If (~fileExists)∧9≡40∘⎕ATX '##.##.TatinVars'
     ##.##.installraylib 1
-    success←1
-  :Else
+  :ElseIf ~fileExists
     ('File ',lib,' was not found') Assert ~fileExists
-    success←1
   :EndIf
 ∇
 
@@ -61,9 +59,15 @@ PlatfromToLibFile ← {
   ('Unknown platform (',platform,')') Assert 0
 }
 
+fixPath←{
+  'Windows'≡'-64'~⍨⊃#⎕WG'APLVersion':('\'@('/'∘=))⍵
+  lib
+}
+
 lib ← ∊1⎕NPARTS PlatfromToLibFile '-64'~⍨⊃#⎕WG'APLVersion'
+lib←fixPath lib
 installAutoForTatin ⎕NEXISTS lib
-lib←'"',lib,'"'
+lib←∊'"',lib'"'
 
 Read←{
   _←'R'⎕NA lib,'|memcpy2 =U1[',(⍕⍺),'] P U8' ⍝ MA = Mid After. Means these convert to/from pointer. IF = Into From
