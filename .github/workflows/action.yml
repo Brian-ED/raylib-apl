@@ -12,37 +12,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  # test:
-  #   name: Test
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Install Dyalog APL
-  #       run: |
-  #         DEBFILE=$(curl -s https://www.dyalog.com/uploads/php/download.dyalog.com/download.php?file=docker.metafile | awk -v v="19.0" '$0~v && /deb/ {print $3}')
-  #         curl -o /tmp/dyalog.deb "${DEBFILE}"
-  #         sudo apt install -y /tmp/dyalog.deb
-  #     - name: Setup .NET
-  #       uses: actions/setup-dotnet@v4
-  #       with:
-  #         dotnet-version: '8.X'
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
-  #     - name: Activate Tatin and Cider
-  #       run: |
-  #         unset DISPLAY
-  #         cd "${GITHUB_WORKSPACE}"
-  #         chmod +x "${GITHUB_WORKSPACE}/.github/workflows/activate.apls"
-  #         xvfb-run -a "${GITHUB_WORKSPACE}/.github/workflows/activate.apls"
-  #     - name: Run Tests
-  #       run: |
-  #         unset DISPLAY
-  #         cd "${GITHUB_WORKSPACE}"
-  #         chmod +x "${GITHUB_WORKSPACE}/.github/workflows/test.apls"
-  #         xvfb-run -a "${GITHUB_WORKSPACE}/.github/workflows/test.apls"
-
   build:
     name: Build
-    # needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Install Dyalog APL
