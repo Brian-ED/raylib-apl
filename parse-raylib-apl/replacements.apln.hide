@@ -1496,15 +1496,15 @@ scopeInitAudioDevice ← 0
     r←LoadShaderFromMemoryRAYLIB(vsCode fsCode)
 ∇
 ∇r←LoadSound fileName
-    'LoadSound errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing ∧ scopeInitAudioDevice)
+    'LoadSound errored' Assert ∨/(scopeInitWindow ∧ scopeInitAudioDevice)
     r←LoadSoundRAYLIB fileName
 ∇
 ∇r←LoadSoundAlias source
-    'LoadSoundAlias errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing ∧ scopeInitAudioDevice)
+    'LoadSoundAlias errored' Assert ∨/(scopeInitWindow ∧ scopeInitAudioDevice)
     r←LoadSoundAliasRAYLIB source
 ∇
 ∇r←LoadSoundFromWave wave
-    'LoadSoundFromWave errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing ∧ scopeInitAudioDevice)
+    'LoadSoundFromWave errored' Assert ∨/(scopeInitWindow ∧ scopeInitAudioDevice)
     r←LoadSoundFromWaveRAYLIB wave
 ∇
 ∇r←LoadTexture fileName
@@ -1582,7 +1582,7 @@ scopeInitAudioDevice ← 0
     _←PlayMusicStreamRAYLIB music
 ∇
 ∇PlaySound sound
-    'PlaySound errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing ∧ scopeInitAudioDevice)
+    'PlaySound errored' Assert ∨/(scopeInitWindow ∧ scopeInitAudioDevice)
     _←PlaySoundRAYLIB sound
 ∇
 ∇PollInputEvents _

@@ -1,0 +1,6 @@
+#!/usr/bin/dyalogscript DYALOG_INITSESSION=1
+⎕←'Loading Tatin and Cider...'
+⎕SE.(⍎⊃2⎕FIX'/StartupSession.aplf',⍨2⎕NQ#'GetEnvironment' 'DYALOG')
+⎕←⎕SE.UCMD 'Tools.Activate all'
+⎕←'Success loading Tatin and Cider'
+⎕off 0

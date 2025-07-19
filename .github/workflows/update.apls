@@ -1,0 +1,9 @@
+#!/usr/bin/dyalogscript DYALOG_INITSESSION=1
+⎕←'Updating Tatin'
+⎕PW←500
+⎕SE.(⍎⊃2⎕FIX'/StartupSession.aplf',⍨2⎕NQ#'GetEnvironment' 'DYALOG')
+⎕ML ⎕IO←1 0 ⍝ ⎕IO delana est
+⎕←⎕SE.UCMD 'ureset'
+⎕SE.UCMD 'UpdateTatin'
+⎕←'Updated'
+⎕off 0

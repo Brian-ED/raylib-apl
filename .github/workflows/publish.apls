@@ -1,0 +1,12 @@
+#!/usr/bin/dyalogscript DYALOG_INITSESSION=1
+⎕PW←500
+⎕SE.(⍎⊃2⎕FIX'/StartupSession.aplf',⍨2⎕NQ#'GetEnvironment' 'DYALOG')
+⎕ML ⎕IO←1 0 ⍝ ⎕IO delana est
+package←∊⊃1 ⎕NPARTS⊃(⎕ninfo⍠('Wildcard' 1))'*.zip'
+⎕←'publishing: ',package
+apikey←(⊢2⎕NQ#'GetEnvironment',⊂)'TATIN_API_KEY'
+(⎕SE.Tatin.MyUserSettings.GetRegistry '[tatin]').api_key←apikey
+⎕SE.Tatin.MyUserSettings.Save 1
+⎕SE.Tatin.PublishPackage (package '[tatin]')
+⎕←'Published!!!'
+⎕off 0
