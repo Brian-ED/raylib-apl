@@ -42,12 +42,15 @@ FilePrefixGet←{
 }
 prefix←FilePrefixGet ⍬
 
-∇ installAutoForTatin fileExists
-  :If (~fileExists)∧9≡40∘⎕ATX '##.##.TatinVars'
-    ##.##.installraylib 1
-  :ElseIf ~fileExists
-    ('File ',lib,' was not found') Assert ~fileExists
+∇ success←installAutoForTatin fileExists
+  :If (~fileExists)
+    :If 9≡40∘⎕ATX '##.##.TatinVars'
+          ##.##.installraylib 1
+    :Else
+          ('File ',lib,' was not found') Assert ~fileExists
+    :EndIf
   :EndIf
+  success←1
 ∇
 
 ⍝ Optain path to lib file for the current platform
@@ -66,7 +69,7 @@ fixPath←{
 
 lib ← ∊1⎕NPARTS PlatfromToLibFile '-64'~⍨⊃#⎕WG'APLVersion'
 lib←fixPath lib
-installAutoForTatin ⎕NEXISTS lib
+installed←installAutoForTatin ⎕NEXISTS lib
 lib←∊'"',lib'"'
 
 Read←{
