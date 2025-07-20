@@ -19,5 +19,5 @@
   source: "link",
   tags: "graphics,sound,audio,application-development,game-development,io,2D,3D,shaders,gui,c-binding",
   userCommandScript: "",
-  version: "0.1.0",
+  version: "0.1.1",
 }
