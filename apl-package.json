@@ -1,6 +1,6 @@
 {
   api: "",
-  assets: "",
+  assets: "non-link",
   description: "raylib-apl is a library made to write cross-platform graphical applications using the Dyalog APL programming language",
   documentation: "https://github.com/Brian-ED/raylib-apl",
   files: "",
