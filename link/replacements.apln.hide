@@ -1335,7 +1335,7 @@ scopeInitAudioDevice ← 0
     r←IsShaderValidRAYLIB shader
 ∇
 ∇r←IsSoundPlaying sound
-    'IsSoundPlaying errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing ∧ scopeInitAudioDevice)
+    'IsSoundPlaying errored' Assert ∨/(scopeInitWindow ∧ scopeInitAudioDevice)
     r←IsSoundPlayingRAYLIB sound
 ∇
 ∇r←IsSoundValid sound
@@ -1569,7 +1569,7 @@ scopeInitAudioDevice ← 0
     _←PauseMusicStreamRAYLIB music
 ∇
 ∇PauseSound sound
-    'PauseSound errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing ∧ scopeInitAudioDevice)
+    'PauseSound errored' Assert ∨/(scopeInitWindow ∧ scopeInitAudioDevice)
     _←PauseSoundRAYLIB sound
 ∇
 ∇PlayAudioStream stream
@@ -1600,7 +1600,7 @@ scopeInitAudioDevice ← 0
     _←ResumeMusicStreamRAYLIB music
 ∇
 ∇ResumeSound sound
-    'ResumeSound errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing ∧ scopeInitAudioDevice)
+    'ResumeSound errored' Assert ∨/(scopeInitWindow ∧ scopeInitAudioDevice)
     _←ResumeSoundRAYLIB sound
 ∇
 ∇r←SaveFileData(fileName data dataSize)
@@ -1817,7 +1817,7 @@ scopeInitAudioDevice ← 0
     _←StopMusicStreamRAYLIB music
 ∇
 ∇StopSound sound
-    'StopSound errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing ∧ scopeInitAudioDevice)
+    'StopSound errored' Assert ∨/(scopeInitWindow ∧ scopeInitAudioDevice)
     _←StopSoundRAYLIB sound
 ∇
 ∇SwapScreenBuffer _
@@ -2006,7 +2006,7 @@ scopeInitAudioDevice ← 0
     _←UpdateMusicStreamRAYLIB music
 ∇
 ∇UpdateSound(sound data sampleCount)
-    'UpdateSound errored' Assert ∨/(scopeInitWindow ∧ scopeBeginDrawing ∧ scopeInitAudioDevice)
+    'UpdateSound errored' Assert ∨/(scopeInitWindow ∧ scopeInitAudioDevice)
     _←UpdateSoundRAYLIB(sound data sampleCount)
 ∇
 ∇UpdateTexture(texture pixels)
