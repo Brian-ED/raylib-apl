@@ -1,6 +1,6 @@
 #!/usr/bin/env bqn
 ⟨HeaderToFFI⟩ ← •Import "parseAPL.bqn"
-file ← •FChars "../include/raymath.h"
+file ← •FChars "include/raymath.h"
 file HeaderToFFI˜↩ "RMAPI"
 file ∾˜↩ ":Namespace raymath"∾@+10
 file ∾ ↩ ":EndNamespace"∾˜@+10

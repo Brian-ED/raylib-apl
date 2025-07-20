@@ -1,6 +1,6 @@
 #!/usr/bin/env bqn
 ⟨HeaderToFFI⟩ ← •Import "parseAPL.bqn"
-file ← •FChars "../include/raygui.h"
+file ← •FChars "include/raygui.h"
 file {𝕩/˜¬∨`𝕩≠⊸↑𝕨⍷𝕩}˜↩ "/***********************************************************************************
 *
 *   RAYGUI IMPLEMENTATION

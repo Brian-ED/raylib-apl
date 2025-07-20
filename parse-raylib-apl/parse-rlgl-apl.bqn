@@ -66,7 +66,7 @@ Fix_StatePointer ← {
   (if⊸↑∾il⊸↓)𝕩
 }
 
-file ← •FChars "../include/rlgl.h"
+file ← •FChars "include/rlgl.h"
 file {𝕩/˜¬∨`𝕩≠⊸↑𝕨⍷𝕩}˜↩ "/***********************************************************************************
 *
 *   RLGL IMPLEMENTATION

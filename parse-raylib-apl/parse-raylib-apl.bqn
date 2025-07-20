@@ -1,6 +1,6 @@
 #!/usr/bin/env bqn
 ⟨ParseHeader,ToFFI,HeaderToFFI⟩ ← •Import "parseAPL.bqn"
-file ← •FChars "../include/raylib.h"
+file ← •FChars "include/raylib.h"
 file ParseHeader˜↩ "RLAPI"
 
 defines‿structs‿aliases‿enums‿callbacks‿functions←file
