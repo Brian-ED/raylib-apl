@@ -259,7 +259,7 @@ push,←⊂ StringPushGen ⍬
 
 
 ∇AfterDefaultDefinitions mode
-  replacements ⊢← 0 ⎕FIX pathToRaylibDotAPLN,'replacements.apln.hide'
+  replacements ⊢← 0 ⎕FIX pathToRaylibDotAPLN,'../non-link/replacements.apln.hide'
 
   SetTraceLogLevelRAYLIB TraceLogLevel.LOG_WARNING
   SetTargetFPSRAYLIB 60

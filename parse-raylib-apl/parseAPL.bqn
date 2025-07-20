@@ -146,7 +146,7 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
     ""
     "pathToRaylibDotAPLN ← (⊢,'/'/⍨'/'≢⊃⍤⌽)(⊢,'.'/⍨0=≢⍤⊢),pathToRaylibDotAPLN"
     ""
-    "__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__ ← 0 ⎕FIX pathToRaylibDotAPLN,'setup.apln.hide'"
+    "__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__ ← 0 ⎕FIX pathToRaylibDotAPLN,'../non-link/setup.apln.hide'"
     "'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯3"
     "'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯2"
     "'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯9"
