@@ -11,7 +11,7 @@ PlatfromToLibFile ← {
 }
 platform ← '-64'~⍨⊃#⎕WG'APLVersion'
 
-version ← 'v0.1.0'
+version ← 'v4.0.2'
 ⍝ If Tatin, use TatinVars.HOME as prefix for library path
 :If tatin
   libPath ← FullPath TatinVars.HOME,'/lib'
