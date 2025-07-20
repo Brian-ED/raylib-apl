@@ -1,7 +1,12 @@
 #!/usr/bin/env bqn
 ⟨HeaderToFFI⟩ ← •Import "parseAPL.bqn"
 file ← •FChars "../include/raygui.h"
-file {𝕩/˜¬∨`𝕩≠⊸↑𝕨⍷𝕩}˜↩ "RAYGUI IMPLEMENTATION"
+file {𝕩/˜¬∨`𝕩≠⊸↑𝕨⍷𝕩}˜↩ "/***********************************************************************************
+*
+*   RAYGUI IMPLEMENTATION
+*
+************************************************************************************/
+"
 file HeaderToFFI˜↩ "RAYGUIAPI"
 file ∾˜↩ ":Namespace raygui"∾@+10
 file ∾↩ ":EndNamespace"∾˜@+10

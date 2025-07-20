@@ -126,13 +126,12 @@ remPtrInfo ← {⍵/⍨~ (~atomTypes∊⍨⊂⍵)∧ ∧\'<=>'∊⍨⍵}
 ⍝ -------------------------------- ⍝
 structs ← ∪{(('⋄'≡⊃⍤⊃)¨⍵)/⍵}##.{⍎⍵._Each_(0/⊂,⊂'')⎕NL¯2} E
 ⎕NA 'I4 ',lib,'|StructCount'
-'Not right amount of structs found' Assert StructCount≡≢structs
 
 ⎕NA 'I4 ',lib,'|GetStructNameLength I4'
 ⎕NA lib,'|GetStructName =C1[] I4 I4'
-structNames ← {l←GetStructNameLength⍵ ⋄ GetStructName ((l⍴'')l ⍵)}E._Each_(0/⊂'')⊢ ¯1+⍳≢structs
+structNames ← {l←GetStructNameLength⍵ ⋄ GetStructName ((l⍴'')l ⍵)}E._Each_(0/⊂'')⊢ ¯1+⍳StructCount
 
-'Not all found struct names matched' Assert structNames≡⍥{⍵[⍋⍵]}NameOfStruct¨structs
+('Not all structs were found in the .so/dll/dylib library binary:',⊃,/' ',¨(~r)/NameOfStruct¨structs) Assert ∧/r←structNames∊⍨NameOfStruct¨structs
 
 ⎕NA 'I4 ',lib,'|GetStructSize I4'
 'tempAlloc' ⎕NA 'P ',lib,'|MemAlloc U4'
@@ -260,7 +259,7 @@ push,←⊂ StringPushGen ⍬
 
 
 ∇AfterDefaultDefinitions mode
-  replacements ⊢← 0 ⎕FIX pathToRaylibDotAPLN,'../parse-raylib-apl/replacements.apln.hide'
+  replacements ⊢← 0 ⎕FIX pathToRaylibDotAPLN,'replacements.apln.hide'
 
   SetTraceLogLevelRAYLIB TraceLogLevel.LOG_WARNING
   SetTargetFPSRAYLIB 60

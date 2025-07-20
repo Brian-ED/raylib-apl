@@ -478,15 +478,6 @@ GuiStyleProp ← ⍬ ⍝ NOTE: Used when exporting style as code for convenience
   GuiStyleProp,←⊂ u2              ⍝ controlId      ⍝ Control identifier
   GuiStyleProp,←⊂ u2              ⍝ propertyId     ⍝ Property identifier
   GuiStyleProp,←⊂ i               ⍝ propertyValue  ⍝ Property value
-
-GuiTextStyle ← ⍬ ⍝ NOTE: Text style is defined by control
-  GuiTextStyle,←⊂ '⋄GuiTextStyle' ⍝              ⍝
-  GuiTextStyle,←⊂ u               ⍝ size         ⍝
-  GuiTextStyle,←⊂ i               ⍝ charSpacing  ⍝
-  GuiTextStyle,←⊂ i               ⍝ lineSpacing  ⍝
-  GuiTextStyle,←⊂ i               ⍝ alignmentH   ⍝
-  GuiTextStyle,←⊂ i               ⍝ alignmentV   ⍝
-  GuiTextStyle,←⊂ i               ⍝ padding      ⍝
 ⍝ Mode is either 3:All changes, 2:only manual changes 1:only automatic changes, or 0: no changes
 ∇{mode} Init pathToRaylibDotAPLN
 
