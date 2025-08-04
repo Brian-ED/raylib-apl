@@ -9,7 +9,7 @@ lib/
 examples/6_shaders
 
 # build output directory
-out/ 
+out/
 Dist/
 
 # vscode settings
