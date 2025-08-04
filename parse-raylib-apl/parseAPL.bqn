@@ -3,6 +3,10 @@
   ToFFI        # turns header data from ParseHeader into ffi file characters
   ParseHeader  # Read string 𝕩 and optional function prefix 𝕨, outputs header data
   ToPrettyJson # Read header data from ParseHeader and makes a pretty json file
+  GetFiles
+  FFISetup
+  HandleEverything
+  MakeReplacement
 ⟩⇐
 
 ⟨ParseJSON⇐Parse⟩ ← •Import "../imports/c-header-to-bqn-ffi/json.bqn"
@@ -182,7 +186,7 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
   structsDone ← typedefs∾initTradFnHeader∾˜{
     [names,descriptions,fields]←⍉(↕0‿3)∾´structs
     headers ← (MapStructNames names) ∾⟜" ← ⍬ ⍝ "⊸∾¨ descriptions
-    bodys ← names{<˘("  "∾(MapStructNames⌾⋈𝕨)∾",←⊂ ")‿" ⍝ "‿"  ⍝ "⟨MapStructTypes,⊢,⊢⟩_MetaParse ⟨"'"(⊣∾˜∾)'⋄'∾𝕨⋄""⋄""⟩∾ >𝕩}¨⊢˝¨¨fields
+    bodys ← names{<˘("  "∾(MapStructNames⌾⋈𝕨)∾",←⊂ ")‿" ⍝ "‿"  ⍝ "⟨MapStructTypes,⊢,⊢⟩_MetaParse ⟨"'"(⊣∾˜∾)'⋄'∾MapNames⌾⋈𝕨⋄""⋄""⟩∾ >𝕩}¨⊢˝¨¨fields
     assembled ← headers ""⊸⋈⊸∾¨ bodys
     aliasLines←»⊸∨∘≠⟜' '⊸/¨<˘""‿" ← "‿" ⍝ "⟨MapNames,MapArgTypes,⊢⟩_MetaParse ⌽⌾(2⊸↑)˘>⊢˝¨aliases
     p←⊑¨⊢˝¨aliases
@@ -223,3 +227,83 @@ ToFFI ← {𝕨𝕊data: nameMapping ← 𝕨⊣↕2‿0
 ⟨ParseHeader, ToPrettyJson⟩⇐•Import"../imports/c-header-to-bqn-ffi/parse.bqn"
 
 HeaderToFFI ← ToFFI ParseHeader
+
+GetFiles ← {𝕊libName:
+  header ⇐ •FChars "include/"∾libName∾".h"
+  autoErrorJson ⇐ •FChars "auto-error/"•file.At libName∾".json"
+  replacementFilename ⇐ libName∾"Replacement.apln.hide"
+  replacement ⇐ "../non-link"•file.At replacementFilename
+  linkOutput ⇐ "../link/"•file.At libName∾".apln"
+}
+
+FFISetup ← {libName‿replacementFilename𝕊file:
+  file ∾⟜("AfterDefaultDefinitions mode '"∾replacementFilename∾"'"∾@+10)⌾(∾⟜"∇"⁼)↩
+  file ∾˜↩ ":Namespace "∾libName∾@+10
+  file ∾ ↩ ":EndNamespace"∾˜@+10
+  file ∾ ↩ @+10
+}
+
+HandleEverything ⇐ {libPrefix𝕊libName:
+  ⟨ header ⋄ autoErrorJson ⋄ replacementFilename
+    replacement ⋄ linkOutput
+  ⟩← GetFiles libName
+  ·‿·‿·‿·‿·‿functions ← headerTree ← libPrefix ParseHeader header
+
+  replacement •FLines libName‿autoErrorJson MakeReplacement ⍉(⍋⊏˘)⊸⊏(↕0‿5)∾´functions
+  linkOutput •FChars libName‿replacementFilename FFISetup ToFFI headerTree
+  •Out linkOutput∾" successfully generated"
+}
+
+MakeReplacement ← {libName‿jsonFile𝕊[names⋄comment⋄outType⋄argNames⋄argTypes]:
+  out←⟨⟩
+
+  scopes‿functions ← "scopes"‿"functions"{⊐⟜𝕗}⊸⊏˝ParseJSON jsonFile
+
+  [begin⋄end⋄nested⋄scopeDoc] ← {
+    ⍉(↕0‿4)∾´⊐⟜𝕩⊸⊏˝¨scopes
+  }"begin"‿"end"‿"nested"‿"doc"
+  nested ⊐˜↩ "false"⋈○<"true" # Turn json booleans into binary
+
+  [name⋄allow⋄disallow⋄funcDoc] ← ⍋∘⊏⊸(⊏⎉1) {
+    ⍉(↕0‿4)∾´⊐⟜𝕩⊸⊏˝¨functions
+  }"name"‿"allowed cases"‿"disallowed cases"‿"doc"
+
+  # Define Assert. Needed for erroring
+  out ∾↩<"Assert ← {⍺←'assertion failure' ⋄ 0∊⍵:⍺ ⎕SIGNAL 8 ⋄ shy←0}"
+
+  # Defining scope status variables
+  @∘{𝕊⟨b⟩:
+    out∾↩<"scope"∾b∾" ← 0"
+  }˘⍉[begin]
+
+  # Spacing to separate variable definitions section from Tradfns definition
+  out∾↩""‿""
+
+  # When the first argument is a pointer, it's usually a reference as return value.
+  # Useful since if first arg is a pointer, the function has a return value.
+  returnViaRef ← '*'={⊢´⊑𝕩∾<" "}¨argTypes
+
+  # Adding Tradfns with assertions
+  @∘{𝕊⟨n,aw,daw,an,r⟩:
+    arg ← "_"⍟(0=≠)1↓∾' '∾¨an
+    out∾↩<'∇'∾"r←"⊸∾⍟r n∾(' '⊸∾"("∾⁼∾⟜")"⁼)⍟(×∘≠∧∧´∘≠⟜' ') ('('∾∾⟜')')⍟(×≠) arg
+    {𝕊:out∾↩<"    '"∾n∾" errored' Assert ∨/"∾𝕩}⍟(¬"()"⊸≡) "("∾")"∾˜3↓∾{") ("∾3↓∾" ∧ scope"⊸∾¨𝕩}¨aw
+    {𝕊:out∾↩<"    '"∾n∾" errored' Assert ∧/"∾𝕩}⍟(¬"()"⊸≡) "("∾")"∾˜3↓∾{") ("∾3↓∾" ∨ scope"⊸∾¨𝕩}¨daw
+    {𝕊:out∾↩<"    '"∾n∾" errored' Assert ~scope"∾⊑1⊑𝕩⋄!1≡≠1⊑𝕩}⍟(¬∧´∘⊑)(n⊸≡¨begin)⊸/¨nested‿begin
+    {𝕊:out∾↩<"    scope"∾𝕩∾" ← 1"}∘⊑⍟(×≠) begin/˜n⊸≡¨begin
+    {𝕊:out∾↩<"    scope"∾𝕩∾" ← 0"}∘⊑⍟(×≠) begin/˜n⊸≡¨end
+    out∾↩"∇"⋈˜"    "∾(r⊑"_←"‿"r←")∾ (n∾"RAYLIB")∾ (¬×∘≠∧∧´∘≠⟜' ')◶⟨' '⊸∾⋄'('∾∾⟜')'⟩ arg
+
+  }˘⍉ [
+    name
+    allow
+    disallow
+    argNames
+    returnViaRef∨"void"⊸≢¨outtype
+  ]
+
+  out∾˜↩(":Namespace "∾libName∾"Replacement")‿""
+  out∾↩""‿":EndNamespace"
+
+  out # Return value
+}

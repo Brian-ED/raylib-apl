@@ -224,5 +224,6 @@ QuaternionToEulerRAYLIB              ←            R('QuaternionToEulerRetPtr' 
 QuaternionTransformRAYLIB            ←            R('QuaternionTransformRetPtr'            (('>',Quaternion) Quaternion Matrix                            )) ⍝ q mat                                           ⍝
 QuaternionEqualsRAYLIB               ←            R('QuaternionEqualsRetPtr'               (('>',i) Quaternion Quaternion                                 )) ⍝ p q                                             ⍝
 MatrixDecomposeRAYLIB                ←            R('MatrixDecomposeRetPtr'                (Matrix ('=',v3) ('=',Quaternion) ('=',v3)                     )) ⍝ mat translation rotation scale                  ⍝
+AfterDefaultDefinitions mode 'raymathReplacement.apln.hide'
 ∇
 :EndNamespace

@@ -122,5 +122,6 @@ GetPhysicsShapeVertexRAYLIB        ←      R('GetPhysicsShapeVertexRetPtr'     
 SetPhysicsBodyRotationRAYLIB       ←      R('SetPhysicsBodyRotationRetPtr'       (ptr f             )) ⍝ body radians             ⍝ Sets physics body shape transform based on radians parameter
 DestroyPhysicsBodyRAYLIB           ←      R('DestroyPhysicsBodyRetPtr'           (,⊂ ptr            )) ⍝ body                     ⍝ Unitializes and destroy a physics body
 ClosePhysicsRAYLIB                 ←      R('ClosePhysicsRetPtr'                 (⍬                 )) ⍝                          ⍝ Unitializes physics pointers and closes physics loop thread
+AfterDefaultDefinitions mode 'physacReplacement.apln.hide'
 ∇
 :EndNamespace

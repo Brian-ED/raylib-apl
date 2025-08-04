@@ -1256,6 +1256,6 @@ AttachAudioStreamProcessorRAYLIB       ←                     R('AttachAudioStr
 DetachAudioStreamProcessorRAYLIB       ←                     R('DetachAudioStreamProcessorRetPtr'       (AudioStream ptr                                     )) ⍝ stream processor                                                  ⍝ Detach audio stream processor from stream
 AttachAudioMixedProcessorRAYLIB        ←                     R('AttachAudioMixedProcessorRetPtr'        (,⊂ ptr                                              )) ⍝ processor                                                         ⍝ Attach audio stream processor to the entire audio pipeline, receives the samples as 'float'
 DetachAudioMixedProcessorRAYLIB        ←                     R('DetachAudioMixedProcessorRetPtr'        (,⊂ ptr                                              )) ⍝ processor                                                         ⍝ Detach audio stream processor from the entire audio pipeline
-AfterDefaultDefinitions mode
+AfterDefaultDefinitions mode 'raylibReplacement.apln.hide'
 ∇
 :EndNamespace

@@ -1,0 +1,64 @@
+:Namespace physacReplacement
+
+Assert ← {⍺←'assertion failure' ⋄ 0∊⍵:⍺ ⎕SIGNAL 8 ⋄ shy←0}
+
+
+∇ClosePhysics _
+    _←ClosePhysicsRAYLIB _
+∇
+∇r←CreatePhysicsBodyCircle(pos radius density)
+    r←CreatePhysicsBodyCircleRAYLIB(pos radius density)
+∇
+∇r←CreatePhysicsBodyPolygon(pos radius sides density)
+    r←CreatePhysicsBodyPolygonRAYLIB(pos radius sides density)
+∇
+∇r←CreatePhysicsBodyRectangle(pos width height density)
+    r←CreatePhysicsBodyRectangleRAYLIB(pos width height density)
+∇
+∇DestroyPhysicsBody body
+    _←DestroyPhysicsBodyRAYLIB body
+∇
+∇r←GetPhysicsBodiesCount _
+    r←GetPhysicsBodiesCountRAYLIB _
+∇
+∇r←GetPhysicsBody index
+    r←GetPhysicsBodyRAYLIB index
+∇
+∇r←GetPhysicsShapeType index
+    r←GetPhysicsShapeTypeRAYLIB index
+∇
+∇r←GetPhysicsShapeVertex(body vertex)
+    r←GetPhysicsShapeVertexRAYLIB(body vertex)
+∇
+∇r←GetPhysicsShapeVerticesCount index
+    r←GetPhysicsShapeVerticesCountRAYLIB index
+∇
+∇InitPhysics _
+    _←InitPhysicsRAYLIB _
+∇
+∇r←IsPhysicsEnabled _
+    r←IsPhysicsEnabledRAYLIB _
+∇
+∇PhysicsAddForce(body force)
+    _←PhysicsAddForceRAYLIB(body force)
+∇
+∇PhysicsAddTorque(body amount)
+    _←PhysicsAddTorqueRAYLIB(body amount)
+∇
+∇PhysicsShatter(body position force)
+    _←PhysicsShatterRAYLIB(body position force)
+∇
+∇RunPhysicsStep _
+    _←RunPhysicsStepRAYLIB _
+∇
+∇SetPhysicsBodyRotation(body radians)
+    _←SetPhysicsBodyRotationRAYLIB(body radians)
+∇
+∇SetPhysicsGravity(x y)
+    _←SetPhysicsGravityRAYLIB(x y)
+∇
+∇SetPhysicsTimeStep delta
+    _←SetPhysicsTimeStepRAYLIB delta
+∇
+
+:EndNamespace

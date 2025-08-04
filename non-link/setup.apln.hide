@@ -45,9 +45,9 @@ prefix←FilePrefixGet ⍬
 ∇ success←installAutoForTatin fileExists
   :If (~fileExists)
     :If 9≡40∘⎕ATX '##.##.TatinVars'
-          ##.##.installraylib 1
+      ##.##.installraylib 1
     :Else
-          ('File ',lib,' was not found') Assert ~fileExists
+      0 Assert⍨ 'File ',lib,' was not found'
     :EndIf
   :EndIf
   success←1
@@ -64,13 +64,12 @@ PlatfromToLibFile ← {
 
 fixPath←{
   'Windows'≡'-64'~⍨⊃#⎕WG'APLVersion':('\'@('/'∘=))⍵
-  lib
+  ⍵
 }
 
-lib ← ∊1⎕NPARTS PlatfromToLibFile '-64'~⍨⊃#⎕WG'APLVersion'
-lib←fixPath lib
-installed←installAutoForTatin ⎕NEXISTS lib
-lib←∊'"',lib'"'
+lib ← fixPath ∊1⎕NPARTS PlatfromToLibFile '-64'~⍨⊃#⎕WG'APLVersion'
+_ ← installAutoForTatin ⎕NEXISTS lib
+lib ← '"',lib,'"'
 
 Read←{
   _←'R'⎕NA lib,'|memcpy2 =U1[',(⍕⍺),'] P U8' ⍝ MA = Mid After. Means these convert to/from pointer. IF = Into From
@@ -258,11 +257,13 @@ push,←⊂ StringPushGen ⍬
 ∇
 
 
-∇AfterDefaultDefinitions mode
-  replacements ⊢← 0 ⎕FIX pathToRaylibDotAPLN,'../non-link/replacements.apln.hide'
+∇AfterDefaultDefinitions (mode replacementFileName)
+  replacements ⊢← 0 ⎕FIX pathToRaylibDotAPLN,'../non-link/',replacementFileName
 
-  SetTraceLogLevelRAYLIB TraceLogLevel.LOG_WARNING
-  SetTargetFPSRAYLIB 60
+  :if 'raylib'≡6↑replacementFileName
+    SetTraceLogLevelRAYLIB TraceLogLevel.LOG_WARNING
+    SetTargetFPSRAYLIB 60
+  :EndIf
 
   :If mode∊1 3 ⍝ Automatic replacements
     replacements {r←⍵ ⋄ r←r⊣'r'⎕NS⍺} ⎕THIS

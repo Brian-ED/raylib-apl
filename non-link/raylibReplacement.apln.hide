@@ -1,4 +1,4 @@
-:Namespace replacements
+:Namespace raylibReplacement
 
 Assert ← {⍺←'assertion failure' ⋄ 0∊⍵:⍺ ⎕SIGNAL 8 ⋄ shy←0}
 scopeInitWindow ← 0

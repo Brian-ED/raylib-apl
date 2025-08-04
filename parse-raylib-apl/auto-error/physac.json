@@ -1,0 +1,34 @@
+
+{
+  "doc1": "Lines are in the regex form `[a-zA-Z0-9]+ *:( [a-zA-Z0-9]+)*`.",
+  "doc2": "Ordering of names after : is the scope initiation order, meaning the order that the scope functions are activated in.",
+  "doc3": "Ordering of lines is with respect to FName, ordered the same as in raylib.h.",
+  "doc4": "Scope functions are only added if they are required for proper behavior of FName.",
+  "doc5": "Proper behavior means FName won't: crash, do undefined behavior (Ex: reading incorrect memory), or return wrong values (Ex: F in Scope returns a*b, but outside scope returns 0).",
+  "doc6": "FName may be a Scope function if it implicitly influences other functions's behavior, and has a corresponding function that ends the scope.",
+  "doc7": "Scope may have prefix.",
+  "doc8": "scopes.nested is true unless proven false.",
+  "scopes":[
+  ],
+  "functions":[
+    {"name": "InitPhysics"                   ,"allowed cases": [], "disallowed cases": [], "doc":""},
+    {"name": "RunPhysicsStep"                ,"allowed cases": [], "disallowed cases": [], "doc":""},
+    {"name": "SetPhysicsTimeStep"            ,"allowed cases": [], "disallowed cases": [], "doc":""},
+    {"name": "IsPhysicsEnabled"              ,"allowed cases": [], "disallowed cases": [], "doc":""},
+    {"name": "SetPhysicsGravity"             ,"allowed cases": [], "disallowed cases": [], "doc":""},
+    {"name": "CreatePhysicsBodyCircle"       ,"allowed cases": [], "disallowed cases": [], "doc":""},
+    {"name": "CreatePhysicsBodyRectangle"    ,"allowed cases": [], "disallowed cases": [], "doc":""},
+    {"name": "CreatePhysicsBodyPolygon"      ,"allowed cases": [], "disallowed cases": [], "doc":""},
+    {"name": "PhysicsAddForce"               ,"allowed cases": [], "disallowed cases": [], "doc":""},
+    {"name": "PhysicsAddTorque"              ,"allowed cases": [], "disallowed cases": [], "doc":""},
+    {"name": "PhysicsShatter"                ,"allowed cases": [], "disallowed cases": [], "doc":""},
+    {"name": "GetPhysicsBodiesCount"         ,"allowed cases": [], "disallowed cases": [], "doc":""},
+    {"name": "GetPhysicsBody"                ,"allowed cases": [], "disallowed cases": [], "doc":""},
+    {"name": "GetPhysicsShapeType"           ,"allowed cases": [], "disallowed cases": [], "doc":""},
+    {"name": "GetPhysicsShapeVerticesCount"  ,"allowed cases": [], "disallowed cases": [], "doc":""},
+    {"name": "GetPhysicsShapeVertex"         ,"allowed cases": [], "disallowed cases": [], "doc":""},
+    {"name": "SetPhysicsBodyRotation"        ,"allowed cases": [], "disallowed cases": [], "doc":""},
+    {"name": "DestroyPhysicsBody"            ,"allowed cases": [], "disallowed cases": [], "doc":""},
+    {"name": "ClosePhysics"                  ,"allowed cases": [], "disallowed cases": [], "doc":""}
+  ]
+}

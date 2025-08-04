@@ -440,13 +440,13 @@ Rectangle ← ⍬ ⍝ Rectangle type
   Rectangle,←⊂ f            ⍝ width   ⍝
   Rectangle,←⊂ f            ⍝ height  ⍝
 
-Texture2D ← ⍬ ⍝ It should be redesigned to be provided by user
-  Texture2D,←⊂ '⋄Texture2D' ⍝          ⍝
-  Texture2D,←⊂ u            ⍝ id       ⍝ OpenGL texture id
-  Texture2D,←⊂ i            ⍝ width    ⍝ Texture base width
-  Texture2D,←⊂ i            ⍝ height   ⍝ Texture base height
-  Texture2D,←⊂ i            ⍝ mipmaps  ⍝ Mipmap levels, 1 by default
-  Texture2D,←⊂ i            ⍝ format   ⍝ Data format (PixelFormat type)
+Texture ← ⍬ ⍝ It should be redesigned to be provided by user
+  Texture,←⊂ '⋄Texture' ⍝          ⍝
+  Texture,←⊂ u          ⍝ id       ⍝ OpenGL texture id
+  Texture,←⊂ i          ⍝ width    ⍝ Texture base width
+  Texture,←⊂ i          ⍝ height   ⍝ Texture base height
+  Texture,←⊂ i          ⍝ mipmaps  ⍝ Mipmap levels, 1 by default
+  Texture,←⊂ i          ⍝ format   ⍝ Data format (PixelFormat type)
 
 Image ← ⍬ ⍝ Image, pixel data stored in CPU memory (RAM)
   Image,←⊂ '⋄Image' ⍝          ⍝
@@ -469,7 +469,7 @@ Font ← ⍬ ⍝ It should be redesigned to be provided by user
   Font,←⊂ i             ⍝ baseSize      ⍝ Base size (default chars height)
   Font,←⊂ i             ⍝ glyphCount    ⍝ Number of glyph characters
   Font,←⊂ i             ⍝ glyphPadding  ⍝ Padding around the glyph characters
-  Font,←⊂ Texture2D     ⍝ texture       ⍝ Texture atlas containing the glyphs
+  Font,←⊂ Texture       ⍝ texture       ⍝ Texture atlas containing the glyphs
   Font,←⊂ '=',Rectangle ⍝ recs          ⍝ Rectangles in texture for the glyphs
   Font,←⊂ '=',GlyphInfo ⍝ glyphs        ⍝ Glyphs info data
 
@@ -551,5 +551,6 @@ GuiColorBarAlphaRAYLIB    ←           R('GuiColorBarAlphaRetPtr'    (('>',i) R
 GuiColorBarHueRAYLIB      ←           R('GuiColorBarHueRetPtr'      (('>',i) Rectangle str ('=',f)                           )) ⍝ bounds text value                                              ⍝ Color Bar Hue control
 GuiColorPickerHSVRAYLIB   ←           R('GuiColorPickerHSVRetPtr'   (('>',i) Rectangle str ('=',v3)                          )) ⍝ bounds text colorHsv                                           ⍝ Color Picker control that avoids conversion to RGB on each call (multiple color controls)
 GuiColorPanelHSVRAYLIB    ←           R('GuiColorPanelHSVRetPtr'    (('>',i) Rectangle str ('=',v3)                          )) ⍝ bounds text colorHsv                                           ⍝ Color Panel control that returns HSV color value, used by GuiColorPickerHSV()
+AfterDefaultDefinitions mode 'rayguiReplacement.apln.hide'
 ∇
 :EndNamespace

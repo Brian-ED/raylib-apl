@@ -1,0 +1,175 @@
+:Namespace rayguiReplacement
+
+Assert ← {⍺←'assertion failure' ⋄ 0∊⍵:⍺ ⎕SIGNAL 8 ⋄ shy←0}
+
+
+∇r←GuiButton(bounds text)
+    r←GuiButtonRAYLIB(bounds text)
+∇
+∇r←GuiCheckBox(bounds text checked)
+    r←GuiCheckBoxRAYLIB(bounds text checked)
+∇
+∇r←GuiColorBarAlpha(bounds text alpha)
+    r←GuiColorBarAlphaRAYLIB(bounds text alpha)
+∇
+∇r←GuiColorBarHue(bounds text value)
+    r←GuiColorBarHueRAYLIB(bounds text value)
+∇
+∇r←GuiColorPanel(bounds text color)
+    r←GuiColorPanelRAYLIB(bounds text color)
+∇
+∇r←GuiColorPanelHSV(bounds text colorHsv)
+    r←GuiColorPanelHSVRAYLIB(bounds text colorHsv)
+∇
+∇r←GuiColorPicker(bounds text color)
+    r←GuiColorPickerRAYLIB(bounds text color)
+∇
+∇r←GuiColorPickerHSV(bounds text colorHsv)
+    r←GuiColorPickerHSVRAYLIB(bounds text colorHsv)
+∇
+∇r←GuiComboBox(bounds text active)
+    r←GuiComboBoxRAYLIB(bounds text active)
+∇
+∇GuiDisable _
+    _←GuiDisableRAYLIB _
+∇
+∇GuiDisableTooltip _
+    _←GuiDisableTooltipRAYLIB _
+∇
+∇GuiDrawIcon(iconId posX posY pixelSize color)
+    _←GuiDrawIconRAYLIB(iconId posX posY pixelSize color)
+∇
+∇r←GuiDropdownBox(bounds text active editMode)
+    r←GuiDropdownBoxRAYLIB(bounds text active editMode)
+∇
+∇r←GuiDummyRec(bounds text)
+    r←GuiDummyRecRAYLIB(bounds text)
+∇
+∇GuiEnable _
+    _←GuiEnableRAYLIB _
+∇
+∇GuiEnableTooltip _
+    _←GuiEnableTooltipRAYLIB _
+∇
+∇r←GuiGetFont _
+    r←GuiGetFontRAYLIB _
+∇
+∇r←GuiGetIcons _
+    r←GuiGetIconsRAYLIB _
+∇
+∇r←GuiGetState _
+    r←GuiGetStateRAYLIB _
+∇
+∇r←GuiGetStyle(control property)
+    r←GuiGetStyleRAYLIB(control property)
+∇
+∇r←GuiGrid(bounds text spacing subdivs mouseCell)
+    r←GuiGridRAYLIB(bounds text spacing subdivs mouseCell)
+∇
+∇r←GuiGroupBox(bounds text)
+    r←GuiGroupBoxRAYLIB(bounds text)
+∇
+∇r←GuiIconText(iconId text)
+    r←GuiIconTextRAYLIB(iconId text)
+∇
+∇r←GuiIsLocked _
+    r←GuiIsLockedRAYLIB _
+∇
+∇r←GuiLabel(bounds text)
+    r←GuiLabelRAYLIB(bounds text)
+∇
+∇r←GuiLabelButton(bounds text)
+    r←GuiLabelButtonRAYLIB(bounds text)
+∇
+∇r←GuiLine(bounds text)
+    r←GuiLineRAYLIB(bounds text)
+∇
+∇r←GuiListView(bounds text scrollIndex active)
+    r←GuiListViewRAYLIB(bounds text scrollIndex active)
+∇
+∇r←GuiListViewEx(bounds text count scrollIndex active focus)
+    r←GuiListViewExRAYLIB(bounds text count scrollIndex active focus)
+∇
+∇r←GuiLoadIcons(fileName loadIconsName)
+    r←GuiLoadIconsRAYLIB(fileName loadIconsName)
+∇
+∇r←GuiLoadStyle fileName
+    r←GuiLoadStyleRAYLIB fileName
+∇
+∇GuiLoadStyleDefault _
+    _←GuiLoadStyleDefaultRAYLIB _
+∇
+∇GuiLock _
+    _←GuiLockRAYLIB _
+∇
+∇r←GuiMessageBox(bounds title message buttons)
+    r←GuiMessageBoxRAYLIB(bounds title message buttons)
+∇
+∇r←GuiPanel(bounds text)
+    r←GuiPanelRAYLIB(bounds text)
+∇
+∇r←GuiProgressBar(bounds textLeft textRight value minValue maxValue)
+    r←GuiProgressBarRAYLIB(bounds textLeft textRight value minValue maxValue)
+∇
+∇r←GuiScrollPanel(bounds text content scroll view)
+    r←GuiScrollPanelRAYLIB(bounds text content scroll view)
+∇
+∇GuiSetAlpha alpha
+    _←GuiSetAlphaRAYLIB alpha
+∇
+∇GuiSetFont font
+    _←GuiSetFontRAYLIB font
+∇
+∇GuiSetIconScale scale
+    _←GuiSetIconScaleRAYLIB scale
+∇
+∇GuiSetState state
+    _←GuiSetStateRAYLIB state
+∇
+∇GuiSetStyle(control property value)
+    _←GuiSetStyleRAYLIB(control property value)
+∇
+∇r←GuiSetTooltip tooltip
+    r←GuiSetTooltipRAYLIB tooltip
+∇
+∇r←GuiSlider(bounds textLeft textRight value minValue maxValue)
+    r←GuiSliderRAYLIB(bounds textLeft textRight value minValue maxValue)
+∇
+∇r←GuiSliderBar(bounds textLeft textRight value minValue maxValue)
+    r←GuiSliderBarRAYLIB(bounds textLeft textRight value minValue maxValue)
+∇
+∇r←GuiSpinner(bounds text value minValue maxValue editMode)
+    r←GuiSpinnerRAYLIB(bounds text value minValue maxValue editMode)
+∇
+∇r←GuiStatusBar(bounds text)
+    r←GuiStatusBarRAYLIB(bounds text)
+∇
+∇r←GuiTabBar(bounds text count active)
+    r←GuiTabBarRAYLIB(bounds text count active)
+∇
+∇r←GuiTextBox(bounds text textSize editMode)
+    r←GuiTextBoxRAYLIB(bounds text textSize editMode)
+∇
+∇r←GuiTextInputBox(bounds title message buttons text textMaxSize secretViewActive)
+    r←GuiTextInputBoxRAYLIB(bounds title message buttons text textMaxSize secretViewActive)
+∇
+∇r←GuiToggle(bounds text active)
+    r←GuiToggleRAYLIB(bounds text active)
+∇
+∇r←GuiToggleGroup(bounds text active)
+    r←GuiToggleGroupRAYLIB(bounds text active)
+∇
+∇r←GuiToggleSlider(bounds text active)
+    r←GuiToggleSliderRAYLIB(bounds text active)
+∇
+∇GuiUnlock _
+    _←GuiUnlockRAYLIB _
+∇
+∇r←GuiValueBox(bounds text value minValue maxValue editMode)
+    r←GuiValueBoxRAYLIB(bounds text value minValue maxValue editMode)
+∇
+∇r←GuiWindowBox(bounds title)
+    r←GuiWindowBoxRAYLIB(bounds title)
+∇
+
+:EndNamespace

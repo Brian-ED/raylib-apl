@@ -1,5 +1,10 @@
 #!/usr/bin/env bqn
-⟨ToFFI⋄ParseHeader⟩ ← •Import "parseAPL.bqn"
+⟨ParseHeader
+GetFiles
+FFISetup
+ToFFI
+MakeReplacement⟩ ← •Import "parseAPL.bqn"
+
 map ← [
   "RL_ZERO"‿"RLGL_VERSION"
   "RLZERO" ‿"RLGLVersionString"
@@ -66,20 +71,24 @@ Fix_StatePointer ← {
   (if⊸↑∾il⊸↓)𝕩
 }
 
-file ← •FChars "include/rlgl.h"
-file {𝕩/˜¬∨`𝕩≠⊸↑𝕨⍷𝕩}˜↩ "/***********************************************************************************
+libName ← "rlgl"
+libPrefix ← "RLAPI"
+
+⟨ header ⋄ autoErrorJson ⋄ replacementFilename
+  replacement ⋄ linkOutput
+⟩ ← GetFiles libName
+
+header {𝕩/˜¬∨`𝕩≠⊸↑𝕨⍷𝕩}˜↩ "/***********************************************************************************
 *
 *   RLGL IMPLEMENTATION
 *
 ************************************************************************************/
 "
-file Fix_rlVertexBuffer↩
-file Fix_StatePointer↩
-file ParseHeader˜↩ "RLAPI"
-file ToFFI˜↩ map
-file ∾˜↩ ":Namespace rlgl"∾@+10
-file ∾↩ ":EndNamespace"∾˜@+10
-file ∾↩ @+10
-destination ← "../link/rlgl.apln"
-destination •FChars file
-•Out destination∾" successfully generated"
+header Fix_rlVertexBuffer↩
+header Fix_StatePointer↩
+
+·‿·‿·‿·‿·‿functions ← headerTree ← libPrefix ParseHeader header
+replacement •FLines libName‿autoErrorJson MakeReplacement ⍉(⍋⊏˘)⊸⊏(↕0‿5)∾´functions
+
+linkOutput •FChars libName‿replacementFilename FFISetup ToFFI headerTree
+•Out linkOutput∾" successfully generated"

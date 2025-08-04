@@ -1,16 +1,25 @@
 #!/usr/bin/env bqn
-⟨HeaderToFFI⟩ ← •Import "parseAPL.bqn"
-file ← •FChars "include/raygui.h"
-file {𝕩/˜¬∨`𝕩≠⊸↑𝕨⍷𝕩}˜↩ "/***********************************************************************************
+⟨ParseHeader
+GetFiles
+FFISetup
+ToFFI
+MakeReplacement⟩ ← •Import "parseAPL.bqn"
+
+libName ← "raygui"
+libPrefix ← "RAYGUIAPI"
+
+⟨ header ⋄ autoErrorJson ⋄ replacementFilename
+  replacement ⋄ linkOutput
+⟩ ← GetFiles libName
+
+header {𝕩/˜¬∨`𝕩≠⊸↑𝕨⍷𝕩}˜↩ "/***********************************************************************************
 *
 *   RAYGUI IMPLEMENTATION
 *
 ************************************************************************************/
 "
-file HeaderToFFI˜↩ "RAYGUIAPI"
-file ∾˜↩ ":Namespace raygui"∾@+10
-file ∾↩ ":EndNamespace"∾˜@+10
-file ∾↩ @+10
-destination ← "../link/raygui.apln"
-destination •FChars  file
-•Out destination∾" successfully generated"
+·‿·‿·‿·‿·‿functions ← headerTree ← libPrefix ParseHeader header
+replacement •FLines libName‿autoErrorJson MakeReplacement ⍉(⍋⊏˘)⊸⊏(↕0‿5)∾´functions
+
+linkOutput •FChars libName‿replacementFilename FFISetup [⟨"Texture2D"⟩⋄⟨"Texture"⟩] ToFFI headerTree
+•Out linkOutput∾" successfully generated"

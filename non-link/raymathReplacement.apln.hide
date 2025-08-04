@@ -1,0 +1,436 @@
+:Namespace raymathReplacement
+
+Assert ← {⍺←'assertion failure' ⋄ 0∊⍵:⍺ ⎕SIGNAL 8 ⋄ shy←0}
+
+
+∇r←Clamp(value min max)
+    r←ClampRAYLIB(value min max)
+∇
+∇r←FloatEquals(x y)
+    r←FloatEqualsRAYLIB(x y)
+∇
+∇r←Lerp(start end amount)
+    r←LerpRAYLIB(start end amount)
+∇
+∇r←MatrixAdd(left right)
+    r←MatrixAddRAYLIB(left right)
+∇
+∇MatrixDecompose(mat translation rotation scale)
+    _←MatrixDecomposeRAYLIB(mat translation rotation scale)
+∇
+∇r←MatrixDeterminant mat
+    r←MatrixDeterminantRAYLIB mat
+∇
+∇r←MatrixFrustum(left right bottom top nearPlane farPlane)
+    r←MatrixFrustumRAYLIB(left right bottom top nearPlane farPlane)
+∇
+∇r←MatrixIdentity _
+    r←MatrixIdentityRAYLIB _
+∇
+∇r←MatrixInvert mat
+    r←MatrixInvertRAYLIB mat
+∇
+∇r←MatrixLookAt(eye target up)
+    r←MatrixLookAtRAYLIB(eye target up)
+∇
+∇r←MatrixMultiply(left right)
+    r←MatrixMultiplyRAYLIB(left right)
+∇
+∇r←MatrixOrtho(left right bottom top nearPlane farPlane)
+    r←MatrixOrthoRAYLIB(left right bottom top nearPlane farPlane)
+∇
+∇r←MatrixPerspective(fovY aspect nearPlane farPlane)
+    r←MatrixPerspectiveRAYLIB(fovY aspect nearPlane farPlane)
+∇
+∇r←MatrixRotate(axis angle)
+    r←MatrixRotateRAYLIB(axis angle)
+∇
+∇r←MatrixRotateX angle
+    r←MatrixRotateXRAYLIB angle
+∇
+∇r←MatrixRotateXYZ angle
+    r←MatrixRotateXYZRAYLIB angle
+∇
+∇r←MatrixRotateY angle
+    r←MatrixRotateYRAYLIB angle
+∇
+∇r←MatrixRotateZ angle
+    r←MatrixRotateZRAYLIB angle
+∇
+∇r←MatrixRotateZYX angle
+    r←MatrixRotateZYXRAYLIB angle
+∇
+∇r←MatrixScale(x y z)
+    r←MatrixScaleRAYLIB(x y z)
+∇
+∇r←MatrixSubtract(left right)
+    r←MatrixSubtractRAYLIB(left right)
+∇
+∇r←MatrixToFloatV mat
+    r←MatrixToFloatVRAYLIB mat
+∇
+∇r←MatrixTrace mat
+    r←MatrixTraceRAYLIB mat
+∇
+∇r←MatrixTranslate(x y z)
+    r←MatrixTranslateRAYLIB(x y z)
+∇
+∇r←MatrixTranspose mat
+    r←MatrixTransposeRAYLIB mat
+∇
+∇r←Normalize(value start end)
+    r←NormalizeRAYLIB(value start end)
+∇
+∇r←QuaternionAdd(q1 q2)
+    r←QuaternionAddRAYLIB(q1 q2)
+∇
+∇r←QuaternionAddValue(q add)
+    r←QuaternionAddValueRAYLIB(q add)
+∇
+∇r←QuaternionCubicHermiteSpline(q1 outTangent1 q2 inTangent2 t)
+    r←QuaternionCubicHermiteSplineRAYLIB(q1 outTangent1 q2 inTangent2 t)
+∇
+∇r←QuaternionDivide(q1 q2)
+    r←QuaternionDivideRAYLIB(q1 q2)
+∇
+∇r←QuaternionEquals(p q)
+    r←QuaternionEqualsRAYLIB(p q)
+∇
+∇r←QuaternionFromAxisAngle(axis angle)
+    r←QuaternionFromAxisAngleRAYLIB(axis angle)
+∇
+∇r←QuaternionFromEuler(pitch yaw roll)
+    r←QuaternionFromEulerRAYLIB(pitch yaw roll)
+∇
+∇r←QuaternionFromMatrix mat
+    r←QuaternionFromMatrixRAYLIB mat
+∇
+∇r←QuaternionFromVector3ToVector3(from to)
+    r←QuaternionFromVector3ToVector3RAYLIB(from to)
+∇
+∇r←QuaternionIdentity _
+    r←QuaternionIdentityRAYLIB _
+∇
+∇r←QuaternionInvert q
+    r←QuaternionInvertRAYLIB q
+∇
+∇r←QuaternionLength q
+    r←QuaternionLengthRAYLIB q
+∇
+∇r←QuaternionLerp(q1 q2 amount)
+    r←QuaternionLerpRAYLIB(q1 q2 amount)
+∇
+∇r←QuaternionMultiply(q1 q2)
+    r←QuaternionMultiplyRAYLIB(q1 q2)
+∇
+∇r←QuaternionNlerp(q1 q2 amount)
+    r←QuaternionNlerpRAYLIB(q1 q2 amount)
+∇
+∇r←QuaternionNormalize q
+    r←QuaternionNormalizeRAYLIB q
+∇
+∇r←QuaternionScale(q mul)
+    r←QuaternionScaleRAYLIB(q mul)
+∇
+∇r←QuaternionSlerp(q1 q2 amount)
+    r←QuaternionSlerpRAYLIB(q1 q2 amount)
+∇
+∇r←QuaternionSubtract(q1 q2)
+    r←QuaternionSubtractRAYLIB(q1 q2)
+∇
+∇r←QuaternionSubtractValue(q sub)
+    r←QuaternionSubtractValueRAYLIB(q sub)
+∇
+∇QuaternionToAxisAngle(q outAxis outAngle)
+    _←QuaternionToAxisAngleRAYLIB(q outAxis outAngle)
+∇
+∇r←QuaternionToEuler q
+    r←QuaternionToEulerRAYLIB q
+∇
+∇r←QuaternionToMatrix q
+    r←QuaternionToMatrixRAYLIB q
+∇
+∇r←QuaternionTransform(q mat)
+    r←QuaternionTransformRAYLIB(q mat)
+∇
+∇r←Remap(value inputStart inputEnd outputStart outputEnd)
+    r←RemapRAYLIB(value inputStart inputEnd outputStart outputEnd)
+∇
+∇r←Vector2Add(v1 v2)
+    r←Vector2AddRAYLIB(v1 v2)
+∇
+∇r←Vector2AddValue(v add)
+    r←Vector2AddValueRAYLIB(v add)
+∇
+∇r←Vector2Angle(v1 v2)
+    r←Vector2AngleRAYLIB(v1 v2)
+∇
+∇r←Vector2Clamp(v min max)
+    r←Vector2ClampRAYLIB(v min max)
+∇
+∇r←Vector2ClampValue(v min max)
+    r←Vector2ClampValueRAYLIB(v min max)
+∇
+∇r←Vector2Distance(v1 v2)
+    r←Vector2DistanceRAYLIB(v1 v2)
+∇
+∇r←Vector2DistanceSqr(v1 v2)
+    r←Vector2DistanceSqrRAYLIB(v1 v2)
+∇
+∇r←Vector2Divide(v1 v2)
+    r←Vector2DivideRAYLIB(v1 v2)
+∇
+∇r←Vector2DotProduct(v1 v2)
+    r←Vector2DotProductRAYLIB(v1 v2)
+∇
+∇r←Vector2Equals(p q)
+    r←Vector2EqualsRAYLIB(p q)
+∇
+∇r←Vector2Invert v
+    r←Vector2InvertRAYLIB v
+∇
+∇r←Vector2Length v
+    r←Vector2LengthRAYLIB v
+∇
+∇r←Vector2LengthSqr v
+    r←Vector2LengthSqrRAYLIB v
+∇
+∇r←Vector2Lerp(v1 v2 amount)
+    r←Vector2LerpRAYLIB(v1 v2 amount)
+∇
+∇r←Vector2LineAngle(start end)
+    r←Vector2LineAngleRAYLIB(start end)
+∇
+∇r←Vector2Max(v1 v2)
+    r←Vector2MaxRAYLIB(v1 v2)
+∇
+∇r←Vector2Min(v1 v2)
+    r←Vector2MinRAYLIB(v1 v2)
+∇
+∇r←Vector2MoveTowards(v target maxDistance)
+    r←Vector2MoveTowardsRAYLIB(v target maxDistance)
+∇
+∇r←Vector2Multiply(v1 v2)
+    r←Vector2MultiplyRAYLIB(v1 v2)
+∇
+∇r←Vector2Negate v
+    r←Vector2NegateRAYLIB v
+∇
+∇r←Vector2Normalize v
+    r←Vector2NormalizeRAYLIB v
+∇
+∇r←Vector2One _
+    r←Vector2OneRAYLIB _
+∇
+∇r←Vector2Reflect(v normal)
+    r←Vector2ReflectRAYLIB(v normal)
+∇
+∇r←Vector2Refract(v n r)
+    r←Vector2RefractRAYLIB(v n r)
+∇
+∇r←Vector2Rotate(v angle)
+    r←Vector2RotateRAYLIB(v angle)
+∇
+∇r←Vector2Scale(v scale)
+    r←Vector2ScaleRAYLIB(v scale)
+∇
+∇r←Vector2Subtract(v1 v2)
+    r←Vector2SubtractRAYLIB(v1 v2)
+∇
+∇r←Vector2SubtractValue(v sub)
+    r←Vector2SubtractValueRAYLIB(v sub)
+∇
+∇r←Vector2Transform(v mat)
+    r←Vector2TransformRAYLIB(v mat)
+∇
+∇r←Vector2Zero _
+    r←Vector2ZeroRAYLIB _
+∇
+∇r←Vector3Add(v1 v2)
+    r←Vector3AddRAYLIB(v1 v2)
+∇
+∇r←Vector3AddValue(v add)
+    r←Vector3AddValueRAYLIB(v add)
+∇
+∇r←Vector3Angle(v1 v2)
+    r←Vector3AngleRAYLIB(v1 v2)
+∇
+∇r←Vector3Barycenter(p a b c)
+    r←Vector3BarycenterRAYLIB(p a b c)
+∇
+∇r←Vector3Clamp(v min max)
+    r←Vector3ClampRAYLIB(v min max)
+∇
+∇r←Vector3ClampValue(v min max)
+    r←Vector3ClampValueRAYLIB(v min max)
+∇
+∇r←Vector3CrossProduct(v1 v2)
+    r←Vector3CrossProductRAYLIB(v1 v2)
+∇
+∇r←Vector3CubicHermite(v1 tangent1 v2 tangent2 amount)
+    r←Vector3CubicHermiteRAYLIB(v1 tangent1 v2 tangent2 amount)
+∇
+∇r←Vector3Distance(v1 v2)
+    r←Vector3DistanceRAYLIB(v1 v2)
+∇
+∇r←Vector3DistanceSqr(v1 v2)
+    r←Vector3DistanceSqrRAYLIB(v1 v2)
+∇
+∇r←Vector3Divide(v1 v2)
+    r←Vector3DivideRAYLIB(v1 v2)
+∇
+∇r←Vector3DotProduct(v1 v2)
+    r←Vector3DotProductRAYLIB(v1 v2)
+∇
+∇r←Vector3Equals(p q)
+    r←Vector3EqualsRAYLIB(p q)
+∇
+∇r←Vector3Invert v
+    r←Vector3InvertRAYLIB v
+∇
+∇r←Vector3Length v
+    r←Vector3LengthRAYLIB v
+∇
+∇r←Vector3LengthSqr v
+    r←Vector3LengthSqrRAYLIB v
+∇
+∇r←Vector3Lerp(v1 v2 amount)
+    r←Vector3LerpRAYLIB(v1 v2 amount)
+∇
+∇r←Vector3Max(v1 v2)
+    r←Vector3MaxRAYLIB(v1 v2)
+∇
+∇r←Vector3Min(v1 v2)
+    r←Vector3MinRAYLIB(v1 v2)
+∇
+∇r←Vector3MoveTowards(v target maxDistance)
+    r←Vector3MoveTowardsRAYLIB(v target maxDistance)
+∇
+∇r←Vector3Multiply(v1 v2)
+    r←Vector3MultiplyRAYLIB(v1 v2)
+∇
+∇r←Vector3Negate v
+    r←Vector3NegateRAYLIB v
+∇
+∇r←Vector3Normalize v
+    r←Vector3NormalizeRAYLIB v
+∇
+∇r←Vector3One _
+    r←Vector3OneRAYLIB _
+∇
+∇r←Vector3OrthoNormalize(v1 v2)
+    r←Vector3OrthoNormalizeRAYLIB(v1 v2)
+∇
+∇r←Vector3Perpendicular v
+    r←Vector3PerpendicularRAYLIB v
+∇
+∇r←Vector3Project(v1 v2)
+    r←Vector3ProjectRAYLIB(v1 v2)
+∇
+∇r←Vector3Reflect(v normal)
+    r←Vector3ReflectRAYLIB(v normal)
+∇
+∇r←Vector3Refract(v n r)
+    r←Vector3RefractRAYLIB(v n r)
+∇
+∇r←Vector3Reject(v1 v2)
+    r←Vector3RejectRAYLIB(v1 v2)
+∇
+∇r←Vector3RotateByAxisAngle(v axis angle)
+    r←Vector3RotateByAxisAngleRAYLIB(v axis angle)
+∇
+∇r←Vector3RotateByQuaternion(v q)
+    r←Vector3RotateByQuaternionRAYLIB(v q)
+∇
+∇r←Vector3Scale(v scalar)
+    r←Vector3ScaleRAYLIB(v scalar)
+∇
+∇r←Vector3Subtract(v1 v2)
+    r←Vector3SubtractRAYLIB(v1 v2)
+∇
+∇r←Vector3SubtractValue(v sub)
+    r←Vector3SubtractValueRAYLIB(v sub)
+∇
+∇r←Vector3ToFloatV v
+    r←Vector3ToFloatVRAYLIB v
+∇
+∇r←Vector3Transform(v mat)
+    r←Vector3TransformRAYLIB(v mat)
+∇
+∇r←Vector3Unproject(source projection view)
+    r←Vector3UnprojectRAYLIB(source projection view)
+∇
+∇r←Vector3Zero _
+    r←Vector3ZeroRAYLIB _
+∇
+∇r←Vector4Add(v1 v2)
+    r←Vector4AddRAYLIB(v1 v2)
+∇
+∇r←Vector4AddValue(v add)
+    r←Vector4AddValueRAYLIB(v add)
+∇
+∇r←Vector4Distance(v1 v2)
+    r←Vector4DistanceRAYLIB(v1 v2)
+∇
+∇r←Vector4DistanceSqr(v1 v2)
+    r←Vector4DistanceSqrRAYLIB(v1 v2)
+∇
+∇r←Vector4Divide(v1 v2)
+    r←Vector4DivideRAYLIB(v1 v2)
+∇
+∇r←Vector4DotProduct(v1 v2)
+    r←Vector4DotProductRAYLIB(v1 v2)
+∇
+∇r←Vector4Equals(p q)
+    r←Vector4EqualsRAYLIB(p q)
+∇
+∇r←Vector4Invert v
+    r←Vector4InvertRAYLIB v
+∇
+∇r←Vector4Length v
+    r←Vector4LengthRAYLIB v
+∇
+∇r←Vector4LengthSqr v
+    r←Vector4LengthSqrRAYLIB v
+∇
+∇r←Vector4Lerp(v1 v2 amount)
+    r←Vector4LerpRAYLIB(v1 v2 amount)
+∇
+∇r←Vector4Max(v1 v2)
+    r←Vector4MaxRAYLIB(v1 v2)
+∇
+∇r←Vector4Min(v1 v2)
+    r←Vector4MinRAYLIB(v1 v2)
+∇
+∇r←Vector4MoveTowards(v target maxDistance)
+    r←Vector4MoveTowardsRAYLIB(v target maxDistance)
+∇
+∇r←Vector4Multiply(v1 v2)
+    r←Vector4MultiplyRAYLIB(v1 v2)
+∇
+∇r←Vector4Negate v
+    r←Vector4NegateRAYLIB v
+∇
+∇r←Vector4Normalize v
+    r←Vector4NormalizeRAYLIB v
+∇
+∇r←Vector4One _
+    r←Vector4OneRAYLIB _
+∇
+∇r←Vector4Scale(v scale)
+    r←Vector4ScaleRAYLIB(v scale)
+∇
+∇r←Vector4Subtract(v1 v2)
+    r←Vector4SubtractRAYLIB(v1 v2)
+∇
+∇r←Vector4SubtractValue(v add)
+    r←Vector4SubtractValueRAYLIB(v add)
+∇
+∇r←Vector4Zero _
+    r←Vector4ZeroRAYLIB _
+∇
+∇r←Wrap(value min max)
+    r←WrapRAYLIB(value min max)
+∇
+
+:EndNamespace
