@@ -39,7 +39,7 @@ rl.SetMusicVolume music 0.75
         
         ⍝ Show music status
         status ← ('Paused' 'Playing')[1+rl.IsMusicStreamPlaying music]
-        rl.DrawText (∊'Status: ',status) 10 70 16 (⊃((⊂rl.color.red),(⊂rl.color.green))[1+rl.IsMusicStreamPlaying music])
+        rl.DrawText (∊'Status: ',status) 10 70 16 ,rl.color.red rl.color.green[1+rl.IsMusicStreamPlaying music]
         
     rl.EndDrawing⍬
 :EndWhile
