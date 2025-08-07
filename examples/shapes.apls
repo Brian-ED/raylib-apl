@@ -20,8 +20,8 @@ rl.InitWindow 800 800 'Hello!!!'
     rl.BeginDrawing⍬
         rl.ClearBackground rl.color.black
         rl.DrawFPS 40 40
-        rl.DrawEllipse pos,200 200,⊂rl.color.red
-        rl.DrawRectangle¨ ,∘rec rec rl.color.white¨ +∘pos¨outerRecs-rec÷2
+        rl.DrawEllipse ⌊pos,200 200,⊂rl.color.red
+        rl.DrawRectangle¨ ⌊,∘rec rec rl.color.white¨ +∘pos¨outerRecs-rec÷2
     rl.EndDrawing⍬
 :EndWhile
 rl.CloseWindow⍬
