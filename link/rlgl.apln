@@ -295,15 +295,13 @@ rlRenderBatch ← ⍬ ⍝ rlRenderBatch type
   rlRenderBatch,←⊂ i                  ⍝ drawCounter    ⍝ Draw calls counter
   rlRenderBatch,←⊂ f                  ⍝ currentDepth   ⍝ Current depth value for next draw
 ⍝ Mode is either 3:All changes, 2:only manual changes 1:only automatic changes, or 0: no changes
-∇{mode} Init pathToRaylibDotAPLN
+∇{mode} Init pathToRaylibDotAPLN ;import
 
 pathToRaylibDotAPLN ← (⊢,'/'/⍨'/'≢⊃⍤⌽)(⊢,'.'/⍨0=≢⍤⊢),pathToRaylibDotAPLN
 
-__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__ ← 0 ⎕FIX pathToRaylibDotAPLN,'../non-link/setup.apln.hide'
-'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯3
-'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯2
-'' ⎕NS ('__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.',⊢)¨__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__.⎕NL ¯9
-⎕EX '__PLEASE_DO_NOT_REPLACE_EXISTING_VAR__'
+import ← 0 ⎕FIX pathToRaylibDotAPLN,'../non-link/setup.apln.hide'
+'' ⎕NS 'import.'∘,¨import.⎕NL-2 3 9
+⎕EX 'import'
 
 pathToBinary ← lib
 :If 0=⎕NC 'mode'
