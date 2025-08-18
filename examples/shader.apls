@@ -1,0 +1,194 @@
+#!cd $dir && /usr/bin/dyalogscript $fileName
+rlDir ← '../link/',⍨⊃1⎕NPARTS''
+rl ← 0⎕Fix rlDir,'raylib.apln'
+rl.Init rlDir
+
+_←'MemCpyF4'   ⎕NA rl.lib,'|memcpy2 P <F4[] U8'
+_←'MemCpyI4'   ⎕NA rl.lib,'|memcpy2 P <I4[] U8'
+_←'MemCpyI4Out'⎕NA rl.lib,'|memcpy2 =I4[] P U8'
+_←'MemCpyF4Out'⎕NA rl.lib,'|memcpy2 =F4[] P U8'
+_←'MovePtr'⎕NA'P ',rl.lib,'|MovePtr P I4'
+
+⍝WriteF4 ← { ptr←⍺ ⋄ floats ← ⍵ ⋄ MemCpyF4 {⍺⍺ ⍵} (ptr floats (4×≢floats)) }
+⍝WriteI4 ← { ptr←⍺ ⋄ ints   ← ⍵ ⋄ MemCpyI4 {⍺⍺ ⍵} (ptr ints (4×≢ints)) }
+⍝ReadI4  ← { ptr←⍺ ⋄ amount ← ⍵ ⋄ MemCpyI4Out {⍺⍺ ⍵} ((amount⍴0) ptr (4×amount)) }
+∇ptr WriteF4 floats
+  MemCpyF4 {⍺⍺ ⍵} (ptr floats (4×≢floats))
+∇
+
+∇ptr WriteI4 ints
+  MemCpyI4 {⍺⍺ ⍵} (ptr ints (4×≢ints))
+∇
+
+∇r←ptr ReadI4 amount
+  r←MemCpyI4Out {⍺⍺ ⍵} ((amount⍴0) ptr (4×amount))
+∇
+∇r←ptr ReadF4 amount
+  r←MemCpyF4Out {⍺⍺ ⍵} ((amount⍴0) ptr (4×amount))
+∇
+
+⍝  ⟨ReadI32 ⋄ ReadI8⟩⇐low
+(black white raywhite) ← rl.color.(black white raywhite)
+key ← rl.KeyboardKey
+
+:Namespace shaderIndex ⍝ Shader
+  id   ← 1+0 ⍝ u     ⍝ Shader program id
+  locs ← 1+1 ⍝ '*',i ⍝ Shader locations array (RL_MAX_SHADER_LOCATIONS)
+:EndNamespace
+
+⍝ A few good julia sets
+pointsOfInterest ← 0 2⍴⍬
+pointsOfInterest ⍪← ¯0.348827 0.607167
+pointsOfInterest ⍪← ¯0.786268 0.169728
+pointsOfInterest ⍪← ¯0.8      0.156
+pointsOfInterest ⍪←  0.285    0.0
+pointsOfInterest ⍪← ¯0.835   ¯0.2321
+pointsOfInterest ⍪← ¯0.70176 ¯0.3842
+
+offsetSpeedMul ← 2
+
+startingZoom ← 0.75
+
+rl.InitWindow 1920 1080 'raylib [shaders] example - basic lighting'
+rl.SetExitKey 0
+
+⍝ Load julia set shader
+shader ← rl.LoadShader (⊃1⎕NPARTS'')∘,¨'assets/shaders/glsl330/'∘,¨'default.vs' 'julia_set.fs'
+
+⍝ Get some required shader locations
+veiwPos ← rl.GetShaderLocation(shader 'viewPos')
+GF←{
+  locsPtr ← shaderIndex.locs⊃shader
+  newLocsPtr ← MovePtr locsPtr (4×rl.ShaderLocationIndex.SHADER_LOC_VECTOR_VIEW)
+  newLocsPtr WriteI4 ,veiwPos
+}
+GF⍬
+⍝ Create a RenderTexture2D to be used for render to texture
+target ← rl.LoadRenderTexture 1920 1080⊣((rl.GetScreenWidth⍬)(rl.GetScreenHeight⍬))
+
+⍝ c constant to use in z^2 + c
+c ← 1⌷pointsOfInterest
+
+⍝ Offset and zoom to draw the julia set at. (centered on screen and default size)
+offset ← 0 0
+zoom ← startingZoom
+
+⍝ Get variable (uniform) locations on the shader to connect with the program
+⍝ NOTE: If uniform variable could not be found in the shader, function returns -1
+cLoc      ← rl.GetShaderLocation (shader (,'c')  )
+zoomLoc   ← rl.GetShaderLocation (shader 'zoom'  )
+offsetLoc ← rl.GetShaderLocation (shader 'offset')
+⍝ Report to dzaima: &ref seem to accept pointer objects
+
+cv2 ← rl.MemAlloc 8
+cv2 WriteF4 c
+
+zoomFloat ← rl.MemAlloc 4
+zoomFloat WriteF4 ,zoom
+
+offsetV2 ← rl.MemAlloc 8
+offsetV2 WriteF4 offset
+
+⍝ Upload the shader uniform values!
+rl.SetShaderValue (shader cLoc      cv2       rl.ShaderUniformDataType.SHADER_UNIFORM_VEC2 )
+rl.SetShaderValue (shader zoomLoc   zoomFloat rl.ShaderUniformDataType.SHADER_UNIFORM_FLOAT)
+rl.SetShaderValue (shader offsetLoc offsetV2  rl.ShaderUniformDataType.SHADER_UNIFORM_VEC2 )
+
+incrementSpeed ← 0 ⍝ Multiplier of speed to change c value
+showControls ← 1   ⍝ Show controls
+
+increment←0
+
+⍝ Main game loop
+:While ~rl.WindowShouldClose⍬
+
+  FF←{
+    cv2 WriteF4 ⍵
+    rl.SetShaderValue (shader cLoc cv2 rl.ShaderUniformDataType.SHADER_UNIFORM_VEC2)
+  }
+  FF⍤¯1⍣(0<≢a)⊢a←pointsOfInterest⌿⍨rl.IsKeyPressed¨key.KEY_ZERO+⍳6
+
+  ⍝ If 'R' is pressed, reset zoom and offset.
+  FG←{
+    zoomFloat WriteF4 ,zoom
+    offset⊢←0 0
+    offsetV2 WriteF4 offset
+    zoomFloat WriteF4 ,startingZoom
+    rl.SetShaderValue(shader zoomLoc   zoomFloat rl.ShaderUniformDataType.SHADER_UNIFORM_FLOAT)
+    rl.SetShaderValue(shader offsetLoc offsetV2  rl.ShaderUniformDataType.SHADER_UNIFORM_VEC2 )
+  }
+  FG⍣(rl.IsKeyPressed key.KEY_R)⊢⍬
+
+  incrementSpeed ×← ~rl.IsKeyPressed key.KEY_SPACE ⍝ Pause animation (c change)
+  showControls   ≠←  rl.IsKeyPressed key.KEY_F1    ⍝ Toggle whether or not to show controls
+
+  increment +← key.KEY_RIGHT (-⍥rl.IsKeyPressed) key.KEY_LEFT
+
+  ⍝ If either left or right button is pressed, zoom in/out.
+  FH←{
+    ⍝ Change zoom. If Mouse left -> zoom in. Mouse right -> zoom out.
+    zoom ×← *0.01×-/rl.IsMouseButtonDown (rl.MouseButton.MOUSE_BUTTON_LEFT rl.MouseButton.MOUSE_BUTTON_RIGHT)
+    mousePos ← rl.GetMousePosition⍬
+    ⍝ Find the velocity at which to change the camera. Take the distance of the mouse
+    ⍝ from the center of the screen as the direction, and adjust magnitude based on
+    ⍝ the current zoom.
+    offsetVelocity ← (0.5-⍨mousePos÷rl.window.GetSize⍬)×offsetSpeedMul÷zoom
+
+
+    ⍝ Apply move velocity to camera
+    offset +← offsetVelocity÷rl.GetFrameTime⍬
+
+    ⍝ Update the shader uniform values!
+    zoomFloat WriteF4 ,zoom
+
+
+    offset⊢←0 0
+    (¯1+⍳2)offsetV2.Write¨offset
+
+    rl.SetShaderValue(shader zoomLoc   zoomfloat rl.ShaderUniformDataType.SHADER_UNIFORM_FLOAT)
+
+
+    rl.SetShaderValue(shader offsetLoc offsetV2  rl.ShaderUniformDataType.SHADER_UNIFORM_VEC2 )
+  }
+
+  FH⍣(rl.IsMouseButtonDown rl.MouseButton.MOUSE_BUTTON_RIGHT)⊢⍬
+
+
+  rl.SetShaderValue (shader cLoc cv2 rl.ShaderUniformDataType.SHADER_UNIFORM_VEC2)
+  ⍝----------------------------------------------------------------------------------
+
+  rl.BeginDrawing⍬
+
+    rl.ClearBackground rl.color.black
+
+    ⍝ Draw the saved texture and rendered julia set with shader
+    ⍝ NOTE: We do not invert texture on Y, already considered inside shader
+    rl.BeginShaderMode shader
+      ⍝ WARNING: If FLAG_WINDOW_HIGHDPI is enabled, HighDPI monitor scaling should be considered
+      ⍝ when rendering the RenderTexture2D to fit in the HighDPI scaled Window
+      texture ← 2
+      rl.DrawTextureEx ((texture⊃target) (0 0) 0 1 white)
+
+    rl.EndShaderMode⍬
+
+    text ← ⍬
+    text ,←⊂ 'Press Mouse buttons right/left to zoom in/out and move'
+    text ,←⊂ 'Press KEY_F1 to toggle these controls'
+    text ,←⊂ 'Press KEYS [1 - 6] to change point of interest'
+    text ,←⊂ 'Press KEY_LEFT | KEY_RIGHT to change speed'
+    text ,←⊂ 'Press KEY_SPACE to stop movement animation'
+    text ,←⊂ 'Press KEY_R to recenter the camera'
+
+    {rl.DrawText(⍺ 10 ⍵ 30 raywhite)}¨∘(30×1+⍳⍤≢)⍨⍣showControls⊢ text
+
+    rl.DrawFPS 260 0
+  rl.EndDrawing⍬
+:EndWhile
+
+⍝ De-Initialization
+⍝--------------------------------------------------------------------------------------
+rl.UnloadShader shader              ⍝ Unload shader
+rl.UnloadRenderTexture target       ⍝ Unload render texture
+rl.MemFree¨(cv2 zoomFloat offsetV2)
+
+rl.CloseWindow⍬
